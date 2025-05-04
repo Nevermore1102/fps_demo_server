@@ -1,28 +1,33 @@
 cmake_minimum_required(VERSION 3.10)
-project(game_server)
+project(GameServer)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 设置Lua版本
-set(LUA_VERSION 5.3)
-
-# 查找依赖包
+# 查找必要的包
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBEVENT REQUIRED libevent)
-pkg_check_modules(LUA REQUIRED lua${LUA_VERSION})
-
-# 添加源文件
-add_executable(game_server main.cpp)
+pkg_check_modules(LUA REQUIRED lua5.3)
 
 # 包含目录
-target_include_directories(game_server PRIVATE
+include_directories(
     ${LIBEVENT_INCLUDE_DIRS}
     ${LUA_INCLUDE_DIRS}
 )
 
+# 源文件
+set(SOURCES
+    src/main.cpp
+    src/core/EventLoop.cpp
+    src/net/TcpServer.cpp
+    src/script/LuaVM.cpp
+)
+
+# 可执行文件
+add_executable(game_server ${SOURCES})
+
 # 链接库
-target_link_libraries(game_server PRIVATE
+target_link_libraries(game_server
     ${LIBEVENT_LIBRARIES}
     ${LUA_LIBRARIES}
 )
