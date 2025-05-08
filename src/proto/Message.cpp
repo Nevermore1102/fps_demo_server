@@ -1,89 +1,51 @@
-#include "proto/Message.h"
+#include "Message.h"
 #include <cstring>
+#include <spdlog/spdlog.h>
 
-Message::Message(MessageType type) : type_(type) {}
+bool Message::serialize(std::vector<uint8_t>& out) const {
+    // 计算总大小
+    size_t total_size = sizeof(MessageHeader) + body_.size();
+    out.resize(total_size);
 
-PlayerUpdateMessage::PlayerUpdateMessage()
-    : Message(MessageType::PLAYER_UPDATE) {
-    health = 0.0f;
-    ammo = 0;
-    x = y = z = 0.0f;
-    rotation = 0.0f;
-}
+    // 复制消息头
+    std::memcpy(out.data(), &header_, sizeof(MessageHeader));
 
-bool PlayerUpdateMessage::serialize(std::vector<uint8_t>& buffer) const {
-    // 计算消息大小
-    size_t size = sizeof(MessageHeader) + 
-                  sizeof(float) * 5 +  // health, x, y, z, rotation
-                  sizeof(int);         // ammo
-    
-    buffer.resize(size);
-    uint8_t* ptr = buffer.data();
-    
-    // 写入消息头
-    MessageHeader header;
-    header.type = type_;
-    header.length = size - sizeof(MessageHeader);
-    header.sequence = 0;  // TODO: 实现序列号生成
-    
-    memcpy(ptr, &header, sizeof(MessageHeader));
-    ptr += sizeof(MessageHeader);
-    
-    // 写入消息体
-    memcpy(ptr, &health, sizeof(float));
-    ptr += sizeof(float);
-    
-    memcpy(ptr, &ammo, sizeof(int));
-    ptr += sizeof(int);
-    
-    memcpy(ptr, &x, sizeof(float));
-    ptr += sizeof(float);
-    
-    memcpy(ptr, &y, sizeof(float));
-    ptr += sizeof(float);
-    
-    memcpy(ptr, &z, sizeof(float));
-    ptr += sizeof(float);
-    
-    memcpy(ptr, &rotation, sizeof(float));
-    
+    // 复制消息体
+    if (!body_.empty()) {
+        std::memcpy(out.data() + sizeof(MessageHeader), body_.data(), body_.size());
+    }
+
+    spdlog::debug("Serialized message: type={}, body_size={}, total_size={}", 
+                  header_.msg_id, header_.body_size, total_size);
     return true;
 }
 
-bool PlayerUpdateMessage::deserialize(const std::vector<uint8_t>& buffer) {
-    if (buffer.size() < sizeof(MessageHeader)) {
+bool Message::deserialize(const std::vector<uint8_t>& in) {
+    // 检查数据大小
+    if (in.size() < sizeof(MessageHeader)) {
+        spdlog::error("Message too small: {} bytes", in.size());
         return false;
     }
-    
-    const uint8_t* ptr = buffer.data();
-    
-    // 读取消息头
-    MessageHeader header;
-    memcpy(&header, ptr, sizeof(MessageHeader));
-    ptr += sizeof(MessageHeader);
-    
-    if (header.type != type_ || 
-        buffer.size() != sizeof(MessageHeader) + header.length) {
+
+    // 复制消息头
+    std::memcpy(&header_, in.data(), sizeof(MessageHeader));
+
+    // 检查消息体大小
+    if (in.size() != sizeof(MessageHeader) + header_.body_size) {
+        spdlog::error("Invalid message size: got {} bytes, expected {} bytes", 
+                     in.size(), sizeof(MessageHeader) + header_.body_size);
         return false;
     }
-    
-    // 读取消息体
-    memcpy(&health, ptr, sizeof(float));
-    ptr += sizeof(float);
-    
-    memcpy(&ammo, ptr, sizeof(int));
-    ptr += sizeof(int);
-    
-    memcpy(&x, ptr, sizeof(float));
-    ptr += sizeof(float);
-    
-    memcpy(&y, ptr, sizeof(float));
-    ptr += sizeof(float);
-    
-    memcpy(&z, ptr, sizeof(float));
-    ptr += sizeof(float);
-    
-    memcpy(&rotation, ptr, sizeof(float));
-    
+
+    // 复制消息体
+    if (header_.body_size > 0) {
+        body_.resize(header_.body_size);
+        std::memcpy(body_.data(), in.data() + sizeof(MessageHeader), header_.body_size);
+    } else {
+        body_.clear();
+    }
+
+    spdlog::debug("Deserialized message: type={}, body_size={}, total_size={}", 
+                  header_.msg_id, header_.body_size, in.size());
     return true;
-} 
+}

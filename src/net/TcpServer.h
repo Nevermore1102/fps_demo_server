@@ -15,33 +15,48 @@
 #pragma once
 
 #include <event2/listener.h>
-#include <event2/bufferevent.h>
-#include <memory>
+#include <event2/event.h>
 #include <string>
+#include <memory>
 #include <functional>
+#include "Connection.h"
 
 class TcpServer {
 public:
-    using ConnectionCallback = std::function<void(struct bufferevent*)>;
-    using ReadCallback = std::function<void(struct bufferevent*, const char*, size_t)>;
-    using ErrorCallback = std::function<void(struct bufferevent*, short)>;
+    using MessageCallback = Connection::MessageCallback;
+    using NewConnectionCallback = std::function<void(const std::shared_ptr<Connection>&)>;
 
-    TcpServer();
+    TcpServer(const std::string& host, uint16_t port);
     ~TcpServer();
 
-    bool init(struct event_base* base, int port);
-    void setConnectionCallback(ConnectionCallback cb) { connection_cb_ = cb; }
-    void setReadCallback(ReadCallback cb) { read_cb_ = cb; }
-    void setErrorCallback(ErrorCallback cb) { error_cb_ = cb; }
+    // 启动和停止服务器
+    bool start();
+    void stop();
+
+    // 设置回调
+    void setMessageCallback(MessageCallback cb) { message_cb_ = cb; }
+    void setNewConnectionCallback(NewConnectionCallback cb) { new_conn_cb_ = cb; }
+
+    // 广播消息给所有连接
+    void broadcast(const Message& msg);
 
 private:
-    static void on_accept(struct evconnlistener* listener, evutil_socket_t fd,
-                         struct sockaddr* address, int socklen, void* ctx);
-    static void on_read(struct bufferevent* bev, void* ctx);
-    static void on_error(struct bufferevent* bev, short events, void* ctx);
+    static void acceptCallback(struct evconnlistener* listener,
+                             evutil_socket_t fd,
+                             struct sockaddr* addr,
+                             int socklen,
+                             void* ctx);
+    static void acceptErrorCallback(struct evconnlistener* listener, void* ctx);
 
+    void onAccept(evutil_socket_t fd, struct sockaddr* addr);
+    void onAcceptError();
+
+    struct event_base* base_;
     struct evconnlistener* listener_;
-    ConnectionCallback connection_cb_;
-    ReadCallback read_cb_;
-    ErrorCallback error_cb_;
+    std::string host_;
+    uint16_t port_;
+    bool running_;
+
+    MessageCallback message_cb_;
+    NewConnectionCallback new_conn_cb_;
 }; 

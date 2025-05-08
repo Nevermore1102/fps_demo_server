@@ -11,79 +11,103 @@
  * @date 2025-05-05
  */
 
-#include "core/EventLoop.h"
-#include "net/TcpServer.h"
-#include "script/LuaVM.h"
 #include <iostream>
-#include <string>
+#include <signal.h>
+#include <event2/event.h>
+#include <spdlog/spdlog.h>
+#include "net/TcpServer.h"
+#include "core/EventLoop.h"
+#include "proto/Message.h"
 
 class GameServer {
 public:
-    GameServer() : port_(8888) {}
-    
+    GameServer() 
+        : port_(8888)
+        , tcp_server_("0.0.0.0", port_) {
+    }
+
     bool init() {
+        // 初始化事件循环
         if (!event_loop_.init()) {
+            spdlog::error("Failed to init event loop");
             return false;
         }
-        
-        if (!lua_vm_.init()) {
-            return false;
-        }
-        
-        if (!loadLuaScripts()) {
-            return false;
-        }
-        
+
+        // 初始化网络
         if (!initNetwork()) {
+            spdlog::error("Failed to init network");
             return false;
         }
-        
+
         return true;
     }
-    
+
     void run() {
         event_loop_.run();
     }
-    
+
 private:
-    bool loadLuaScripts() {
-        return lua_vm_.loadScript("scripts/core/init.lua");
-    }
-    
     bool initNetwork() {
-        tcp_server_.setConnectionCallback([](struct bufferevent* bev) {
-            std::cout << "New connection accepted" << std::endl;
-        });
-        
-        tcp_server_.setReadCallback([](struct bufferevent* bev, const char* data, size_t len) {
-            std::cout << "Received: " << std::string(data, len) << std::endl;
-        });
-        
-        tcp_server_.setErrorCallback([](struct bufferevent* bev, short events) {
-            if (events & BEV_EVENT_ERROR) {
-                std::cerr << "Error from bufferevent" << std::endl;
-            }
-        });
-        
-        return tcp_server_.init(event_loop_.getBase(), port_);
+        // 设置消息回调
+        tcp_server_.setMessageCallback(
+            [this](const std::shared_ptr<Connection>& conn, const Message& msg) {
+                spdlog::info("Received message from {}, type: {}", 
+                            conn->getId(), static_cast<int>(msg.getType()));
+                
+                // 处理不同类型的消息
+                switch (msg.getType()) {
+                    case MessageType::HEARTBEAT:
+                        // 回复心跳
+                        spdlog::info("Sending heartbeat response to {}", conn->getId());
+                        if (!conn->sendMessage(Message(MessageType::HEARTBEAT))) {
+                            spdlog::error("Failed to send heartbeat response");
+                        }
+                        break;
+                        
+                    case MessageType::LOGIN:
+                        // 回复登录成功
+                        spdlog::info("Sending login response to {}", conn->getId());
+                        if (!conn->sendMessage(Message(MessageType::LOGIN))) {
+                            spdlog::error("Failed to send login response");
+                        }
+                        break;
+                        
+                    default:
+                        spdlog::warn("Unknown message type: {}", static_cast<int>(msg.getType()));
+                        break;
+                }
+            });
+
+        // 设置新连接回调
+        tcp_server_.setNewConnectionCallback(
+            [](const std::shared_ptr<Connection>& conn) {
+                spdlog::info("New connection: {}", conn->getId());
+            });
+
+        // 启动服务器
+        return tcp_server_.start();
     }
-    
+
+    uint16_t port_;
     EventLoop event_loop_;
     TcpServer tcp_server_;
-    LuaVM lua_vm_;
-    int port_;
 };
 
 int main() {
+    // 忽略 SIGPIPE 信号
+    signal(SIGPIPE, SIG_IGN);
+
+    // 初始化日志
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::info("Server starting...");
+
+    // 创建并运行服务器
     GameServer server;
-    
     if (!server.init()) {
-        std::cerr << "Failed to initialize server" << std::endl;
+        spdlog::error("Failed to init server");
         return 1;
     }
-    
-    std::cout << "Server started on port 8888" << std::endl;
+
     server.run();
-    
     return 0;
 } 

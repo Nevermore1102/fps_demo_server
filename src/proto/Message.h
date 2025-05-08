@@ -4,54 +4,41 @@
 #include <string>
 #include <vector>
 
-// 消息类型定义
-enum class MessageType : uint16_t {
-    // 系统消息
-    HEARTBEAT = 0x0001,
-    LOGIN = 0x0002,
-    LOGOUT = 0x0003,
-    
-    // 游戏消息
-    PLAYER_UPDATE = 0x0101,
-    PLAYER_SHOOT = 0x0102,
-    PLAYER_HIT = 0x0103,
-    GAME_STATE = 0x0104,
+// 消息头结构
+struct MessageHeader {
+    uint32_t msg_id;      // 消息ID
+    uint32_t body_size;   // 消息体大小
 };
 
-// 消息头
-struct MessageHeader {
-    MessageType type;
-    uint32_t length;
-    uint32_t sequence;
+// 消息类型枚举
+enum class MessageType : uint32_t {
+    HEARTBEAT = 1,
+    LOGIN = 2,
+    LOGOUT = 3,
+    PLAYER_UPDATE = 4,
+    PLAYER_SHOOT = 5,
+    PLAYER_HIT = 6,
+    GAME_STATE = 7
 };
 
 // 基础消息类
 class Message {
 public:
-    Message(MessageType type);
-    virtual ~Message() = default;
-    
-    // 序列化/反序列化
-    virtual bool serialize(std::vector<uint8_t>& buffer) const = 0;
-    virtual bool deserialize(const std::vector<uint8_t>& buffer) = 0;
-    
-    MessageType getType() const { return type_; }
-    
-protected:
-    MessageType type_;
-};
+    Message() = default;
+    Message(MessageType type, const std::vector<uint8_t>& body = {})
+        : header_{static_cast<uint32_t>(type), static_cast<uint32_t>(body.size())}
+        , body_(body) {}
 
-// 玩家状态更新消息
-class PlayerUpdateMessage : public Message {
-public:
-    PlayerUpdateMessage();
-    
-    bool serialize(std::vector<uint8_t>& buffer) const override;
-    bool deserialize(const std::vector<uint8_t>& buffer) override;
-    
-    // 玩家状态
-    float health;
-    int ammo;
-    float x, y, z;
-    float rotation;
+    // 序列化和反序列化
+    bool serialize(std::vector<uint8_t>& out) const;
+    bool deserialize(const std::vector<uint8_t>& in);
+
+    // 获取消息信息
+    MessageType getType() const { return static_cast<MessageType>(header_.msg_id); }
+    const std::vector<uint8_t>& getBody() const { return body_; }
+    size_t getSize() const { return sizeof(MessageHeader) + body_.size(); }
+
+private:
+    MessageHeader header_;
+    std::vector<uint8_t> body_;
 }; 
