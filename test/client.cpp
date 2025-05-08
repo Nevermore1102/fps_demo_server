@@ -3,6 +3,7 @@
 #include "TestManager.h"
 #include "ConnectionTest.h"
 #include "ServerShutdownTest.h"
+#include "LuaMessageTest.h"
 
 void printUsage(const char* program) {
     std::cout << "Usage: " << program << " [test_name]" << std::endl;
@@ -28,6 +29,14 @@ int main(int argc, char* argv[]) {
         std::function<std::unique_ptr<TestBase>(const std::string&, uint16_t)>(
             [](const std::string& host, uint16_t port) -> std::unique_ptr<TestBase> {
                 return std::make_unique<ServerShutdownTest>(host, port);
+            }
+        )
+    );
+
+    manager.registerTest("lua_message", 
+        std::function<std::unique_ptr<TestBase>(const std::string&, uint16_t)>(
+            [](const std::string& host, uint16_t port) -> std::unique_ptr<TestBase> {
+                return std::make_unique<LuaMessageTest>(host, port);
             }
         )
     );

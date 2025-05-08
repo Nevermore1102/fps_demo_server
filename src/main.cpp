@@ -18,6 +18,7 @@
 #include "net/TcpServer.h"
 #include "core/EventLoop.h"
 #include "proto/Message.h"
+#include "script/LuaVM.h"
 
 class GameServer {
 public:
@@ -30,6 +31,12 @@ public:
         // 初始化事件循环
         if (!event_loop_.init()) {
             spdlog::error("Failed to init event loop");
+            return false;
+        }
+
+        // 初始化Lua环境
+        if (!initLua()) {
+            spdlog::error("Failed to init Lua environment");
             return false;
         }
 
@@ -47,6 +54,24 @@ public:
     }
 
 private:
+    bool initLua() {
+        if (!lua_vm_.init()) {
+            return false;
+        }
+
+        // 加载消息处理脚本
+        if (!lua_vm_.loadScript("scripts/message_handlers.lua")) {
+            return false;
+        }
+
+        // 注册Lua消息处理器
+        lua_vm_.registerMessageHandler(MessageType::PLAYER_UPDATE, "handle_player_update");
+        lua_vm_.registerMessageHandler(MessageType::PLAYER_SHOOT, "handle_player_shoot");
+        lua_vm_.registerMessageHandler(MessageType::PLAYER_HIT, "handle_player_hit");
+
+        return true;
+    }
+
     bool initNetwork() {
         // 设置消息回调
         tcp_server_.setMessageCallback(
@@ -54,7 +79,16 @@ private:
                 spdlog::info("Received message from {}, type: {}", 
                             conn->getId(), static_cast<int>(msg.getType()));
                 
-                // 处理不同类型的消息
+                // 设置当前连接
+                lua_vm_.setCurrentConnection(conn);
+                
+                // 尝试由Lua处理消息
+                if (lua_vm_.handleMessage(msg)) {
+                    spdlog::info("Message handled by Lua");
+                    return;
+                }
+                
+                // 如果Lua没有处理，则由C++处理
                 switch (msg.getType()) {
                     case MessageType::HEARTBEAT:
                         // 回复心跳
@@ -91,6 +125,7 @@ private:
     uint16_t port_;
     EventLoop event_loop_;
     TcpServer tcp_server_;
+    LuaVM lua_vm_;
 };
 
 int main() {

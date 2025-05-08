@@ -18,8 +18,15 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include "proto/Message.h"
+#include "net/Connection.h"
+
+// 前向声明
+static int lua_send_response(lua_State* L);
 
 class LuaVM {
+    friend int lua_send_response(lua_State* L);
+    
 public:
     LuaVM();
     ~LuaVM();
@@ -36,14 +43,28 @@ public:
     
     // 获取 Lua 状态
     lua_State* getState() { return L_; }
+
+    // 消息处理相关方法
+    bool handleMessage(const Message& msg);
+    bool registerMessageHandler(MessageType type, const std::string& luaFuncName);
+    bool unregisterMessageHandler(MessageType type);
+    
+    // 设置当前连接
+    void setCurrentConnection(const std::shared_ptr<Connection>& conn) { current_connection_ = conn; }
     
 private:
     lua_State* L_;
     std::unordered_map<std::string, std::string> loadedScripts_;
+    std::unordered_map<MessageType, std::string> message_handlers_;
+    std::shared_ptr<Connection> current_connection_;
     
     // 错误处理
     void handleError(const std::string& msg);
     
     // 注册基础函数
     void registerBaseFunctions();
+
+    // 消息处理辅助方法
+    bool pushMessageToLua(const Message& msg);
+    bool getMessageFromLua(Message& msg);
 }; 
