@@ -8,7 +8,8 @@ build/
 game_server
 
 # 编辑器文件
-.vscode/
+.vscode/*
+!.vscode/c_cpp_properties.json
 .idea/
 *.swp
 *.swo

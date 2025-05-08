@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include",
+                "/usr/local/include",
+                "/usr/include/lua5.3",
+                "/usr/local/include/lua5.3",
+                "/usr/include/libevent",
+                "/usr/local/include/libevent",
+                "/usr/include/c++/13",
+                "/usr/include/x86_64-linux-gnu/c++/13",
+                "/usr/include/x86_64-linux-gnu",
+                "/usr/lib/llvm-10/lib/clang/10.0.0/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang++",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-clang-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+} 
