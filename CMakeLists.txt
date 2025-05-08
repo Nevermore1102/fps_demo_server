@@ -19,12 +19,10 @@ include_directories(
     /usr/local/include
 )
 
-# 源文件
-set(SOURCES
-    src/main.cpp
-    src/core/EventLoop.cpp
-    src/net/TcpServer.cpp
-    src/script/LuaVM.cpp
+# 自动查找所有源文件
+file(GLOB_RECURSE SOURCES 
+    "src/*.cpp"
+    "src/*.h"
 )
 
 # 可执行文件
