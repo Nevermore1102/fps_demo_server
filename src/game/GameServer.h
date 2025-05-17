@@ -1,9 +1,10 @@
+#pragma once
 #include <event2/event.h>
 #include <spdlog/spdlog.h>
 #include "net/TcpServer.h"
 #include "core/EventLoop.h"
 #include "proto/Message.h"
-#include "script/LuaVM.h"
+#include "LuaEngine.h"
 #include "MessageProcessor.h"
 #include "CppEngine.h"
 #include <memory>
@@ -13,7 +14,7 @@ public:
     GameServer() 
         : port_(8888)
         , tcp_server_("0.0.0.0", port_)
-        , lua_vm_(std::make_shared<LuaVM>())
+        , lua_engine_(std::make_shared<LuaEngine>())
         , cpp_engine_(std::make_shared<CppEngine>()) {
     }
 
@@ -45,26 +46,24 @@ public:
 
 private:
     bool initLua() {
-        if (!lua_vm_->init()) {
+        if (!lua_engine_->init()) {
             return false;
         }
 
         // 加载消息处理脚本
-        if (!lua_vm_->loadScript("scripts/message_handlers.lua")) {
+        if (!lua_engine_->loadScript("scripts/message_handlers.lua")) {
             return false;
         }
 
-        // 注册Lua消息处理器
-        lua_vm_->registerMessageHandler(MessageType::PLAYER_UPDATE, "handle_player_update");
-        lua_vm_->registerMessageHandler(MessageType::PLAYER_SHOOT, "handle_player_shoot");
-        lua_vm_->registerMessageHandler(MessageType::PLAYER_HIT, "handle_player_hit");
+        // 注册默认的消息处理器
+        lua_engine_->registerDefaultHandlers();
 
         return true;
     }
 
     bool initNetwork() {
-        // 初始化消息处理器成员变量，确保共用同一个 LuaVM 和 CppEngine 实例
-        message_processor_ = std::make_shared<MessageProcessor>(lua_vm_, cpp_engine_);
+        // 初始化消息处理器成员变量，确保共用同一个 LuaEngine 和 CppEngine 实例
+        message_processor_ = std::make_shared<MessageProcessor>(lua_engine_->getLuaVM(), cpp_engine_);
 
         // 设置消息回调，捕获 this
         tcp_server_.setMessageCallback(
@@ -90,7 +89,7 @@ private:
     uint16_t port_;
     EventLoop event_loop_;
     TcpServer tcp_server_;
-    std::shared_ptr<LuaVM> lua_vm_;
+    std::shared_ptr<LuaEngine> lua_engine_;
     std::shared_ptr<CppEngine> cpp_engine_;
     std::shared_ptr<MessageProcessor> message_processor_;
 };
