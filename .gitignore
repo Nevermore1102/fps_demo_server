@@ -25,4 +25,10 @@ Thumbs.db
 *.log
 
 # 存档文件
-save/*.dat 
+save/*.dat
+
+# node 目录配置
+node/
+!node/start.sh
+node/data/
+node/game_server 
