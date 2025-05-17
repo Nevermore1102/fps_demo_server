@@ -28,7 +28,7 @@ Thumbs.db
 save/*.dat
 
 # node 目录配置
-node/
+node/*
 !node/start.sh
 node/data/
 node/game_server 
