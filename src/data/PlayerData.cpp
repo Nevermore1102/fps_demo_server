@@ -1,13 +1,13 @@
-#include "data/PlayerData.h"
-#include <fstream>
-#include <filesystem>
+#include "PlayerData.h"
+#include <spdlog/spdlog.h>
 
-namespace fs = std::filesystem;
-
-PlayerData::PlayerData(const std::string& playerId)
+PlayerData::PlayerData(const std::string& playerId) 
     : playerId_(playerId) {
-    // 初始化玩家状态
-    state_.health = 100.0f;
+    initState();
+}
+
+void PlayerData::initState() {
+    state_.health = 100;
     state_.ammo = 30;
     state_.x = 0.0f;
     state_.y = 0.0f;
@@ -16,64 +16,33 @@ PlayerData::PlayerData(const std::string& playerId)
 }
 
 bool PlayerData::load() {
+    std::string data = Storage::getInstance().loadPlayerData(playerId_);
+    if (data.empty()) {
+        spdlog::info("No saved data found for player {}", playerId_);
+        return false;
+    }
+
     try {
-        fs::path savePath = SAVE_DIR;
-        savePath /= playerId_ + ".json";
-        
-        if (!fs::exists(savePath)) {
-            return false;
-        }
-        
-        std::ifstream file(savePath);
-        if (!file.is_open()) {
-            return false;
-        }
-        
-        file >> data_;
-        
-        // 从 JSON 加载数据
-        state_.health = data_["health"];
-        state_.ammo = data_["ammo"];
-        state_.x = data_["position"]["x"];
-        state_.y = data_["position"]["y"];
-        state_.z = data_["position"]["z"];
-        state_.rotation = data_["rotation"];
-        
-        return true;
+        nlohmann::json json = nlohmann::json::parse(data);
+        return fromJson(json);
     } catch (const std::exception& e) {
+        spdlog::error("Failed to parse player data for {}: {}", playerId_, e.what());
         return false;
     }
 }
 
 bool PlayerData::save() {
     try {
-        // 准备保存目录
-        fs::path savePath = SAVE_DIR;
-        fs::create_directories(savePath);
-        
-        // 更新 JSON 数据
-        data_["health"] = state_.health;
-        data_["ammo"] = state_.ammo;
-        data_["position"]["x"] = state_.x;
-        data_["position"]["y"] = state_.y;
-        data_["position"]["z"] = state_.z;
-        data_["rotation"] = state_.rotation;
-        
-        // 保存到文件
-        savePath /= playerId_ + ".json";
-        std::ofstream file(savePath);
-        if (!file.is_open()) {
-            return false;
-        }
-        
-        file << data_.dump(4);
-        return true;
+        nlohmann::json json = toJson();
+        std::string data = json.dump();
+        return Storage::getInstance().savePlayerData(playerId_, data);
     } catch (const std::exception& e) {
+        spdlog::error("Failed to save player data for {}: {}", playerId_, e.what());
         return false;
     }
 }
 
-void PlayerData::updateHealth(float health) {
+void PlayerData::updateHealth(int health) {
     state_.health = health;
 }
 
@@ -89,4 +58,30 @@ void PlayerData::updatePosition(float x, float y, float z) {
 
 void PlayerData::updateRotation(float rotation) {
     state_.rotation = rotation;
+}
+
+bool PlayerData::fromJson(const nlohmann::json& json) {
+    try {
+        state_.health = json["health"].get<int>();
+        state_.ammo = json["ammo"].get<int>();
+        state_.x = json["x"].get<float>();
+        state_.y = json["y"].get<float>();
+        state_.z = json["z"].get<float>();
+        state_.rotation = json["rotation"].get<float>();
+        return true;
+    } catch (const std::exception& e) {
+        spdlog::error("Failed to parse player state from JSON: {}", e.what());
+        return false;
+    }
+}
+
+nlohmann::json PlayerData::toJson() const {
+    nlohmann::json json;
+    json["health"] = state_.health;
+    json["ammo"] = state_.ammo;
+    json["x"] = state_.x;
+    json["y"] = state_.y;
+    json["z"] = state_.z;
+    json["rotation"] = state_.rotation;
+    return json;
 } 

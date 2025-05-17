@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <nlohmann/json.hpp>
+#include "Storage.h"
 
 struct PlayerState {
-    float health;
+    int health;
     int ammo;
     float x, y, z;  // 位置
     float rotation; // 朝向
@@ -20,7 +20,7 @@ public:
     bool save();
     
     // 状态更新
-    void updateHealth(float health);
+    void updateHealth(int health);
     void updateAmmo(int ammo);
     void updatePosition(float x, float y, float z);
     void updateRotation(float rotation);
@@ -30,9 +30,10 @@ public:
     const std::string& getPlayerId() const { return playerId_; }
     
 private:
+    void initState();
+    bool fromJson(const nlohmann::json& json);
+    nlohmann::json toJson() const;
+
     std::string playerId_;
     PlayerState state_;
-    nlohmann::json data_;
-    
-    static constexpr const char* SAVE_DIR = "save/players/";
 }; 
