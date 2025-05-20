@@ -107,4 +107,105 @@ make
    - 日志轮转
    - 性能监控
 
+## 客户端与服务端消息同步开发文档
+
+### 1. 消息格式（Protocol Buffers）
+
+- 所有客户端与服务端通信消息均采用 Protocol Buffers（proto3）格式。
+- 消息定义示例（NetworkMessage.proto）：
+
+```proto
+syntax = "proto3";
+
+package Unity.FPS.Game;
+
+enum MessageType {
+  HEARTBEAT = 0;
+  PLAYER_UPDATE = 1;
+}
+
+message NetworkMessage {
+  MessageType msg_id = 1;
+  uint32 player_id = 2;
+  uint32 timestamp = 3;
+  oneof data {
+    HeartbeatMessage heartbeat = 4;
+    PlayerUpdateMessage player_update = 5;
+  }
+}
+
+message HeartbeatMessage {
+  // 空消息体
+}
+
+message PlayerUpdateMessage {
+  float position_x = 1;
+  float position_y = 2;
+  float position_z = 3;
+  float rotation_x = 4;
+  float rotation_y = 5;
+  float rotation_z = 6;
+  float velocity_x = 7;
+  float velocity_y = 8;
+  float velocity_z = 9;
+  bool is_grounded = 10;
+  float health = 11;
+}
+```
+
+- 客户端和服务端需保持 proto 文件完全一致。
+- 使用 `protoc` 工具生成各自语言的代码。
+
+### 2. 消息序列化与反序列化
+
+- 发送前：将消息对象序列化为二进制流（`SerializeToArray` 或 `SerializeToString`）。
+- 接收后：将收到的二进制流反序列化为消息对象（`ParseFromArray` 或 `ParseFromString`）。
+
+### 3. 粘包/拆包（包边界）处理规范
+
+- **protobuf 只负责内容，不负责包边界。**
+- 每条消息前需加上4字节无符号整型（uint32，网络字节序）表示消息体长度。
+- 发送流程：
+  1. 序列化消息为二进制流 `data`。
+  2. 计算长度 `len = data.size()`。
+  3. 发送4字节长度（uint32_t，网络字节序）。
+  4. 发送消息体内容。
+- 接收流程：
+  1. 先读取4字节长度字段，得到 `len`。
+  2. 再读取 `len` 字节内容。
+  3. 用 protobuf 反序列化。
+
+#### C++ 伪代码示例
+
+```cpp
+// 发送
+std::string data;
+msg.SerializeToString(&data);
+uint32_t len = htonl(data.size());
+send(socket, &len, sizeof(len), 0);
+send(socket, data.data(), data.size(), 0);
+
+// 接收
+uint32_t len;
+recv(socket, &len, sizeof(len), 0);
+len = ntohl(len);
+std::vector<char> buf(len);
+recv(socket, buf.data(), len, 0);
+NetworkMessage msg;
+msg.ParseFromArray(buf.data(), len);
+```
+
+### 4. 版本兼容与扩展
+
+- 新增字段时，使用 proto3 的兼容性特性，避免破坏旧客户端/服务端。
+- 建议所有消息都通过 `NetworkMessage` 统一封装，便于扩展。
+
+### 5. 注意事项
+
+- proto 文件变更后，务必同步更新客户端和服务端。
+- 网络传输务必处理好包边界，防止粘包/拆包导致解析错误。
+- 建议所有网络日志记录原始包长度和类型，便于排查问题。
+
+如有疑问请联系服务端/客户端开发负责人。
+
 

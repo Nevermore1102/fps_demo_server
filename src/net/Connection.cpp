@@ -5,6 +5,10 @@
 #include <spdlog/spdlog.h>
 #include <cstring>
 #include <uuid/uuid.h>
+#include <arpa/inet.h>  // for htonl/ntohl
+
+// 最大消息大小限制（10MB）
+constexpr size_t MAX_MESSAGE_SIZE = 10 * 1024 * 1024;
 
 Connection::Connection(struct bufferevent* bev) 
     : bev_(bev), connected_(true) {
@@ -74,12 +78,15 @@ void Connection::onRead() {
     evbuffer_remove(input, read_buffer_.data() + old_size, len);
 
     // 处理消息
-    while (read_buffer_.size() >= sizeof(MessageHeader)) {
-        const MessageHeader* header = reinterpret_cast<const MessageHeader*>(read_buffer_.data());
-        size_t total_size = sizeof(MessageHeader) + header->body_size;
+    while (read_buffer_.size() >= sizeof(uint32_t)) {  // 至少要有4字节长度字段
+        // 读取4字节长度（网络字节序）
+        uint32_t net_len = 0;
+        std::memcpy(&net_len, read_buffer_.data(), sizeof(uint32_t));
+        uint32_t body_len = ntohl(net_len);
+        size_t total_size = sizeof(uint32_t) + body_len;
 
-        if (total_size > MAX_MESSAGE_SIZE) {
-            spdlog::error("Message too large: {} bytes", total_size);
+        if (body_len > MAX_MESSAGE_SIZE) {
+            spdlog::error("Message body too large: {} bytes (max: {})", body_len, MAX_MESSAGE_SIZE);
             close();
             return;
         }
@@ -107,14 +114,35 @@ void Connection::onError(short events) {
 }
 
 void Connection::handleMessage(const std::vector<uint8_t>& data) {
+    if (data.size() < sizeof(uint32_t)) {
+        spdlog::error("Message too small: {} bytes", data.size());
+        return;
+    }
+
+    // 读取4字节长度（网络字节序）
+    uint32_t net_len = 0;
+    std::memcpy(&net_len, data.data(), sizeof(uint32_t));
+    uint32_t body_len = ntohl(net_len);
+
+    if (data.size() != sizeof(uint32_t) + body_len) {
+        spdlog::error("Invalid message size: got {} bytes, expected {} bytes", 
+                     data.size(), sizeof(uint32_t) + body_len);
+        return;
+    }
+
+    // 创建消息对象并反序列化
     Message msg;
     if (!msg.deserialize(data)) {
         spdlog::error("Failed to deserialize message");
         return;
     }
 
+    // 获取消息类型（确保使用正确的字节序）
+    MessageType type = msg.getType();
+    spdlog::debug("Received message type: {}", static_cast<uint32_t>(type));
+
+    // 调用消息回调
     if (message_cb_) {
-        // 在调用回调之前先保存一个智能指针，防止提前释放
         auto self = shared_from_this();
         message_cb_(self, msg);
     }

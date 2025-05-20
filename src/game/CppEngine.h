@@ -24,6 +24,9 @@ public:
 
     // 可扩展的C++处理函数
     void onHeartbeat(const std::shared_ptr<Connection>& conn, const Message& msg);
-    void onLogin(const std::shared_ptr<Connection>& conn, const Message& msg);
-    // ... 其他C++处理函数可在此声明 ...
+    void onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg);
+    void onPlayerAttribute(const std::shared_ptr<Connection>& conn, const Message& msg);
+    void onPlayerState(const std::shared_ptr<Connection>& conn, const Message& msg);
+    void onPlayerJoin(const std::shared_ptr<Connection>& conn, const Message& msg);
+    void onPlayerLeave(const std::shared_ptr<Connection>& conn, const Message& msg);
 }; 

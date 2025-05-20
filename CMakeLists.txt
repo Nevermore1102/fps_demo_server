@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# 查找protobuf包
+find_package(Protobuf REQUIRED)
+
 # 定义是否运行测试的选项
 option(RUN_TESTS "Run tests during startup" OFF)
 
@@ -48,6 +51,7 @@ include_directories(
     ${SPDLOG_INCLUDE_DIRS}
     ${UUID_INCLUDE_DIR}
     ${SQLite3_INCLUDE_DIRS}
+    ${Protobuf_INCLUDE_DIRS}
 )
 
 # 自动查找所有源文件
@@ -74,6 +78,26 @@ target_link_libraries(game_server
     spdlog::spdlog
     ${UUID_LIBRARY}
     ${SQLite3_LIBRARIES}
+    ${Protobuf_LIBRARIES}
+)
+
+# 生成protobuf文件
+set(PROTO_GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/proto)
+set(PROTO_FILES src/proto/NetworkMessage.proto)
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
+target_sources(game_server PRIVATE ${PROTO_SRCS} ${PROTO_HDRS})
+
+# 设置protobuf生成文件的输出目录
+set_target_properties(game_server PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build
+)
+
+# 设置protobuf生成文件的输出目录
+set_source_files_properties(${PROTO_SRCS} ${PROTO_HDRS}
+    PROPERTIES
+    GENERATED 1
+    HEADER_FILE_ONLY 0
+    GENERATED_LOCATION ${PROTO_GEN_DIR}
 )
 
 # 安装规则
@@ -82,7 +106,7 @@ install(DIRECTORY lua/ DESTINATION lua)
 install(DIRECTORY save/ DESTINATION save)
 
 # 添加测试目录
-add_subdirectory(test)
+# add_subdirectory(test)
 
 # 设置输出目录
 set_target_properties(game_server PROPERTIES

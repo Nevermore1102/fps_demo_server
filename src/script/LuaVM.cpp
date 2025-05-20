@@ -164,23 +164,20 @@ void LuaVM::registerBaseFunctions() {
     lua_pushinteger(L_, static_cast<int>(MessageType::HEARTBEAT));
     lua_setfield(L_, -2, "HEARTBEAT");
     
-    lua_pushinteger(L_, static_cast<int>(MessageType::LOGIN));
-    lua_setfield(L_, -2, "LOGIN");
-    
-    lua_pushinteger(L_, static_cast<int>(MessageType::LOGOUT));
-    lua_setfield(L_, -2, "LOGOUT");
-    
     lua_pushinteger(L_, static_cast<int>(MessageType::PLAYER_UPDATE));
     lua_setfield(L_, -2, "PLAYER_UPDATE");
     
-    lua_pushinteger(L_, static_cast<int>(MessageType::PLAYER_SHOOT));
-    lua_setfield(L_, -2, "PLAYER_SHOOT");
+    lua_pushinteger(L_, static_cast<int>(MessageType::PLAYER_ATTRIBUTE));
+    lua_setfield(L_, -2, "PLAYER_ATTRIBUTE");
     
-    lua_pushinteger(L_, static_cast<int>(MessageType::PLAYER_HIT));
-    lua_setfield(L_, -2, "PLAYER_HIT");
+    lua_pushinteger(L_, static_cast<int>(MessageType::PLAYER_STATE));
+    lua_setfield(L_, -2, "PLAYER_STATE");
     
-    lua_pushinteger(L_, static_cast<int>(MessageType::GAME_STATE));
-    lua_setfield(L_, -2, "GAME_STATE");
+    lua_pushinteger(L_, static_cast<int>(MessageType::PLAYER_JOIN));
+    lua_setfield(L_, -2, "PLAYER_JOIN");
+    
+    lua_pushinteger(L_, static_cast<int>(MessageType::PLAYER_LEAVE));
+    lua_setfield(L_, -2, "PLAYER_LEAVE");
     
     // 将MessageType表设置为全局变量
     lua_setglobal(L_, "MessageType");

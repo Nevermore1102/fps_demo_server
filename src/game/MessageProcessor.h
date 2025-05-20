@@ -25,7 +25,8 @@ public:
         }
 
         // 如果Lua没有处理，则由C++处理
-        if (cpp_engine && cpp_engine->handleMessage(conn, msg)) {
+        if (cpp_engine) {
+            cpp_engine->handleMessage(conn, msg);
             return true;
         }
 
