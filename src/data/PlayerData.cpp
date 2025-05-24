@@ -1,8 +1,7 @@
 #include "PlayerData.h"
 #include <spdlog/spdlog.h>
 
-PlayerData::PlayerData(const std::string& playerId) 
-    : playerId_(playerId) {
+PlayerData::PlayerData(const std::string& playerId) : playerId_(playerId) {
     initState();
 }
 
@@ -12,10 +11,20 @@ void PlayerData::initState() {
     state_.x = 0.0f;
     state_.y = 0.0f;
     state_.z = 0.0f;
-    state_.rotation = 0.0f;
+    state_.rotation_x = 0.0f;
+    state_.rotation_y = 0.0f;
+    state_.rotation_z = 0.0f;
+    state_.velocity_x = 0.0f;
+    state_.velocity_y = 0.0f;
+    state_.velocity_z = 0.0f;
+    state_.is_grounded = true;
 }
 
 bool PlayerData::load() {
+    if (playerId_.empty()) {
+        spdlog::error("Player ID is empty");
+        return false;
+    }
     std::string data = Storage::getInstance().loadPlayerData(playerId_);
     if (data.empty()) {
         spdlog::info("No saved data found for player {}", playerId_);
@@ -56,8 +65,21 @@ void PlayerData::updatePosition(float x, float y, float z) {
     state_.z = z;
 }
 
-void PlayerData::updateRotation(float rotation) {
-    state_.rotation = rotation;
+void PlayerData::updateRotation(float x, float y, float z) {
+    state_.rotation_x = x;
+    state_.rotation_y = y;
+    state_.rotation_z = z;
+}
+
+void PlayerData::updateVelocity(float x, float y, float z) {
+    state_.velocity_x = x;
+    state_.velocity_y = y;
+    state_.velocity_z = z;
+
+}
+
+void PlayerData::updateIsGrounded(bool is_grounded) {
+    state_.is_grounded = is_grounded;
 }
 
 bool PlayerData::fromJson(const nlohmann::json& json) {
@@ -67,7 +89,13 @@ bool PlayerData::fromJson(const nlohmann::json& json) {
         state_.x = json["x"].get<float>();
         state_.y = json["y"].get<float>();
         state_.z = json["z"].get<float>();
-        state_.rotation = json["rotation"].get<float>();
+        state_.rotation_x = json["rotation_x"].get<float>();
+        state_.rotation_y = json["rotation_y"].get<float>();
+        state_.rotation_z = json["rotation_z"].get<float>();
+        state_.velocity_x = json["velocity_x"].get<float>();
+        state_.velocity_y = json["velocity_y"].get<float>();
+        state_.velocity_z = json["velocity_z"].get<float>();
+        state_.is_grounded = json["is_grounded"].get<bool>();
         return true;
     } catch (const std::exception& e) {
         spdlog::error("Failed to parse player state from JSON: {}", e.what());
@@ -82,6 +110,12 @@ nlohmann::json PlayerData::toJson() const {
     json["x"] = state_.x;
     json["y"] = state_.y;
     json["z"] = state_.z;
-    json["rotation"] = state_.rotation;
+    json["rotation_x"] = state_.rotation_x;
+    json["rotation_y"] = state_.rotation_y;
+    json["rotation_z"] = state_.rotation_z;
+    json["velocity_x"] = state_.velocity_x;
+    json["velocity_y"] = state_.velocity_y;
+    json["velocity_z"] = state_.velocity_z;
+    json["is_grounded"] = state_.is_grounded;
     return json;
-} 
+}

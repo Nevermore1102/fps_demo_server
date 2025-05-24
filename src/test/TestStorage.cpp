@@ -32,7 +32,7 @@ bool TestStorage::testPlayerDataSaveLoad() {
     player.updateHealth(80);
     player.updateAmmo(45);
     player.updatePosition(10.5f, 20.5f, 30.5f);
-    player.updateRotation(90.0f);
+    player.updateRotation(90.0f, 0.0f, 0.0f);
 
     // 保存数据
     if (!player.save()) {
@@ -63,7 +63,7 @@ bool TestStorage::testPlayerStateValidation() {
     const PlayerState& state = loadedPlayer.getState();
     if (state.health != 80 || state.ammo != 45 || 
         state.x != 10.5f || state.y != 20.5f || state.z != 30.5f || 
-        state.rotation != 90.0f) {
+        state.rotation_x != 90.0f || state.rotation_y != 0.0f || state.rotation_z != 0.0f) {
         spdlog::error("加载的数据与保存的数据不匹配");
         return false;
     }

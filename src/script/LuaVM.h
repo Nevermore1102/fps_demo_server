@@ -20,6 +20,7 @@
 #include <unordered_map>
 #include "proto/Message.h"
 #include "net/Connection.h"
+#include "data/PlayerData.h"
 
 // 前向声明
 static int lua_send_response(lua_State* L);
@@ -48,7 +49,8 @@ public:
     bool handleMessage(const Message& msg);
     bool registerMessageHandler(MessageType type, const std::string& luaFuncName);
     bool unregisterMessageHandler(MessageType type);
-    
+
+
     // 设置当前连接
     void setCurrentConnection(const std::shared_ptr<Connection>& conn) { current_connection_ = conn; }
     
@@ -67,4 +69,18 @@ private:
     // 消息处理辅助方法
     bool pushMessageToLua(const Message& msg);
     bool getMessageFromLua(Message& msg);
+
+    // PlayerData Lua绑定函数
+    static int lua_playerdata_new(lua_State* L);
+    static int lua_playerdata_update_position(lua_State* L);
+    static int lua_playerdata_update_rotation(lua_State* L);
+    static int lua_playerdata_update_velocity(lua_State* L);
+    static int lua_playerdata_update_is_grounded(lua_State* L);
+    static int lua_playerdata_update_health(lua_State* L);
+    static int lua_playerdata_load(lua_State* L);
+    static int lua_playerdata_save(lua_State* L);
+    
+    // 注册PlayerData类到Lua
+    void registerPlayerDataClass();
+    bool registerPlayerData(const std::string& player_id);
 }; 

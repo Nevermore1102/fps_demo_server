@@ -55,6 +55,10 @@ bool LuaVM::init() {
     lua_setglobal(L_, "LUA_VM");
     
     registerBaseFunctions();
+    
+    // 注册PlayerData类
+    registerPlayerDataClass();
+    
     return true;
 }
 
@@ -266,4 +270,149 @@ bool LuaVM::getMessageFromLua(Message& msg) {
     
     msg = Message(type, bodyData);
     return true;
-} 
+}
+
+// PlayerData Lua绑定函数实现
+int LuaVM::lua_playerdata_new(lua_State* L) {
+    const char* player_id = luaL_checkstring(L, 1);
+    PlayerData* data = new PlayerData(player_id);
+    
+    // 创建用户数据
+    PlayerData** ud = static_cast<PlayerData**>(lua_newuserdata(L, sizeof(PlayerData*)));
+    *ud = data;
+    
+    // 设置元表
+    luaL_getmetatable(L, "PlayerData");
+    lua_setmetatable(L, -2);
+    
+    return 1;
+}
+
+int LuaVM::lua_playerdata_update_position(lua_State* L) {
+    //注意此处为PlayerData* data = *static_cast<PlayerData**>
+    //保障lua和c++侧的PlayerData* 指向同一个对象
+    PlayerData* data = *static_cast<PlayerData**>(luaL_checkudata(L, 1, "PlayerData"));
+    float x = luaL_checknumber(L, 2);
+    float y = luaL_checknumber(L, 3);
+    float z = luaL_checknumber(L, 4);
+    data->updatePosition(x, y, z);
+    return 0;
+}
+
+int LuaVM::lua_playerdata_update_rotation(lua_State* L) {
+    PlayerData* data = *static_cast<PlayerData**>(luaL_checkudata(L, 1, "PlayerData"));
+    float x = luaL_checknumber(L, 2);
+    float y = luaL_checknumber(L, 3);
+    float z = luaL_checknumber(L, 4);
+    data->updateRotation(x, y, z);
+    return 0;
+}
+
+int LuaVM::lua_playerdata_update_velocity(lua_State* L) {
+    PlayerData* data = *static_cast<PlayerData**>(luaL_checkudata(L, 1, "PlayerData"));
+    float x = luaL_checknumber(L, 2);
+    float y = luaL_checknumber(L, 3);
+    float z = luaL_checknumber(L, 4);
+    data->updateVelocity(x, y, z);
+    return 0;
+}
+
+int LuaVM::lua_playerdata_update_is_grounded(lua_State* L) {
+    PlayerData* data = *static_cast<PlayerData**>(luaL_checkudata(L, 1, "PlayerData"));
+    bool is_grounded = lua_toboolean(L, 2);
+    data->updateIsGrounded(is_grounded);
+    return 0;
+}
+
+int LuaVM::lua_playerdata_update_health(lua_State* L) {
+    PlayerData* data = *static_cast<PlayerData**>(luaL_checkudata(L, 1, "PlayerData"));
+    float health = luaL_checknumber(L, 2);
+    data->updateHealth(health);
+    return 0;
+}
+
+// 添加load方法的绑定
+int LuaVM::lua_playerdata_load(lua_State* L) {
+    PlayerData* data = *static_cast<PlayerData**>(luaL_checkudata(L, 1, "PlayerData"));
+    bool success = data->load();
+    lua_pushboolean(L, success);
+    return 1;
+}
+
+// 添加save方法的绑定
+int LuaVM::lua_playerdata_save(lua_State* L) {
+    PlayerData* data = *static_cast<PlayerData**>(luaL_checkudata(L, 1, "PlayerData"));
+    bool success = data->save();
+    lua_pushboolean(L, success);
+    return 1;
+}
+
+void LuaVM::registerPlayerDataClass() {
+    // 创建PlayerData元表
+    luaL_newmetatable(L_, "PlayerData");
+    
+    // 设置元表的__index为自身
+    lua_pushvalue(L_, -1);
+    lua_setfield(L_, -2, "__index");
+    
+    // 注册方法
+    lua_pushcfunction(L_, lua_playerdata_update_position);
+    lua_setfield(L_, -2, "update_position");
+    
+    lua_pushcfunction(L_, lua_playerdata_update_rotation);
+    lua_setfield(L_, -2, "update_rotation");
+    
+    lua_pushcfunction(L_, lua_playerdata_update_velocity);
+    lua_setfield(L_, -2, "update_velocity");
+    
+    lua_pushcfunction(L_, lua_playerdata_update_is_grounded);
+    lua_setfield(L_, -2, "update_is_grounded");
+    
+    lua_pushcfunction(L_, lua_playerdata_update_health);
+    lua_setfield(L_, -2, "update_health");
+    
+    // 添加load和save方法
+    lua_pushcfunction(L_, lua_playerdata_load);
+    lua_setfield(L_, -2, "load");
+    
+    lua_pushcfunction(L_, lua_playerdata_save);
+    lua_setfield(L_, -2, "save");
+    
+    // 创建PlayerData表
+    lua_newtable(L_);
+    
+    // 注册构造函数
+    lua_pushcfunction(L_, lua_playerdata_new);
+    lua_setfield(L_, -2, "new");
+    
+    // 设置元表
+    lua_pushvalue(L_, -2);
+    lua_setmetatable(L_, -2);
+    
+    // 将PlayerData表设置为全局变量
+    lua_setglobal(L_, "PlayerData");
+    
+    // 弹出元表
+    lua_pop(L_, 1);
+}
+
+bool LuaVM::registerPlayerData(const std::string& player_id) {
+    // 确保PlayerData类已注册
+    registerPlayerDataClass();
+    
+    // 创建新的PlayerData实例
+    lua_getglobal(L_, "PlayerData");
+    if (!lua_istable(L_, -1)) {
+        spdlog::error("Failed to get PlayerData table");
+        return false;
+    }
+    
+    // 调用构造函数
+    lua_pushstring(L_, player_id.c_str());
+    if (lua_pcall(L_, 1, 1, 0) != 0) {
+        spdlog::error("Failed to create PlayerData instance: {}", lua_tostring(L_, -1));
+        return false;
+    }
+    
+    return true;
+}

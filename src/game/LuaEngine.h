@@ -41,6 +41,9 @@ public:
         lua_vm_->registerMessageHandler(msg_type, handler_name);
     }
 
+//
+
+
     /**
      * @brief 注册所有默认的消息处理器
      */
