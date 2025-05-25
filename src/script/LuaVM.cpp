@@ -6,7 +6,8 @@
 static int lua_send_response(lua_State* L) {
     // 获取参数
     int msgType = luaL_checkinteger(L, 1);
-    const char* body = luaL_checkstring(L, 2);
+    size_t len = 0;
+    const char* body = lua_tolstring(L, 2, &len);
     
     // 获取LuaVM实例
     lua_getglobal(L, "LUA_VM");
@@ -20,7 +21,7 @@ static int lua_send_response(lua_State* L) {
     }
     
     // 创建响应消息
-    std::vector<uint8_t> bodyData(body, body + strlen(body));
+    std::vector<uint8_t> bodyData(body, body + len);
     Message response(static_cast<MessageType>(msgType), bodyData);
     
     // 发送响应
@@ -347,6 +348,54 @@ int LuaVM::lua_playerdata_save(lua_State* L) {
     return 1;
 }
 
+// 添加getState方法的绑定
+int LuaVM::lua_playerdata_get_state(lua_State* L) {
+    PlayerData* data = *static_cast<PlayerData**>(luaL_checkudata(L, 1, "PlayerData"));
+    const PlayerState& state = data->getState();
+    
+    // 创建一个新的表来存储状态数据
+    lua_newtable(L);
+    
+    // 添加所有状态字段
+    lua_pushnumber(L, state.health);
+    lua_setfield(L, -2, "health");
+    
+    lua_pushnumber(L, state.ammo);
+    lua_setfield(L, -2, "ammo");
+    
+    lua_pushnumber(L, state.x);
+    lua_setfield(L, -2, "x");
+    
+    lua_pushnumber(L, state.y);
+    lua_setfield(L, -2, "y");
+    
+    lua_pushnumber(L, state.z);
+    lua_setfield(L, -2, "z");
+    
+    lua_pushnumber(L, state.rotation_x);
+    lua_setfield(L, -2, "rotation_x");
+    
+    lua_pushnumber(L, state.rotation_y);
+    lua_setfield(L, -2, "rotation_y");
+    
+    lua_pushnumber(L, state.rotation_z);
+    lua_setfield(L, -2, "rotation_z");
+    
+    lua_pushnumber(L, state.velocity_x);
+    lua_setfield(L, -2, "velocity_x");
+    
+    lua_pushnumber(L, state.velocity_y);
+    lua_setfield(L, -2, "velocity_y");
+    
+    lua_pushnumber(L, state.velocity_z);
+    lua_setfield(L, -2, "velocity_z");
+    
+    lua_pushboolean(L, state.is_grounded);
+    lua_setfield(L, -2, "is_grounded");
+    
+    return 1;
+}
+
 void LuaVM::registerPlayerDataClass() {
     // 创建PlayerData元表
     luaL_newmetatable(L_, "PlayerData");
@@ -377,6 +426,10 @@ void LuaVM::registerPlayerDataClass() {
     
     lua_pushcfunction(L_, lua_playerdata_save);
     lua_setfield(L_, -2, "save");
+    
+    // 添加getState方法
+    lua_pushcfunction(L_, lua_playerdata_get_state);
+    lua_setfield(L_, -2, "getState");
     
     // 创建PlayerData表
     lua_newtable(L_);

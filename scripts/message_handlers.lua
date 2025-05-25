@@ -15,7 +15,7 @@ assert(pb.load(buffer))
 local player_data_map = {}
 
 -- 测试 ，创建id为test的player
-local test_player = PlayerData.new("test")
+-- local test_player = PlayerData.new("test")
 
 -- 消息处理函数
 function handle_player_update(msg)
@@ -81,6 +81,96 @@ function handle_player_update(msg)
     return true
 end
 
+function handle_player_join(msg)
+    print("Lua handling player join message")
+    -- 先解码 NetworkMessage
+    local success,network_msg = pcall(pb.decode, "NetworkMessage", msg.body)
+    if not success then
+        print("消息解码失败")
+        return false
+    end
+
+    local player_id_str = tostring(network_msg.player_id)
+    print("Player joining with ID:", player_id_str)
+    
+    -- 获取或创建PlayerData实例
+    local player_data = player_data_map[player_id_str]
+    if not player_data then
+        player_data = PlayerData.new(player_id_str)
+        player_data_map[player_id_str] = player_data
+        -- 尝试加载已保存的数据
+        if not player_data:load() then
+            print("登录时首次创建PlayerData:", player_id_str)
+        end
+    end
+
+    -- 获取PlayerState数据
+    local state = player_data:getState()
+    
+    -- 创建PlayerStateMessage
+    local player_state = {
+        player_id = tonumber(player_id_str),
+        position = {
+            x = state.x,
+            y = state.y,
+            z = state.z
+        },
+        rotation = {
+            x = state.rotation_x,
+            y = state.rotation_y,
+            z = state.rotation_z
+        },
+        attributes = {
+            player_id = tonumber(player_id_str),
+            health = state.health,
+            max_health = 100,
+            armor = 0,
+            score = 0,
+            kills = 0,
+            deaths = 0
+        },
+        is_alive = true,
+        team_id = 0
+    }
+    
+    -- 创建NetworkMessage
+    local network_response = {
+        msg_id = MessageType.PLAYER_JOIN,
+        player_id = tonumber(player_id_str),
+        timestamp = os.time(),
+        player_state = player_state  -- 直接设置player_state字段
+    }
+    
+    -- 打印调试信息
+    print("Sending response:")
+    print("Message Type:", network_response.msg_id)
+    print("Player ID:", network_response.player_id)
+    print("Position:", player_state.position.x, player_state.position.y, player_state.position.z)
+    print("Rotation:", player_state.rotation.x, player_state.rotation.y, player_state.rotation.z)
+    print("Health:", player_state.attributes.health)
+    
+    -- 编码并发送响应
+    local encoded = pb.encode("NetworkMessage", network_response)
+    if not encoded then
+        print("编码失败")
+        return false
+    end
+    
+    -- 打印编码后的数据长度
+    print("Encoded message length:", #encoded)
+    
+    -- 发送响应
+    local success = send_response(MessageType.PLAYER_JOIN, encoded)
+    if not success then
+        print("发送响应失败")
+        return false
+    end
+    
+    print("Send response result:", success)
+    return success
+end
+
+
 function handle_player_shoot(msg)
     print("Lua handling player shoot message")
     -- 解析消息
@@ -126,5 +216,6 @@ end
 _G.handle_player_update = handle_player_update
 _G.handle_player_shoot = handle_player_shoot
 _G.handle_player_hit = handle_player_hit
+_G.handle_player_join = handle_player_join
 
 print("Message handlers registered") 

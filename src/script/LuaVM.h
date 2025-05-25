@@ -79,6 +79,7 @@ private:
     static int lua_playerdata_update_health(lua_State* L);
     static int lua_playerdata_load(lua_State* L);
     static int lua_playerdata_save(lua_State* L);
+    static int lua_playerdata_get_state(lua_State* L);
     
     // 注册PlayerData类到Lua
     void registerPlayerDataClass();

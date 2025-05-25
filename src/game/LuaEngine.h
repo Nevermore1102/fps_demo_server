@@ -50,6 +50,8 @@ public:
     void registerDefaultHandlers() {
         // 玩家相关处理器
         registerMessageHandler(MessageType::PLAYER_UPDATE, "handle_player_update");
+        registerMessageHandler(MessageType::PLAYER_JOIN, "handle_player_join");
+        // registerMessageHandler(MessageType::PLAYER_LEAVE, "handle_player_leave");
         // registerMessageHandler(MessageType::PLAYER_SHOOT, "handle_player_shoot");
         // registerMessageHandler(MessageType::PLAYER_HIT, "handle_player_hit");
         
