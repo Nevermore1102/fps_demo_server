@@ -9,22 +9,24 @@ game-server/
 ├── CMakeLists.txt          # 构建配置文件
 ├── config/                 # 配置文件目录
 ├── Dockerfile             # Docker配置文件
+├── node/                  # 节点运行目录
 ├── scripts/               # Lua脚本目录
 │   ├── core/             # 核心脚本
-│   │   └── init.lua     # 初始化脚本
-│   └── handlers/        # 消息处理脚本
-└── src/                  # 源代码目录
-    ├── core/            # 核心功能模块
-    │   ├── EventLoop.cpp
-    │   └── EventLoop.h
-    ├── main.cpp        # 主程序入口
-    ├── net/           # 网络模块
-    │   ├── TcpServer.cpp
-    │   └── TcpServer.h
-    ├── script/       # 脚本引擎模块
-    │   ├── LuaVM.cpp
-    │   └── LuaVM.h
-    └── util/        # 工具类模块
+│   ├── handlers/         # 消息处理脚本
+│   ├── message.desc      # 消息描述文件
+│   └── message_handlers.lua # 消息处理主文件
+├── src/                  # 源代码目录
+│   ├── core/            # 核心功能模块
+│   ├── data/            # 数据管理模块
+│   ├── game/            # 游戏逻辑模块
+│   ├── main.cpp         # 主程序入口
+│   ├── net/             # 网络模块
+│   ├── proto/           # Protocol Buffers 相关
+│   ├── script/          # 脚本引擎模块
+│   ├── test/            # 测试代码，提供了存储模块的测试
+│   └── util/            # 工具类模块
+├── test/                # 测试目录以及测试客户端代码（用来测试基础网络模块，未更新后续消息类型，已无法兼容）
+└── build/               # 构建输出目录
 ```
 
 ## 核心模块说明
@@ -38,8 +40,12 @@ game-server/
   - 提供异步事件处理机制
 
 ### 2. 网络模块 (TcpServer)
-- 位置：`src/net/TcpServer`
+- 位置：`src/net/`
 - 功能：TCP 服务器实现
+- 主要组件：
+  - TcpServer：服务器核心实现
+  - Connection：连接管理
+  - ConnectionPool：连接池管理
 - 职责：
   - 监听客户端连接
   - 处理网络消息
@@ -52,6 +58,44 @@ game-server/
   - 初始化 Lua 环境
   - 加载游戏逻辑脚本
   - 提供 C++ 和 Lua 的交互接口
+  - 管理脚本生命周期
+
+### 4. 游戏引擎 (Game)
+- 位置：`src/game/`
+- 功能：游戏核心逻辑实现
+- 主要组件：
+  - GameServer：游戏服务器核心
+  - CppEngine：C++ 游戏逻辑引擎
+  - LuaEngine：Lua 游戏逻辑引擎
+  - MessageProcessor：消息处理器
+- 职责：
+  - 游戏逻辑处理
+  - 消息分发和处理
+  - 游戏状态管理
+  - 双引擎（C++/Lua）支持
+
+### 5. 协议模块 (Proto)
+- 位置：`src/proto/`
+- 功能：网络消息协议定义和处理
+- 主要组件：
+  - NetworkMessage.proto：协议定义文件
+  - Message：消息处理基类
+- 职责：
+  - 定义网络通信协议
+  - 提供消息序列化/反序列化
+  - 管理消息类型和格式
+  - 生成协议相关代码
+
+### 6. 数据模块 (Data)
+- 位置：`src/data/`
+- 功能：游戏数据管理
+- 主要组件：
+  - Storage：数据存储接口
+  - PlayerData：玩家数据管理
+- 职责：
+  - 管理游戏数据存储
+  - 处理玩家数据持久化
+  - 提供数据访问接口
 
 ## 构建与运行
 
@@ -60,52 +104,40 @@ game-server/
 - libevent
 - Lua 5.3
 - C++17 编译器
+- spdlog
+- SQLite3
+- Protocol Buffers
+- uuid
 
 ### 构建步骤
-```bash
+
+1. 安装依赖（Ubuntu/Debian 系统示例）
+sudo apt-get update
+sudo apt-get install cmake libevent-dev liblua5.3-dev libssl-dev libspdlog-dev libsqlite3-dev protobuf-compiler libprotobuf-dev uuid-dev
+
+2. 构建项目
 mkdir build
 cd build
 cmake ..
 make
-```
 
 ### 运行服务器
 ```bash
-./build/game_server
+cd node
+
+#此脚本会自动拷贝lua脚本以及编译后build目录下文件
+./start.sh
+
 ```
 
 ## 配置说明
 
 ### 服务器配置
 - 默认端口：8888
-- 配置文件路径：`config/server.toml`（待实现）
 
-### Lua脚本
-- 初始化脚本：`scripts/core/init.lua`
-- 消息处理脚本：`scripts/handlers/`（待实现）
+### Lua脚本及其相关序列化文件
+- 均在scripts/下
 
-## 待实现功能
-
-1. 消息路由模块
-   - 消息分发系统
-   - 路由表管理
-   - 消息处理器注册机制
-
-2. 游戏逻辑模块
-   - 实体管理
-   - 玩家系统
-   - 战斗系统
-   - 背包系统
-
-3. 数据持久化
-   - 数据库接口
-   - 存档管理
-   - 异步保存机制
-
-4. 日志系统
-   - 日志分级
-   - 日志轮转
-   - 性能监控
 
 ## 客户端与服务端消息同步开发文档
 
@@ -175,37 +207,7 @@ message PlayerUpdateMessage {
   2. 再读取 `len` 字节内容。
   3. 用 protobuf 反序列化。
 
-#### C++ 伪代码示例
 
-```cpp
-// 发送
-std::string data;
-msg.SerializeToString(&data);
-uint32_t len = htonl(data.size());
-send(socket, &len, sizeof(len), 0);
-send(socket, data.data(), data.size(), 0);
 
-// 接收
-uint32_t len;
-recv(socket, &len, sizeof(len), 0);
-len = ntohl(len);
-std::vector<char> buf(len);
-recv(socket, buf.data(), len, 0);
-NetworkMessage msg;
-msg.ParseFromArray(buf.data(), len);
-```
-
-### 4. 版本兼容与扩展
-
-- 新增字段时，使用 proto3 的兼容性特性，避免破坏旧客户端/服务端。
-- 建议所有消息都通过 `NetworkMessage` 统一封装，便于扩展。
-
-### 5. 注意事项
-
-- proto 文件变更后，务必同步更新客户端和服务端。
-- 网络传输务必处理好包边界，防止粘包/拆包导致解析错误。
-- 建议所有网络日志记录原始包长度和类型，便于排查问题。
-
-如有疑问请联系服务端/客户端开发负责人。
 
 
