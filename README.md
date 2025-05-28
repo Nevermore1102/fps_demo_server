@@ -112,14 +112,18 @@ game-server/
 ### 构建步骤
 
 1. 安装依赖（Ubuntu/Debian 系统示例）
+```bash
 sudo apt-get update
 sudo apt-get install cmake libevent-dev liblua5.3-dev libssl-dev libspdlog-dev libsqlite3-dev protobuf-compiler libprotobuf-dev uuid-dev
+```
 
 2. 构建项目
+```bash
 mkdir build
 cd build
 cmake ..
 make
+```
 
 ### 运行服务器
 ```bash
