@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 查找必要的包
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBEVENT REQUIRED libevent)
+find_package(fmt REQUIRED)
 
 # 包含目录
 include_directories(
@@ -20,6 +21,7 @@ set(SOURCES
     client.cpp
     TestBase.cpp
     ${CMAKE_SOURCE_DIR}/src/proto/Message.cpp
+
 )
 
 # 添加可执行文件
@@ -31,4 +33,5 @@ target_link_libraries(test_client
     event_core
     event_extra
     pthread
+    fmt::fmt
 ) 

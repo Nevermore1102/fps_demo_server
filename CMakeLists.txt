@@ -15,6 +15,7 @@ option(RUN_TESTS "Run tests during startup" OFF)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBEVENT REQUIRED libevent)
 pkg_check_modules(LUA REQUIRED lua5.3)
+find_package(fmt REQUIRED)
 
 # 查找依赖包
 find_package(OpenSSL REQUIRED)
@@ -79,6 +80,7 @@ target_link_libraries(game_server
     ${UUID_LIBRARY}
     ${SQLite3_LIBRARIES}
     ${Protobuf_LIBRARIES}
+    fmt::fmt   
 )
 
 # 生成protobuf文件
