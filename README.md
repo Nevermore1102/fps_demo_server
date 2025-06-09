@@ -114,7 +114,7 @@ game-server/
 1. 安装依赖（Ubuntu/Debian 系统示例）
 ```bash
 sudo apt-get update
-sudo apt-get install cmake libevent-dev liblua5.3-dev libssl-dev libspdlog-dev libsqlite3-dev protobuf-compiler libprotobuf-dev uuid-dev
+sudo apt-get install cmake libevent-dev liblua5.3-dev libssl-dev libspdlog-dev libsqlite3-dev protobuf-compiler libprotobuf-dev uuid-dev libfmt-dev
 ```
 
 2. 构建项目
@@ -153,40 +153,77 @@ cd node
 ```proto
 syntax = "proto3";
 
-package Unity.FPS.Game;
-
+// 消息类型枚举
 enum MessageType {
-  HEARTBEAT = 0;
-  PLAYER_UPDATE = 1;
+    HEARTBEAT = 0;
+    PLAYER_UPDATE = 1;
+    PLAYER_ATTRIBUTE = 2;
+    PLAYER_STATE = 3;
+    PLAYER_JOIN = 4;
+    PLAYER_LEAVE = 5;
 }
 
-message NetworkMessage {
-  MessageType msg_id = 1;
-  uint32 player_id = 2;
-  uint32 timestamp = 3;
-  oneof data {
-    HeartbeatMessage heartbeat = 4;
-    PlayerUpdateMessage player_update = 5;
-  }
+// 向量3结构
+message Vector3 {
+    float x = 1;
+    float y = 2;
+    float z = 3;
 }
 
+// 玩家属性消息
+message PlayerAttributeMessage {
+    uint32 player_id = 1;
+    float health = 2;
+    float max_health = 3;
+    map<string, int32> ammo = 4;  // 不同武器的弹药数量
+    map<string, int32> weapons = 5;  // 拥有的武器
+    float armor = 6;
+    int32 score = 7;
+    int32 kills = 8;
+    int32 deaths = 9;
+}
+
+// 玩家状态消息
+message PlayerStateMessage {
+    uint32 player_id = 1;
+    Vector3 position = 2;
+    Vector3 rotation = 3;
+    PlayerAttributeMessage attributes = 4;
+    bool is_alive = 5;
+    uint32 team_id = 6;
+}
+
+// 心跳消息
 message HeartbeatMessage {
-  // 空消息体
 }
 
+// 玩家更新消息
 message PlayerUpdateMessage {
-  float position_x = 1;
-  float position_y = 2;
-  float position_z = 3;
-  float rotation_x = 4;
-  float rotation_y = 5;
-  float rotation_z = 6;
-  float velocity_x = 7;
-  float velocity_y = 8;
-  float velocity_z = 9;
-  bool is_grounded = 10;
-  float health = 11;
+    float position_x = 1;
+    float position_y = 2;
+    float position_z = 3;
+    float rotation_x = 4;
+    float rotation_y = 5;
+    float rotation_z = 6;
+    float velocity_x = 7;
+    float velocity_y = 8;
+    float velocity_z = 9;
+    bool is_grounded = 10;
+    float health = 11;
 }
+
+// 基础消息结构
+message NetworkMessage {
+    MessageType msg_id = 1;
+    uint32 player_id = 2;
+    uint32 timestamp = 3;
+    oneof data {
+        HeartbeatMessage heartbeat = 4;
+        PlayerUpdateMessage player_update = 5;
+        PlayerAttributeMessage player_attribute = 6;
+        PlayerStateMessage player_state = 7;
+    }
+} 
 ```
 
 - 客户端和服务端需保持 proto 文件完全一致。
@@ -194,8 +231,8 @@ message PlayerUpdateMessage {
 
 ### 2. 消息序列化与反序列化
 
-- 发送前：将消息对象序列化为二进制流（`SerializeToArray` 或 `SerializeToString`）。
-- 接收后：将收到的二进制流反序列化为消息对象（`ParseFromArray` 或 `ParseFromString`）。
+- 发送前：将消息对象序列化为二进制流。
+- 接收后：将收到的二进制流反序列化为消息对象。
 
 ### 3. 粘包/拆包（包边界）处理规范
 
