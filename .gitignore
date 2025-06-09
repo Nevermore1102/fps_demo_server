@@ -4,6 +4,9 @@ build/
 *.a
 *.so
 
+#除了script目录下的protobuf.so文件
+!script/protobuf.so
+
 # 编译输出
 game_server
 
