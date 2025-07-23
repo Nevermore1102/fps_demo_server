@@ -4,6 +4,7 @@ build/
 *.a
 *.so
 
+
 #除了script目录下的protobuf.so文件
 !script/protobuf.so
 
@@ -19,6 +20,9 @@ game_server
 
 # clangd 缓存
 .clangd/
+.cache/
+#
+
 
 # 系统文件
 .DS_Store
