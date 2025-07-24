@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+
+// 消息类型枚举
+enum MessageType {
+  HEARTBEAT = 0;
+  TEST = 1;
+}
+
+
+// 测试消息结构
+message TestMessage {
+  MessageType msg_id = 1;
+  string message = 2;
+} 

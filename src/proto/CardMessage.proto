@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+enum MessageType {
+  UNKNOWN = 0;
+  CONNECT = 1;
+  GAME_START = 2;
+  BATTLE_PREP_TIMER = 3;
+  BATTLE_PREP_SNAPSHOT = 4;
+  ALL_SNAPSHOTS = 5;
+  BATTLE_RESULT = 6;
+  SETTLEMENT = 7;
+}
+
+// 建立连接请求（客户端→服务器）
+message ConnectRequest {
+  MessageType = 1；
+  string player_id = 2;
+}
+
+// 游戏中的基础消息结构
+message GameMessage {
+  MessageType type = 1;
+  string match_id = 2; // 对局id
+  int32 round = 3; // 仅部分消息需要轮次字段
+}
+
+// 对局开始广播（服务器→所有客户端）
+message GameStartMessage {
+  repeated string player_ids = 1;
+  GameMessage base = 2;
+}
+
+// 备战倒计时广播（服务器→所有客户端）
+message BattlePrepTimerMessage {
+  int32 remaining_time_seconds = 1;
+  GameMessage base = 2;
+}
+
+// 客户端提交的备战快照（客户端→服务器）
+message BattlePrepSnapshot {
+  string player_id = 1;
+  string formation_data = 2; // 阵容数据（建议定义具体结构后引用）
+  int32 honor_value = 3;
+  GameMessage base = 4;
+}
+
+// 单个玩家快照
+message PlayerSnapshot {
+  string player_id = 1;
+  string formation = 2; // 需与formation_data结构一致
+  int32 honor_value = 3;
+}
+
+// 所有玩家快照广播（服务器→所有客户端）
+message AllSnapshotsMessage {
+  repeated PlayerSnapshot snapshots = 1;
+  int32 seed = 2; // 随机数种子，C#客户端Random(seed)调用
+  GameMessage base = 3;
+}
+
+// 战斗结果上报（客户端→服务器）
+message BattleResultReport {
+  string player_id = 1;
+  int32 honor_value = 2;
+  GameMessage base = 3;
+}
+
+// 排名条目
+message RankingEntry {
+  string player_id = 1;
+  int32 rank = 2;
+  int32 honor_value = 3;
+}
+
+// 结算信息广播（服务器→所有客户端）
+message SettlementMessage {
+  repeated RankingEntry rankings = 1;
+  GameMessage base = 2;
+}

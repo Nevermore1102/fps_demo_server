@@ -6,6 +6,8 @@
 #include <iostream>
 #include <google/protobuf/message.h>
 #include "NetworkMessage.pb.h"
+// #include "Message.pb.h"
+
 
 // 基础消息类
 class Message {
