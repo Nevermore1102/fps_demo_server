@@ -48,32 +48,76 @@ struct TableStruct_src_2fproto_2fNetworkMessage_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
   static const ::PROTOBUF_NAMESPACE_ID::uint32 offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_src_2fproto_2fNetworkMessage_2eproto;
+class AllSnapshotsMessage;
+class AllSnapshotsMessageDefaultTypeInternal;
+extern AllSnapshotsMessageDefaultTypeInternal _AllSnapshotsMessage_default_instance_;
+class BattlePrepSnapshotMessage;
+class BattlePrepSnapshotMessageDefaultTypeInternal;
+extern BattlePrepSnapshotMessageDefaultTypeInternal _BattlePrepSnapshotMessage_default_instance_;
+class BattlePrepTimerMessage;
+class BattlePrepTimerMessageDefaultTypeInternal;
+extern BattlePrepTimerMessageDefaultTypeInternal _BattlePrepTimerMessage_default_instance_;
+class BattleResultReportMessage;
+class BattleResultReportMessageDefaultTypeInternal;
+extern BattleResultReportMessageDefaultTypeInternal _BattleResultReportMessage_default_instance_;
+class ConnectRequestMessage;
+class ConnectRequestMessageDefaultTypeInternal;
+extern ConnectRequestMessageDefaultTypeInternal _ConnectRequestMessage_default_instance_;
+class GameStartMessage;
+class GameStartMessageDefaultTypeInternal;
+extern GameStartMessageDefaultTypeInternal _GameStartMessage_default_instance_;
 class HeartbeatMessage;
 class HeartbeatMessageDefaultTypeInternal;
 extern HeartbeatMessageDefaultTypeInternal _HeartbeatMessage_default_instance_;
 class NetworkMessage;
 class NetworkMessageDefaultTypeInternal;
 extern NetworkMessageDefaultTypeInternal _NetworkMessage_default_instance_;
+class PlayerSnapshot;
+class PlayerSnapshotDefaultTypeInternal;
+extern PlayerSnapshotDefaultTypeInternal _PlayerSnapshot_default_instance_;
+class RankingEntry;
+class RankingEntryDefaultTypeInternal;
+extern RankingEntryDefaultTypeInternal _RankingEntry_default_instance_;
+class SettlementMessage;
+class SettlementMessageDefaultTypeInternal;
+extern SettlementMessageDefaultTypeInternal _SettlementMessage_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
+template<> ::AllSnapshotsMessage* Arena::CreateMaybeMessage<::AllSnapshotsMessage>(Arena*);
+template<> ::BattlePrepSnapshotMessage* Arena::CreateMaybeMessage<::BattlePrepSnapshotMessage>(Arena*);
+template<> ::BattlePrepTimerMessage* Arena::CreateMaybeMessage<::BattlePrepTimerMessage>(Arena*);
+template<> ::BattleResultReportMessage* Arena::CreateMaybeMessage<::BattleResultReportMessage>(Arena*);
+template<> ::ConnectRequestMessage* Arena::CreateMaybeMessage<::ConnectRequestMessage>(Arena*);
+template<> ::GameStartMessage* Arena::CreateMaybeMessage<::GameStartMessage>(Arena*);
 template<> ::HeartbeatMessage* Arena::CreateMaybeMessage<::HeartbeatMessage>(Arena*);
 template<> ::NetworkMessage* Arena::CreateMaybeMessage<::NetworkMessage>(Arena*);
+template<> ::PlayerSnapshot* Arena::CreateMaybeMessage<::PlayerSnapshot>(Arena*);
+template<> ::RankingEntry* Arena::CreateMaybeMessage<::RankingEntry>(Arena*);
+template<> ::SettlementMessage* Arena::CreateMaybeMessage<::SettlementMessage>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 enum MessageType : int {
   HEARTBEAT = 0,
+  CONNECT = 1,
+  START_MATCH = 2,
+  GAME_START = 3,
+  BATTLE_PREP_TIMER = 4,
+  BATTLE_PREP_SNAPSHOT = 5,
+  ALL_SNAPSHOTS = 6,
+  BATTLE_RESULT = 7,
+  SETTLEMENT = 8,
   MessageType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   MessageType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool MessageType_IsValid(int value);
 constexpr MessageType MessageType_MIN = HEARTBEAT;
-constexpr MessageType MessageType_MAX = HEARTBEAT;
+constexpr MessageType MessageType_MAX = SETTLEMENT;
 constexpr int MessageType_ARRAYSIZE = MessageType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageType_descriptor();
@@ -204,34 +248,6 @@ class HeartbeatMessage PROTOBUF_FINAL :
 
   // accessors -------------------------------------------------------
 
-  enum : int {
-    kDataFieldNumber = 1,
-  };
-  // string data = 1;
-  void clear_data();
-  const std::string& data() const;
-  void set_data(const std::string& value);
-  void set_data(std::string&& value);
-  void set_data(const char* value);
-  void set_data(const char* value, size_t size);
-  std::string* mutable_data();
-  std::string* release_data();
-  void set_allocated_data(std::string* data);
-  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
-  "    string fields are deprecated and will be removed in a"
-  "    future release.")
-  std::string* unsafe_arena_release_data();
-  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
-  "    string fields are deprecated and will be removed in a"
-  "    future release.")
-  void unsafe_arena_set_allocated_data(
-      std::string* data);
-  private:
-  const std::string& _internal_data() const;
-  void _internal_set_data(const std::string& value);
-  std::string* _internal_mutable_data();
-  public:
-
   // @@protoc_insertion_point(class_scope:HeartbeatMessage)
  private:
   class _Internal;
@@ -239,7 +255,1633 @@ class HeartbeatMessage PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ConnectRequestMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ConnectRequestMessage) */ {
+ public:
+  inline ConnectRequestMessage() : ConnectRequestMessage(nullptr) {};
+  virtual ~ConnectRequestMessage();
+
+  ConnectRequestMessage(const ConnectRequestMessage& from);
+  ConnectRequestMessage(ConnectRequestMessage&& from) noexcept
+    : ConnectRequestMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline ConnectRequestMessage& operator=(const ConnectRequestMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ConnectRequestMessage& operator=(ConnectRequestMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ConnectRequestMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ConnectRequestMessage* internal_default_instance() {
+    return reinterpret_cast<const ConnectRequestMessage*>(
+               &_ConnectRequestMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(ConnectRequestMessage& a, ConnectRequestMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ConnectRequestMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ConnectRequestMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ConnectRequestMessage* New() const final {
+    return CreateMaybeMessage<ConnectRequestMessage>(nullptr);
+  }
+
+  ConnectRequestMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ConnectRequestMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ConnectRequestMessage& from);
+  void MergeFrom(const ConnectRequestMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ConnectRequestMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ConnectRequestMessage";
+  }
+  protected:
+  explicit ConnectRequestMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:ConnectRequestMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GameStartMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:GameStartMessage) */ {
+ public:
+  inline GameStartMessage() : GameStartMessage(nullptr) {};
+  virtual ~GameStartMessage();
+
+  GameStartMessage(const GameStartMessage& from);
+  GameStartMessage(GameStartMessage&& from) noexcept
+    : GameStartMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline GameStartMessage& operator=(const GameStartMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GameStartMessage& operator=(GameStartMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const GameStartMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameStartMessage* internal_default_instance() {
+    return reinterpret_cast<const GameStartMessage*>(
+               &_GameStartMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(GameStartMessage& a, GameStartMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GameStartMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GameStartMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameStartMessage* New() const final {
+    return CreateMaybeMessage<GameStartMessage>(nullptr);
+  }
+
+  GameStartMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<GameStartMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const GameStartMessage& from);
+  void MergeFrom(const GameStartMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GameStartMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "GameStartMessage";
+  }
+  protected:
+  explicit GameStartMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdsFieldNumber = 2,
+    kMatchIdFieldNumber = 1,
+  };
+  // repeated string player_ids = 2;
+  int player_ids_size() const;
+  private:
+  int _internal_player_ids_size() const;
+  public:
+  void clear_player_ids();
+  const std::string& player_ids(int index) const;
+  std::string* mutable_player_ids(int index);
+  void set_player_ids(int index, const std::string& value);
+  void set_player_ids(int index, std::string&& value);
+  void set_player_ids(int index, const char* value);
+  void set_player_ids(int index, const char* value, size_t size);
+  std::string* add_player_ids();
+  void add_player_ids(const std::string& value);
+  void add_player_ids(std::string&& value);
+  void add_player_ids(const char* value);
+  void add_player_ids(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& player_ids() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_player_ids();
+  private:
+  const std::string& _internal_player_ids(int index) const;
+  std::string* _internal_add_player_ids();
+  public:
+
+  // string match_id = 1;
+  void clear_match_id();
+  const std::string& match_id() const;
+  void set_match_id(const std::string& value);
+  void set_match_id(std::string&& value);
+  void set_match_id(const char* value);
+  void set_match_id(const char* value, size_t size);
+  std::string* mutable_match_id();
+  std::string* release_match_id();
+  void set_allocated_match_id(std::string* match_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_match_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_match_id(
+      std::string* match_id);
+  private:
+  const std::string& _internal_match_id() const;
+  void _internal_set_match_id(const std::string& value);
+  std::string* _internal_mutable_match_id();
+  public:
+
+  // @@protoc_insertion_point(class_scope:GameStartMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> player_ids_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class BattlePrepTimerMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:BattlePrepTimerMessage) */ {
+ public:
+  inline BattlePrepTimerMessage() : BattlePrepTimerMessage(nullptr) {};
+  virtual ~BattlePrepTimerMessage();
+
+  BattlePrepTimerMessage(const BattlePrepTimerMessage& from);
+  BattlePrepTimerMessage(BattlePrepTimerMessage&& from) noexcept
+    : BattlePrepTimerMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline BattlePrepTimerMessage& operator=(const BattlePrepTimerMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BattlePrepTimerMessage& operator=(BattlePrepTimerMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const BattlePrepTimerMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const BattlePrepTimerMessage* internal_default_instance() {
+    return reinterpret_cast<const BattlePrepTimerMessage*>(
+               &_BattlePrepTimerMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(BattlePrepTimerMessage& a, BattlePrepTimerMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(BattlePrepTimerMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BattlePrepTimerMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline BattlePrepTimerMessage* New() const final {
+    return CreateMaybeMessage<BattlePrepTimerMessage>(nullptr);
+  }
+
+  BattlePrepTimerMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<BattlePrepTimerMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const BattlePrepTimerMessage& from);
+  void MergeFrom(const BattlePrepTimerMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(BattlePrepTimerMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "BattlePrepTimerMessage";
+  }
+  protected:
+  explicit BattlePrepTimerMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMatchIdFieldNumber = 1,
+    kRoundFieldNumber = 2,
+    kRemainingTimeSecondsFieldNumber = 3,
+  };
+  // string match_id = 1;
+  void clear_match_id();
+  const std::string& match_id() const;
+  void set_match_id(const std::string& value);
+  void set_match_id(std::string&& value);
+  void set_match_id(const char* value);
+  void set_match_id(const char* value, size_t size);
+  std::string* mutable_match_id();
+  std::string* release_match_id();
+  void set_allocated_match_id(std::string* match_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_match_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_match_id(
+      std::string* match_id);
+  private:
+  const std::string& _internal_match_id() const;
+  void _internal_set_match_id(const std::string& value);
+  std::string* _internal_mutable_match_id();
+  public:
+
+  // int32 round = 2;
+  void clear_round();
+  ::PROTOBUF_NAMESPACE_ID::int32 round() const;
+  void set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_round() const;
+  void _internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 remaining_time_seconds = 3;
+  void clear_remaining_time_seconds();
+  ::PROTOBUF_NAMESPACE_ID::int32 remaining_time_seconds() const;
+  void set_remaining_time_seconds(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_remaining_time_seconds() const;
+  void _internal_set_remaining_time_seconds(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:BattlePrepTimerMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 round_;
+  ::PROTOBUF_NAMESPACE_ID::int32 remaining_time_seconds_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class BattlePrepSnapshotMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:BattlePrepSnapshotMessage) */ {
+ public:
+  inline BattlePrepSnapshotMessage() : BattlePrepSnapshotMessage(nullptr) {};
+  virtual ~BattlePrepSnapshotMessage();
+
+  BattlePrepSnapshotMessage(const BattlePrepSnapshotMessage& from);
+  BattlePrepSnapshotMessage(BattlePrepSnapshotMessage&& from) noexcept
+    : BattlePrepSnapshotMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline BattlePrepSnapshotMessage& operator=(const BattlePrepSnapshotMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BattlePrepSnapshotMessage& operator=(BattlePrepSnapshotMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const BattlePrepSnapshotMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const BattlePrepSnapshotMessage* internal_default_instance() {
+    return reinterpret_cast<const BattlePrepSnapshotMessage*>(
+               &_BattlePrepSnapshotMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(BattlePrepSnapshotMessage& a, BattlePrepSnapshotMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(BattlePrepSnapshotMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BattlePrepSnapshotMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline BattlePrepSnapshotMessage* New() const final {
+    return CreateMaybeMessage<BattlePrepSnapshotMessage>(nullptr);
+  }
+
+  BattlePrepSnapshotMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<BattlePrepSnapshotMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const BattlePrepSnapshotMessage& from);
+  void MergeFrom(const BattlePrepSnapshotMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(BattlePrepSnapshotMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "BattlePrepSnapshotMessage";
+  }
+  protected:
+  explicit BattlePrepSnapshotMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMatchIdFieldNumber = 1,
+    kFormationDataFieldNumber = 3,
+    kRoundFieldNumber = 2,
+    kHonorValueFieldNumber = 4,
+  };
+  // string match_id = 1;
+  void clear_match_id();
+  const std::string& match_id() const;
+  void set_match_id(const std::string& value);
+  void set_match_id(std::string&& value);
+  void set_match_id(const char* value);
+  void set_match_id(const char* value, size_t size);
+  std::string* mutable_match_id();
+  std::string* release_match_id();
+  void set_allocated_match_id(std::string* match_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_match_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_match_id(
+      std::string* match_id);
+  private:
+  const std::string& _internal_match_id() const;
+  void _internal_set_match_id(const std::string& value);
+  std::string* _internal_mutable_match_id();
+  public:
+
+  // string formation_data = 3;
+  void clear_formation_data();
+  const std::string& formation_data() const;
+  void set_formation_data(const std::string& value);
+  void set_formation_data(std::string&& value);
+  void set_formation_data(const char* value);
+  void set_formation_data(const char* value, size_t size);
+  std::string* mutable_formation_data();
+  std::string* release_formation_data();
+  void set_allocated_formation_data(std::string* formation_data);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_formation_data();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_formation_data(
+      std::string* formation_data);
+  private:
+  const std::string& _internal_formation_data() const;
+  void _internal_set_formation_data(const std::string& value);
+  std::string* _internal_mutable_formation_data();
+  public:
+
+  // int32 round = 2;
+  void clear_round();
+  ::PROTOBUF_NAMESPACE_ID::int32 round() const;
+  void set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_round() const;
+  void _internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 honor_value = 4;
+  void clear_honor_value();
+  ::PROTOBUF_NAMESPACE_ID::int32 honor_value() const;
+  void set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_honor_value() const;
+  void _internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:BattlePrepSnapshotMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr formation_data_;
+  ::PROTOBUF_NAMESPACE_ID::int32 round_;
+  ::PROTOBUF_NAMESPACE_ID::int32 honor_value_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PlayerSnapshot PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:PlayerSnapshot) */ {
+ public:
+  inline PlayerSnapshot() : PlayerSnapshot(nullptr) {};
+  virtual ~PlayerSnapshot();
+
+  PlayerSnapshot(const PlayerSnapshot& from);
+  PlayerSnapshot(PlayerSnapshot&& from) noexcept
+    : PlayerSnapshot() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerSnapshot& operator=(const PlayerSnapshot& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PlayerSnapshot& operator=(PlayerSnapshot&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const PlayerSnapshot& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PlayerSnapshot* internal_default_instance() {
+    return reinterpret_cast<const PlayerSnapshot*>(
+               &_PlayerSnapshot_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(PlayerSnapshot& a, PlayerSnapshot& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PlayerSnapshot* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PlayerSnapshot* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PlayerSnapshot* New() const final {
+    return CreateMaybeMessage<PlayerSnapshot>(nullptr);
+  }
+
+  PlayerSnapshot* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<PlayerSnapshot>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const PlayerSnapshot& from);
+  void MergeFrom(const PlayerSnapshot& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PlayerSnapshot* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "PlayerSnapshot";
+  }
+  protected:
+  explicit PlayerSnapshot(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdFieldNumber = 1,
+    kMatchIdFieldNumber = 2,
+    kFormationDataFieldNumber = 4,
+    kRoundFieldNumber = 3,
+    kHonorValueFieldNumber = 5,
+  };
+  // string player_id = 1;
+  void clear_player_id();
+  const std::string& player_id() const;
+  void set_player_id(const std::string& value);
+  void set_player_id(std::string&& value);
+  void set_player_id(const char* value);
+  void set_player_id(const char* value, size_t size);
+  std::string* mutable_player_id();
+  std::string* release_player_id();
+  void set_allocated_player_id(std::string* player_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_player_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_player_id(
+      std::string* player_id);
+  private:
+  const std::string& _internal_player_id() const;
+  void _internal_set_player_id(const std::string& value);
+  std::string* _internal_mutable_player_id();
+  public:
+
+  // string match_id = 2;
+  void clear_match_id();
+  const std::string& match_id() const;
+  void set_match_id(const std::string& value);
+  void set_match_id(std::string&& value);
+  void set_match_id(const char* value);
+  void set_match_id(const char* value, size_t size);
+  std::string* mutable_match_id();
+  std::string* release_match_id();
+  void set_allocated_match_id(std::string* match_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_match_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_match_id(
+      std::string* match_id);
+  private:
+  const std::string& _internal_match_id() const;
+  void _internal_set_match_id(const std::string& value);
+  std::string* _internal_mutable_match_id();
+  public:
+
+  // string formation_data = 4;
+  void clear_formation_data();
+  const std::string& formation_data() const;
+  void set_formation_data(const std::string& value);
+  void set_formation_data(std::string&& value);
+  void set_formation_data(const char* value);
+  void set_formation_data(const char* value, size_t size);
+  std::string* mutable_formation_data();
+  std::string* release_formation_data();
+  void set_allocated_formation_data(std::string* formation_data);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_formation_data();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_formation_data(
+      std::string* formation_data);
+  private:
+  const std::string& _internal_formation_data() const;
+  void _internal_set_formation_data(const std::string& value);
+  std::string* _internal_mutable_formation_data();
+  public:
+
+  // int32 round = 3;
+  void clear_round();
+  ::PROTOBUF_NAMESPACE_ID::int32 round() const;
+  void set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_round() const;
+  void _internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 honor_value = 5;
+  void clear_honor_value();
+  ::PROTOBUF_NAMESPACE_ID::int32 honor_value() const;
+  void set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_honor_value() const;
+  void _internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:PlayerSnapshot)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr player_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr formation_data_;
+  ::PROTOBUF_NAMESPACE_ID::int32 round_;
+  ::PROTOBUF_NAMESPACE_ID::int32 honor_value_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class AllSnapshotsMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:AllSnapshotsMessage) */ {
+ public:
+  inline AllSnapshotsMessage() : AllSnapshotsMessage(nullptr) {};
+  virtual ~AllSnapshotsMessage();
+
+  AllSnapshotsMessage(const AllSnapshotsMessage& from);
+  AllSnapshotsMessage(AllSnapshotsMessage&& from) noexcept
+    : AllSnapshotsMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline AllSnapshotsMessage& operator=(const AllSnapshotsMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline AllSnapshotsMessage& operator=(AllSnapshotsMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const AllSnapshotsMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const AllSnapshotsMessage* internal_default_instance() {
+    return reinterpret_cast<const AllSnapshotsMessage*>(
+               &_AllSnapshotsMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(AllSnapshotsMessage& a, AllSnapshotsMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(AllSnapshotsMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(AllSnapshotsMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline AllSnapshotsMessage* New() const final {
+    return CreateMaybeMessage<AllSnapshotsMessage>(nullptr);
+  }
+
+  AllSnapshotsMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<AllSnapshotsMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const AllSnapshotsMessage& from);
+  void MergeFrom(const AllSnapshotsMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(AllSnapshotsMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "AllSnapshotsMessage";
+  }
+  protected:
+  explicit AllSnapshotsMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSnapshotsFieldNumber = 3,
+    kMatchIdFieldNumber = 1,
+    kRoundFieldNumber = 2,
+    kSeedFieldNumber = 4,
+  };
+  // repeated .PlayerSnapshot snapshots = 3;
+  int snapshots_size() const;
+  private:
+  int _internal_snapshots_size() const;
+  public:
+  void clear_snapshots();
+  ::PlayerSnapshot* mutable_snapshots(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::PlayerSnapshot >*
+      mutable_snapshots();
+  private:
+  const ::PlayerSnapshot& _internal_snapshots(int index) const;
+  ::PlayerSnapshot* _internal_add_snapshots();
+  public:
+  const ::PlayerSnapshot& snapshots(int index) const;
+  ::PlayerSnapshot* add_snapshots();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::PlayerSnapshot >&
+      snapshots() const;
+
+  // string match_id = 1;
+  void clear_match_id();
+  const std::string& match_id() const;
+  void set_match_id(const std::string& value);
+  void set_match_id(std::string&& value);
+  void set_match_id(const char* value);
+  void set_match_id(const char* value, size_t size);
+  std::string* mutable_match_id();
+  std::string* release_match_id();
+  void set_allocated_match_id(std::string* match_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_match_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_match_id(
+      std::string* match_id);
+  private:
+  const std::string& _internal_match_id() const;
+  void _internal_set_match_id(const std::string& value);
+  std::string* _internal_mutable_match_id();
+  public:
+
+  // int32 round = 2;
+  void clear_round();
+  ::PROTOBUF_NAMESPACE_ID::int32 round() const;
+  void set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_round() const;
+  void _internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 seed = 4;
+  void clear_seed();
+  ::PROTOBUF_NAMESPACE_ID::int32 seed() const;
+  void set_seed(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_seed() const;
+  void _internal_set_seed(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:AllSnapshotsMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::PlayerSnapshot > snapshots_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 round_;
+  ::PROTOBUF_NAMESPACE_ID::int32 seed_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class BattleResultReportMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:BattleResultReportMessage) */ {
+ public:
+  inline BattleResultReportMessage() : BattleResultReportMessage(nullptr) {};
+  virtual ~BattleResultReportMessage();
+
+  BattleResultReportMessage(const BattleResultReportMessage& from);
+  BattleResultReportMessage(BattleResultReportMessage&& from) noexcept
+    : BattleResultReportMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline BattleResultReportMessage& operator=(const BattleResultReportMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BattleResultReportMessage& operator=(BattleResultReportMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const BattleResultReportMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const BattleResultReportMessage* internal_default_instance() {
+    return reinterpret_cast<const BattleResultReportMessage*>(
+               &_BattleResultReportMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(BattleResultReportMessage& a, BattleResultReportMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(BattleResultReportMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BattleResultReportMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline BattleResultReportMessage* New() const final {
+    return CreateMaybeMessage<BattleResultReportMessage>(nullptr);
+  }
+
+  BattleResultReportMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<BattleResultReportMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const BattleResultReportMessage& from);
+  void MergeFrom(const BattleResultReportMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(BattleResultReportMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "BattleResultReportMessage";
+  }
+  protected:
+  explicit BattleResultReportMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMatchIdFieldNumber = 1,
+    kRoundFieldNumber = 2,
+    kHonorValueFieldNumber = 3,
+  };
+  // string match_id = 1;
+  void clear_match_id();
+  const std::string& match_id() const;
+  void set_match_id(const std::string& value);
+  void set_match_id(std::string&& value);
+  void set_match_id(const char* value);
+  void set_match_id(const char* value, size_t size);
+  std::string* mutable_match_id();
+  std::string* release_match_id();
+  void set_allocated_match_id(std::string* match_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_match_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_match_id(
+      std::string* match_id);
+  private:
+  const std::string& _internal_match_id() const;
+  void _internal_set_match_id(const std::string& value);
+  std::string* _internal_mutable_match_id();
+  public:
+
+  // int32 round = 2;
+  void clear_round();
+  ::PROTOBUF_NAMESPACE_ID::int32 round() const;
+  void set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_round() const;
+  void _internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 honor_value = 3;
+  void clear_honor_value();
+  ::PROTOBUF_NAMESPACE_ID::int32 honor_value() const;
+  void set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_honor_value() const;
+  void _internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:BattleResultReportMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 round_;
+  ::PROTOBUF_NAMESPACE_ID::int32 honor_value_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RankingEntry PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RankingEntry) */ {
+ public:
+  inline RankingEntry() : RankingEntry(nullptr) {};
+  virtual ~RankingEntry();
+
+  RankingEntry(const RankingEntry& from);
+  RankingEntry(RankingEntry&& from) noexcept
+    : RankingEntry() {
+    *this = ::std::move(from);
+  }
+
+  inline RankingEntry& operator=(const RankingEntry& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RankingEntry& operator=(RankingEntry&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const RankingEntry& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RankingEntry* internal_default_instance() {
+    return reinterpret_cast<const RankingEntry*>(
+               &_RankingEntry_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  friend void swap(RankingEntry& a, RankingEntry& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RankingEntry* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RankingEntry* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RankingEntry* New() const final {
+    return CreateMaybeMessage<RankingEntry>(nullptr);
+  }
+
+  RankingEntry* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<RankingEntry>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const RankingEntry& from);
+  void MergeFrom(const RankingEntry& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RankingEntry* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "RankingEntry";
+  }
+  protected:
+  explicit RankingEntry(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerIdFieldNumber = 1,
+    kHonorValueFieldNumber = 2,
+    kRankFieldNumber = 3,
+  };
+  // string player_id = 1;
+  void clear_player_id();
+  const std::string& player_id() const;
+  void set_player_id(const std::string& value);
+  void set_player_id(std::string&& value);
+  void set_player_id(const char* value);
+  void set_player_id(const char* value, size_t size);
+  std::string* mutable_player_id();
+  std::string* release_player_id();
+  void set_allocated_player_id(std::string* player_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_player_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_player_id(
+      std::string* player_id);
+  private:
+  const std::string& _internal_player_id() const;
+  void _internal_set_player_id(const std::string& value);
+  std::string* _internal_mutable_player_id();
+  public:
+
+  // int32 honor_value = 2;
+  void clear_honor_value();
+  ::PROTOBUF_NAMESPACE_ID::int32 honor_value() const;
+  void set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_honor_value() const;
+  void _internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 rank = 3;
+  void clear_rank();
+  ::PROTOBUF_NAMESPACE_ID::int32 rank() const;
+  void set_rank(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_rank() const;
+  void _internal_set_rank(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:RankingEntry)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr player_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 honor_value_;
+  ::PROTOBUF_NAMESPACE_ID::int32 rank_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SettlementMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:SettlementMessage) */ {
+ public:
+  inline SettlementMessage() : SettlementMessage(nullptr) {};
+  virtual ~SettlementMessage();
+
+  SettlementMessage(const SettlementMessage& from);
+  SettlementMessage(SettlementMessage&& from) noexcept
+    : SettlementMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline SettlementMessage& operator=(const SettlementMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SettlementMessage& operator=(SettlementMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SettlementMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SettlementMessage* internal_default_instance() {
+    return reinterpret_cast<const SettlementMessage*>(
+               &_SettlementMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(SettlementMessage& a, SettlementMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SettlementMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SettlementMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SettlementMessage* New() const final {
+    return CreateMaybeMessage<SettlementMessage>(nullptr);
+  }
+
+  SettlementMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SettlementMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SettlementMessage& from);
+  void MergeFrom(const SettlementMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SettlementMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "SettlementMessage";
+  }
+  protected:
+  explicit SettlementMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kRankingsFieldNumber = 2,
+    kMatchIdFieldNumber = 1,
+  };
+  // repeated .RankingEntry rankings = 2;
+  int rankings_size() const;
+  private:
+  int _internal_rankings_size() const;
+  public:
+  void clear_rankings();
+  ::RankingEntry* mutable_rankings(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RankingEntry >*
+      mutable_rankings();
+  private:
+  const ::RankingEntry& _internal_rankings(int index) const;
+  ::RankingEntry* _internal_add_rankings();
+  public:
+  const ::RankingEntry& rankings(int index) const;
+  ::RankingEntry* add_rankings();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RankingEntry >&
+      rankings() const;
+
+  // string match_id = 1;
+  void clear_match_id();
+  const std::string& match_id() const;
+  void set_match_id(const std::string& value);
+  void set_match_id(std::string&& value);
+  void set_match_id(const char* value);
+  void set_match_id(const char* value, size_t size);
+  std::string* mutable_match_id();
+  std::string* release_match_id();
+  void set_allocated_match_id(std::string* match_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_match_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_match_id(
+      std::string* match_id);
+  private:
+  const std::string& _internal_match_id() const;
+  void _internal_set_match_id(const std::string& value);
+  std::string* _internal_mutable_match_id();
+  public:
+
+  // @@protoc_insertion_point(class_scope:SettlementMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RankingEntry > rankings_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
 };
@@ -281,13 +1923,25 @@ class NetworkMessage PROTOBUF_FINAL :
   }
   static const NetworkMessage& default_instance();
 
+  enum DataCase {
+    kHeartbeat = 5,
+    kConnectRequest = 6,
+    kGameStart = 7,
+    kBattlePrepTimer = 8,
+    kBattlePrepSnapshot = 9,
+    kAllSnapshots = 10,
+    kBattleResultReport = 11,
+    kSettlement = 12,
+    DATA_NOT_SET = 0,
+  };
+
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
   static inline const NetworkMessage* internal_default_instance() {
     return reinterpret_cast<const NetworkMessage*>(
                &_NetworkMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    10;
 
   friend void swap(NetworkMessage& a, NetworkMessage& b) {
     a.Swap(&b);
@@ -358,12 +2012,52 @@ class NetworkMessage PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kHeartbeatFieldNumber = 4,
-    kMsgIdFieldNumber = 1,
     kPlayerIdFieldNumber = 2,
-    kTimestampFieldNumber = 3,
+    kMsgIdFieldNumber = 1,
+    kHeartbeatFieldNumber = 5,
+    kConnectRequestFieldNumber = 6,
+    kGameStartFieldNumber = 7,
+    kBattlePrepTimerFieldNumber = 8,
+    kBattlePrepSnapshotFieldNumber = 9,
+    kAllSnapshotsFieldNumber = 10,
+    kBattleResultReportFieldNumber = 11,
+    kSettlementFieldNumber = 12,
   };
-  // .HeartbeatMessage heartbeat = 4;
+  // string player_id = 2;
+  void clear_player_id();
+  const std::string& player_id() const;
+  void set_player_id(const std::string& value);
+  void set_player_id(std::string&& value);
+  void set_player_id(const char* value);
+  void set_player_id(const char* value, size_t size);
+  std::string* mutable_player_id();
+  std::string* release_player_id();
+  void set_allocated_player_id(std::string* player_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_player_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_player_id(
+      std::string* player_id);
+  private:
+  const std::string& _internal_player_id() const;
+  void _internal_set_player_id(const std::string& value);
+  std::string* _internal_mutable_player_id();
+  public:
+
+  // .MessageType msg_id = 1;
+  void clear_msg_id();
+  ::MessageType msg_id() const;
+  void set_msg_id(::MessageType value);
+  private:
+  ::MessageType _internal_msg_id() const;
+  void _internal_set_msg_id(::MessageType value);
+  public:
+
+  // .HeartbeatMessage heartbeat = 5;
   bool has_heartbeat() const;
   private:
   bool _internal_has_heartbeat() const;
@@ -381,45 +2075,168 @@ class NetworkMessage PROTOBUF_FINAL :
       ::HeartbeatMessage* heartbeat);
   ::HeartbeatMessage* unsafe_arena_release_heartbeat();
 
-  // .MessageType msg_id = 1;
-  void clear_msg_id();
-  ::MessageType msg_id() const;
-  void set_msg_id(::MessageType value);
+  // .ConnectRequestMessage connect_request = 6;
+  bool has_connect_request() const;
   private:
-  ::MessageType _internal_msg_id() const;
-  void _internal_set_msg_id(::MessageType value);
+  bool _internal_has_connect_request() const;
   public:
-
-  // uint32 player_id = 2;
-  void clear_player_id();
-  ::PROTOBUF_NAMESPACE_ID::uint32 player_id() const;
-  void set_player_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  void clear_connect_request();
+  const ::ConnectRequestMessage& connect_request() const;
+  ::ConnectRequestMessage* release_connect_request();
+  ::ConnectRequestMessage* mutable_connect_request();
+  void set_allocated_connect_request(::ConnectRequestMessage* connect_request);
   private:
-  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_player_id() const;
-  void _internal_set_player_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  const ::ConnectRequestMessage& _internal_connect_request() const;
+  ::ConnectRequestMessage* _internal_mutable_connect_request();
   public:
+  void unsafe_arena_set_allocated_connect_request(
+      ::ConnectRequestMessage* connect_request);
+  ::ConnectRequestMessage* unsafe_arena_release_connect_request();
 
-  // uint32 timestamp = 3;
-  void clear_timestamp();
-  ::PROTOBUF_NAMESPACE_ID::uint32 timestamp() const;
-  void set_timestamp(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  // .GameStartMessage game_start = 7;
+  bool has_game_start() const;
   private:
-  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_timestamp() const;
-  void _internal_set_timestamp(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  bool _internal_has_game_start() const;
   public:
+  void clear_game_start();
+  const ::GameStartMessage& game_start() const;
+  ::GameStartMessage* release_game_start();
+  ::GameStartMessage* mutable_game_start();
+  void set_allocated_game_start(::GameStartMessage* game_start);
+  private:
+  const ::GameStartMessage& _internal_game_start() const;
+  ::GameStartMessage* _internal_mutable_game_start();
+  public:
+  void unsafe_arena_set_allocated_game_start(
+      ::GameStartMessage* game_start);
+  ::GameStartMessage* unsafe_arena_release_game_start();
 
+  // .BattlePrepTimerMessage battle_prep_timer = 8;
+  bool has_battle_prep_timer() const;
+  private:
+  bool _internal_has_battle_prep_timer() const;
+  public:
+  void clear_battle_prep_timer();
+  const ::BattlePrepTimerMessage& battle_prep_timer() const;
+  ::BattlePrepTimerMessage* release_battle_prep_timer();
+  ::BattlePrepTimerMessage* mutable_battle_prep_timer();
+  void set_allocated_battle_prep_timer(::BattlePrepTimerMessage* battle_prep_timer);
+  private:
+  const ::BattlePrepTimerMessage& _internal_battle_prep_timer() const;
+  ::BattlePrepTimerMessage* _internal_mutable_battle_prep_timer();
+  public:
+  void unsafe_arena_set_allocated_battle_prep_timer(
+      ::BattlePrepTimerMessage* battle_prep_timer);
+  ::BattlePrepTimerMessage* unsafe_arena_release_battle_prep_timer();
+
+  // .BattlePrepSnapshotMessage battle_prep_snapshot = 9;
+  bool has_battle_prep_snapshot() const;
+  private:
+  bool _internal_has_battle_prep_snapshot() const;
+  public:
+  void clear_battle_prep_snapshot();
+  const ::BattlePrepSnapshotMessage& battle_prep_snapshot() const;
+  ::BattlePrepSnapshotMessage* release_battle_prep_snapshot();
+  ::BattlePrepSnapshotMessage* mutable_battle_prep_snapshot();
+  void set_allocated_battle_prep_snapshot(::BattlePrepSnapshotMessage* battle_prep_snapshot);
+  private:
+  const ::BattlePrepSnapshotMessage& _internal_battle_prep_snapshot() const;
+  ::BattlePrepSnapshotMessage* _internal_mutable_battle_prep_snapshot();
+  public:
+  void unsafe_arena_set_allocated_battle_prep_snapshot(
+      ::BattlePrepSnapshotMessage* battle_prep_snapshot);
+  ::BattlePrepSnapshotMessage* unsafe_arena_release_battle_prep_snapshot();
+
+  // .AllSnapshotsMessage all_snapshots = 10;
+  bool has_all_snapshots() const;
+  private:
+  bool _internal_has_all_snapshots() const;
+  public:
+  void clear_all_snapshots();
+  const ::AllSnapshotsMessage& all_snapshots() const;
+  ::AllSnapshotsMessage* release_all_snapshots();
+  ::AllSnapshotsMessage* mutable_all_snapshots();
+  void set_allocated_all_snapshots(::AllSnapshotsMessage* all_snapshots);
+  private:
+  const ::AllSnapshotsMessage& _internal_all_snapshots() const;
+  ::AllSnapshotsMessage* _internal_mutable_all_snapshots();
+  public:
+  void unsafe_arena_set_allocated_all_snapshots(
+      ::AllSnapshotsMessage* all_snapshots);
+  ::AllSnapshotsMessage* unsafe_arena_release_all_snapshots();
+
+  // .BattleResultReportMessage battle_result_report = 11;
+  bool has_battle_result_report() const;
+  private:
+  bool _internal_has_battle_result_report() const;
+  public:
+  void clear_battle_result_report();
+  const ::BattleResultReportMessage& battle_result_report() const;
+  ::BattleResultReportMessage* release_battle_result_report();
+  ::BattleResultReportMessage* mutable_battle_result_report();
+  void set_allocated_battle_result_report(::BattleResultReportMessage* battle_result_report);
+  private:
+  const ::BattleResultReportMessage& _internal_battle_result_report() const;
+  ::BattleResultReportMessage* _internal_mutable_battle_result_report();
+  public:
+  void unsafe_arena_set_allocated_battle_result_report(
+      ::BattleResultReportMessage* battle_result_report);
+  ::BattleResultReportMessage* unsafe_arena_release_battle_result_report();
+
+  // .SettlementMessage settlement = 12;
+  bool has_settlement() const;
+  private:
+  bool _internal_has_settlement() const;
+  public:
+  void clear_settlement();
+  const ::SettlementMessage& settlement() const;
+  ::SettlementMessage* release_settlement();
+  ::SettlementMessage* mutable_settlement();
+  void set_allocated_settlement(::SettlementMessage* settlement);
+  private:
+  const ::SettlementMessage& _internal_settlement() const;
+  ::SettlementMessage* _internal_mutable_settlement();
+  public:
+  void unsafe_arena_set_allocated_settlement(
+      ::SettlementMessage* settlement);
+  ::SettlementMessage* unsafe_arena_release_settlement();
+
+  void clear_data();
+  DataCase data_case() const;
   // @@protoc_insertion_point(class_scope:NetworkMessage)
  private:
   class _Internal;
+  void set_has_heartbeat();
+  void set_has_connect_request();
+  void set_has_game_start();
+  void set_has_battle_prep_timer();
+  void set_has_battle_prep_snapshot();
+  void set_has_all_snapshots();
+  void set_has_battle_result_report();
+  void set_has_settlement();
+
+  inline bool has_data() const;
+  inline void clear_has_data();
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::HeartbeatMessage* heartbeat_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr player_id_;
   int msg_id_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 player_id_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 timestamp_;
+  union DataUnion {
+    DataUnion() {}
+    ::HeartbeatMessage* heartbeat_;
+    ::ConnectRequestMessage* connect_request_;
+    ::GameStartMessage* game_start_;
+    ::BattlePrepTimerMessage* battle_prep_timer_;
+    ::BattlePrepSnapshotMessage* battle_prep_snapshot_;
+    ::AllSnapshotsMessage* all_snapshots_;
+    ::BattleResultReportMessage* battle_result_report_;
+    ::SettlementMessage* settlement_;
+  } data_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
+
   friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
 };
 // ===================================================================
@@ -433,85 +2250,1323 @@ class NetworkMessage PROTOBUF_FINAL :
 #endif  // __GNUC__
 // HeartbeatMessage
 
-// string data = 1;
-inline void HeartbeatMessage::clear_data() {
-  data_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+// -------------------------------------------------------------------
+
+// ConnectRequestMessage
+
+// -------------------------------------------------------------------
+
+// GameStartMessage
+
+// string match_id = 1;
+inline void GameStartMessage::clear_match_id() {
+  match_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
 }
-inline const std::string& HeartbeatMessage::data() const {
-  // @@protoc_insertion_point(field_get:HeartbeatMessage.data)
-  return _internal_data();
+inline const std::string& GameStartMessage::match_id() const {
+  // @@protoc_insertion_point(field_get:GameStartMessage.match_id)
+  return _internal_match_id();
 }
-inline void HeartbeatMessage::set_data(const std::string& value) {
-  _internal_set_data(value);
-  // @@protoc_insertion_point(field_set:HeartbeatMessage.data)
+inline void GameStartMessage::set_match_id(const std::string& value) {
+  _internal_set_match_id(value);
+  // @@protoc_insertion_point(field_set:GameStartMessage.match_id)
 }
-inline std::string* HeartbeatMessage::mutable_data() {
-  // @@protoc_insertion_point(field_mutable:HeartbeatMessage.data)
-  return _internal_mutable_data();
+inline std::string* GameStartMessage::mutable_match_id() {
+  // @@protoc_insertion_point(field_mutable:GameStartMessage.match_id)
+  return _internal_mutable_match_id();
 }
-inline const std::string& HeartbeatMessage::_internal_data() const {
-  return data_.Get();
+inline const std::string& GameStartMessage::_internal_match_id() const {
+  return match_id_.Get();
 }
-inline void HeartbeatMessage::_internal_set_data(const std::string& value) {
+inline void GameStartMessage::_internal_set_match_id(const std::string& value) {
   
-  data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
 }
-inline void HeartbeatMessage::set_data(std::string&& value) {
+inline void GameStartMessage::set_match_id(std::string&& value) {
   
-  data_.Set(
+  match_id_.Set(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
-  // @@protoc_insertion_point(field_set_rvalue:HeartbeatMessage.data)
+  // @@protoc_insertion_point(field_set_rvalue:GameStartMessage.match_id)
 }
-inline void HeartbeatMessage::set_data(const char* value) {
+inline void GameStartMessage::set_match_id(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
-  data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
               GetArena());
-  // @@protoc_insertion_point(field_set_char:HeartbeatMessage.data)
+  // @@protoc_insertion_point(field_set_char:GameStartMessage.match_id)
 }
-inline void HeartbeatMessage::set_data(const char* value,
+inline void GameStartMessage::set_match_id(const char* value,
     size_t size) {
   
-  data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
       reinterpret_cast<const char*>(value), size), GetArena());
-  // @@protoc_insertion_point(field_set_pointer:HeartbeatMessage.data)
+  // @@protoc_insertion_point(field_set_pointer:GameStartMessage.match_id)
 }
-inline std::string* HeartbeatMessage::_internal_mutable_data() {
+inline std::string* GameStartMessage::_internal_mutable_match_id() {
   
-  return data_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  return match_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
 }
-inline std::string* HeartbeatMessage::release_data() {
-  // @@protoc_insertion_point(field_release:HeartbeatMessage.data)
-  return data_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+inline std::string* GameStartMessage::release_match_id() {
+  // @@protoc_insertion_point(field_release:GameStartMessage.match_id)
+  return match_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
 }
-inline void HeartbeatMessage::set_allocated_data(std::string* data) {
-  if (data != nullptr) {
+inline void GameStartMessage::set_allocated_match_id(std::string* match_id) {
+  if (match_id != nullptr) {
     
   } else {
     
   }
-  data_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), data,
+  match_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), match_id,
       GetArena());
-  // @@protoc_insertion_point(field_set_allocated:HeartbeatMessage.data)
+  // @@protoc_insertion_point(field_set_allocated:GameStartMessage.match_id)
 }
-inline std::string* HeartbeatMessage::unsafe_arena_release_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:HeartbeatMessage.data)
+inline std::string* GameStartMessage::unsafe_arena_release_match_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:GameStartMessage.match_id)
   GOOGLE_DCHECK(GetArena() != nullptr);
   
-  return data_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+  return match_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       GetArena());
 }
-inline void HeartbeatMessage::unsafe_arena_set_allocated_data(
-    std::string* data) {
+inline void GameStartMessage::unsafe_arena_set_allocated_match_id(
+    std::string* match_id) {
   GOOGLE_DCHECK(GetArena() != nullptr);
-  if (data != nullptr) {
+  if (match_id != nullptr) {
     
   } else {
     
   }
-  data_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      data, GetArena());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:HeartbeatMessage.data)
+  match_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      match_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:GameStartMessage.match_id)
+}
+
+// repeated string player_ids = 2;
+inline int GameStartMessage::_internal_player_ids_size() const {
+  return player_ids_.size();
+}
+inline int GameStartMessage::player_ids_size() const {
+  return _internal_player_ids_size();
+}
+inline void GameStartMessage::clear_player_ids() {
+  player_ids_.Clear();
+}
+inline std::string* GameStartMessage::add_player_ids() {
+  // @@protoc_insertion_point(field_add_mutable:GameStartMessage.player_ids)
+  return _internal_add_player_ids();
+}
+inline const std::string& GameStartMessage::_internal_player_ids(int index) const {
+  return player_ids_.Get(index);
+}
+inline const std::string& GameStartMessage::player_ids(int index) const {
+  // @@protoc_insertion_point(field_get:GameStartMessage.player_ids)
+  return _internal_player_ids(index);
+}
+inline std::string* GameStartMessage::mutable_player_ids(int index) {
+  // @@protoc_insertion_point(field_mutable:GameStartMessage.player_ids)
+  return player_ids_.Mutable(index);
+}
+inline void GameStartMessage::set_player_ids(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:GameStartMessage.player_ids)
+  player_ids_.Mutable(index)->assign(value);
+}
+inline void GameStartMessage::set_player_ids(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:GameStartMessage.player_ids)
+  player_ids_.Mutable(index)->assign(std::move(value));
+}
+inline void GameStartMessage::set_player_ids(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  player_ids_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:GameStartMessage.player_ids)
+}
+inline void GameStartMessage::set_player_ids(int index, const char* value, size_t size) {
+  player_ids_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:GameStartMessage.player_ids)
+}
+inline std::string* GameStartMessage::_internal_add_player_ids() {
+  return player_ids_.Add();
+}
+inline void GameStartMessage::add_player_ids(const std::string& value) {
+  player_ids_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:GameStartMessage.player_ids)
+}
+inline void GameStartMessage::add_player_ids(std::string&& value) {
+  player_ids_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:GameStartMessage.player_ids)
+}
+inline void GameStartMessage::add_player_ids(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  player_ids_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:GameStartMessage.player_ids)
+}
+inline void GameStartMessage::add_player_ids(const char* value, size_t size) {
+  player_ids_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:GameStartMessage.player_ids)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+GameStartMessage::player_ids() const {
+  // @@protoc_insertion_point(field_list:GameStartMessage.player_ids)
+  return player_ids_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+GameStartMessage::mutable_player_ids() {
+  // @@protoc_insertion_point(field_mutable_list:GameStartMessage.player_ids)
+  return &player_ids_;
+}
+
+// -------------------------------------------------------------------
+
+// BattlePrepTimerMessage
+
+// string match_id = 1;
+inline void BattlePrepTimerMessage::clear_match_id() {
+  match_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& BattlePrepTimerMessage::match_id() const {
+  // @@protoc_insertion_point(field_get:BattlePrepTimerMessage.match_id)
+  return _internal_match_id();
+}
+inline void BattlePrepTimerMessage::set_match_id(const std::string& value) {
+  _internal_set_match_id(value);
+  // @@protoc_insertion_point(field_set:BattlePrepTimerMessage.match_id)
+}
+inline std::string* BattlePrepTimerMessage::mutable_match_id() {
+  // @@protoc_insertion_point(field_mutable:BattlePrepTimerMessage.match_id)
+  return _internal_mutable_match_id();
+}
+inline const std::string& BattlePrepTimerMessage::_internal_match_id() const {
+  return match_id_.Get();
+}
+inline void BattlePrepTimerMessage::_internal_set_match_id(const std::string& value) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void BattlePrepTimerMessage::set_match_id(std::string&& value) {
+  
+  match_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:BattlePrepTimerMessage.match_id)
+}
+inline void BattlePrepTimerMessage::set_match_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:BattlePrepTimerMessage.match_id)
+}
+inline void BattlePrepTimerMessage::set_match_id(const char* value,
+    size_t size) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:BattlePrepTimerMessage.match_id)
+}
+inline std::string* BattlePrepTimerMessage::_internal_mutable_match_id() {
+  
+  return match_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* BattlePrepTimerMessage::release_match_id() {
+  // @@protoc_insertion_point(field_release:BattlePrepTimerMessage.match_id)
+  return match_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void BattlePrepTimerMessage::set_allocated_match_id(std::string* match_id) {
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), match_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:BattlePrepTimerMessage.match_id)
+}
+inline std::string* BattlePrepTimerMessage::unsafe_arena_release_match_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:BattlePrepTimerMessage.match_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return match_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void BattlePrepTimerMessage::unsafe_arena_set_allocated_match_id(
+    std::string* match_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      match_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:BattlePrepTimerMessage.match_id)
+}
+
+// int32 round = 2;
+inline void BattlePrepTimerMessage::clear_round() {
+  round_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepTimerMessage::_internal_round() const {
+  return round_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepTimerMessage::round() const {
+  // @@protoc_insertion_point(field_get:BattlePrepTimerMessage.round)
+  return _internal_round();
+}
+inline void BattlePrepTimerMessage::_internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  round_ = value;
+}
+inline void BattlePrepTimerMessage::set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_round(value);
+  // @@protoc_insertion_point(field_set:BattlePrepTimerMessage.round)
+}
+
+// int32 remaining_time_seconds = 3;
+inline void BattlePrepTimerMessage::clear_remaining_time_seconds() {
+  remaining_time_seconds_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepTimerMessage::_internal_remaining_time_seconds() const {
+  return remaining_time_seconds_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepTimerMessage::remaining_time_seconds() const {
+  // @@protoc_insertion_point(field_get:BattlePrepTimerMessage.remaining_time_seconds)
+  return _internal_remaining_time_seconds();
+}
+inline void BattlePrepTimerMessage::_internal_set_remaining_time_seconds(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  remaining_time_seconds_ = value;
+}
+inline void BattlePrepTimerMessage::set_remaining_time_seconds(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_remaining_time_seconds(value);
+  // @@protoc_insertion_point(field_set:BattlePrepTimerMessage.remaining_time_seconds)
+}
+
+// -------------------------------------------------------------------
+
+// BattlePrepSnapshotMessage
+
+// string match_id = 1;
+inline void BattlePrepSnapshotMessage::clear_match_id() {
+  match_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& BattlePrepSnapshotMessage::match_id() const {
+  // @@protoc_insertion_point(field_get:BattlePrepSnapshotMessage.match_id)
+  return _internal_match_id();
+}
+inline void BattlePrepSnapshotMessage::set_match_id(const std::string& value) {
+  _internal_set_match_id(value);
+  // @@protoc_insertion_point(field_set:BattlePrepSnapshotMessage.match_id)
+}
+inline std::string* BattlePrepSnapshotMessage::mutable_match_id() {
+  // @@protoc_insertion_point(field_mutable:BattlePrepSnapshotMessage.match_id)
+  return _internal_mutable_match_id();
+}
+inline const std::string& BattlePrepSnapshotMessage::_internal_match_id() const {
+  return match_id_.Get();
+}
+inline void BattlePrepSnapshotMessage::_internal_set_match_id(const std::string& value) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void BattlePrepSnapshotMessage::set_match_id(std::string&& value) {
+  
+  match_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:BattlePrepSnapshotMessage.match_id)
+}
+inline void BattlePrepSnapshotMessage::set_match_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:BattlePrepSnapshotMessage.match_id)
+}
+inline void BattlePrepSnapshotMessage::set_match_id(const char* value,
+    size_t size) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:BattlePrepSnapshotMessage.match_id)
+}
+inline std::string* BattlePrepSnapshotMessage::_internal_mutable_match_id() {
+  
+  return match_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* BattlePrepSnapshotMessage::release_match_id() {
+  // @@protoc_insertion_point(field_release:BattlePrepSnapshotMessage.match_id)
+  return match_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void BattlePrepSnapshotMessage::set_allocated_match_id(std::string* match_id) {
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), match_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:BattlePrepSnapshotMessage.match_id)
+}
+inline std::string* BattlePrepSnapshotMessage::unsafe_arena_release_match_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:BattlePrepSnapshotMessage.match_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return match_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void BattlePrepSnapshotMessage::unsafe_arena_set_allocated_match_id(
+    std::string* match_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      match_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:BattlePrepSnapshotMessage.match_id)
+}
+
+// int32 round = 2;
+inline void BattlePrepSnapshotMessage::clear_round() {
+  round_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepSnapshotMessage::_internal_round() const {
+  return round_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepSnapshotMessage::round() const {
+  // @@protoc_insertion_point(field_get:BattlePrepSnapshotMessage.round)
+  return _internal_round();
+}
+inline void BattlePrepSnapshotMessage::_internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  round_ = value;
+}
+inline void BattlePrepSnapshotMessage::set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_round(value);
+  // @@protoc_insertion_point(field_set:BattlePrepSnapshotMessage.round)
+}
+
+// string formation_data = 3;
+inline void BattlePrepSnapshotMessage::clear_formation_data() {
+  formation_data_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& BattlePrepSnapshotMessage::formation_data() const {
+  // @@protoc_insertion_point(field_get:BattlePrepSnapshotMessage.formation_data)
+  return _internal_formation_data();
+}
+inline void BattlePrepSnapshotMessage::set_formation_data(const std::string& value) {
+  _internal_set_formation_data(value);
+  // @@protoc_insertion_point(field_set:BattlePrepSnapshotMessage.formation_data)
+}
+inline std::string* BattlePrepSnapshotMessage::mutable_formation_data() {
+  // @@protoc_insertion_point(field_mutable:BattlePrepSnapshotMessage.formation_data)
+  return _internal_mutable_formation_data();
+}
+inline const std::string& BattlePrepSnapshotMessage::_internal_formation_data() const {
+  return formation_data_.Get();
+}
+inline void BattlePrepSnapshotMessage::_internal_set_formation_data(const std::string& value) {
+  
+  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void BattlePrepSnapshotMessage::set_formation_data(std::string&& value) {
+  
+  formation_data_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:BattlePrepSnapshotMessage.formation_data)
+}
+inline void BattlePrepSnapshotMessage::set_formation_data(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:BattlePrepSnapshotMessage.formation_data)
+}
+inline void BattlePrepSnapshotMessage::set_formation_data(const char* value,
+    size_t size) {
+  
+  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:BattlePrepSnapshotMessage.formation_data)
+}
+inline std::string* BattlePrepSnapshotMessage::_internal_mutable_formation_data() {
+  
+  return formation_data_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* BattlePrepSnapshotMessage::release_formation_data() {
+  // @@protoc_insertion_point(field_release:BattlePrepSnapshotMessage.formation_data)
+  return formation_data_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void BattlePrepSnapshotMessage::set_allocated_formation_data(std::string* formation_data) {
+  if (formation_data != nullptr) {
+    
+  } else {
+    
+  }
+  formation_data_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), formation_data,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:BattlePrepSnapshotMessage.formation_data)
+}
+inline std::string* BattlePrepSnapshotMessage::unsafe_arena_release_formation_data() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:BattlePrepSnapshotMessage.formation_data)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return formation_data_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void BattlePrepSnapshotMessage::unsafe_arena_set_allocated_formation_data(
+    std::string* formation_data) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (formation_data != nullptr) {
+    
+  } else {
+    
+  }
+  formation_data_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      formation_data, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:BattlePrepSnapshotMessage.formation_data)
+}
+
+// int32 honor_value = 4;
+inline void BattlePrepSnapshotMessage::clear_honor_value() {
+  honor_value_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepSnapshotMessage::_internal_honor_value() const {
+  return honor_value_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepSnapshotMessage::honor_value() const {
+  // @@protoc_insertion_point(field_get:BattlePrepSnapshotMessage.honor_value)
+  return _internal_honor_value();
+}
+inline void BattlePrepSnapshotMessage::_internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  honor_value_ = value;
+}
+inline void BattlePrepSnapshotMessage::set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_honor_value(value);
+  // @@protoc_insertion_point(field_set:BattlePrepSnapshotMessage.honor_value)
+}
+
+// -------------------------------------------------------------------
+
+// PlayerSnapshot
+
+// string player_id = 1;
+inline void PlayerSnapshot::clear_player_id() {
+  player_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& PlayerSnapshot::player_id() const {
+  // @@protoc_insertion_point(field_get:PlayerSnapshot.player_id)
+  return _internal_player_id();
+}
+inline void PlayerSnapshot::set_player_id(const std::string& value) {
+  _internal_set_player_id(value);
+  // @@protoc_insertion_point(field_set:PlayerSnapshot.player_id)
+}
+inline std::string* PlayerSnapshot::mutable_player_id() {
+  // @@protoc_insertion_point(field_mutable:PlayerSnapshot.player_id)
+  return _internal_mutable_player_id();
+}
+inline const std::string& PlayerSnapshot::_internal_player_id() const {
+  return player_id_.Get();
+}
+inline void PlayerSnapshot::_internal_set_player_id(const std::string& value) {
+  
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void PlayerSnapshot::set_player_id(std::string&& value) {
+  
+  player_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:PlayerSnapshot.player_id)
+}
+inline void PlayerSnapshot::set_player_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:PlayerSnapshot.player_id)
+}
+inline void PlayerSnapshot::set_player_id(const char* value,
+    size_t size) {
+  
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:PlayerSnapshot.player_id)
+}
+inline std::string* PlayerSnapshot::_internal_mutable_player_id() {
+  
+  return player_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* PlayerSnapshot::release_player_id() {
+  // @@protoc_insertion_point(field_release:PlayerSnapshot.player_id)
+  return player_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void PlayerSnapshot::set_allocated_player_id(std::string* player_id) {
+  if (player_id != nullptr) {
+    
+  } else {
+    
+  }
+  player_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), player_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:PlayerSnapshot.player_id)
+}
+inline std::string* PlayerSnapshot::unsafe_arena_release_player_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:PlayerSnapshot.player_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return player_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void PlayerSnapshot::unsafe_arena_set_allocated_player_id(
+    std::string* player_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (player_id != nullptr) {
+    
+  } else {
+    
+  }
+  player_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      player_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:PlayerSnapshot.player_id)
+}
+
+// string match_id = 2;
+inline void PlayerSnapshot::clear_match_id() {
+  match_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& PlayerSnapshot::match_id() const {
+  // @@protoc_insertion_point(field_get:PlayerSnapshot.match_id)
+  return _internal_match_id();
+}
+inline void PlayerSnapshot::set_match_id(const std::string& value) {
+  _internal_set_match_id(value);
+  // @@protoc_insertion_point(field_set:PlayerSnapshot.match_id)
+}
+inline std::string* PlayerSnapshot::mutable_match_id() {
+  // @@protoc_insertion_point(field_mutable:PlayerSnapshot.match_id)
+  return _internal_mutable_match_id();
+}
+inline const std::string& PlayerSnapshot::_internal_match_id() const {
+  return match_id_.Get();
+}
+inline void PlayerSnapshot::_internal_set_match_id(const std::string& value) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void PlayerSnapshot::set_match_id(std::string&& value) {
+  
+  match_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:PlayerSnapshot.match_id)
+}
+inline void PlayerSnapshot::set_match_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:PlayerSnapshot.match_id)
+}
+inline void PlayerSnapshot::set_match_id(const char* value,
+    size_t size) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:PlayerSnapshot.match_id)
+}
+inline std::string* PlayerSnapshot::_internal_mutable_match_id() {
+  
+  return match_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* PlayerSnapshot::release_match_id() {
+  // @@protoc_insertion_point(field_release:PlayerSnapshot.match_id)
+  return match_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void PlayerSnapshot::set_allocated_match_id(std::string* match_id) {
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), match_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:PlayerSnapshot.match_id)
+}
+inline std::string* PlayerSnapshot::unsafe_arena_release_match_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:PlayerSnapshot.match_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return match_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void PlayerSnapshot::unsafe_arena_set_allocated_match_id(
+    std::string* match_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      match_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:PlayerSnapshot.match_id)
+}
+
+// int32 round = 3;
+inline void PlayerSnapshot::clear_round() {
+  round_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 PlayerSnapshot::_internal_round() const {
+  return round_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 PlayerSnapshot::round() const {
+  // @@protoc_insertion_point(field_get:PlayerSnapshot.round)
+  return _internal_round();
+}
+inline void PlayerSnapshot::_internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  round_ = value;
+}
+inline void PlayerSnapshot::set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_round(value);
+  // @@protoc_insertion_point(field_set:PlayerSnapshot.round)
+}
+
+// string formation_data = 4;
+inline void PlayerSnapshot::clear_formation_data() {
+  formation_data_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& PlayerSnapshot::formation_data() const {
+  // @@protoc_insertion_point(field_get:PlayerSnapshot.formation_data)
+  return _internal_formation_data();
+}
+inline void PlayerSnapshot::set_formation_data(const std::string& value) {
+  _internal_set_formation_data(value);
+  // @@protoc_insertion_point(field_set:PlayerSnapshot.formation_data)
+}
+inline std::string* PlayerSnapshot::mutable_formation_data() {
+  // @@protoc_insertion_point(field_mutable:PlayerSnapshot.formation_data)
+  return _internal_mutable_formation_data();
+}
+inline const std::string& PlayerSnapshot::_internal_formation_data() const {
+  return formation_data_.Get();
+}
+inline void PlayerSnapshot::_internal_set_formation_data(const std::string& value) {
+  
+  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void PlayerSnapshot::set_formation_data(std::string&& value) {
+  
+  formation_data_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:PlayerSnapshot.formation_data)
+}
+inline void PlayerSnapshot::set_formation_data(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:PlayerSnapshot.formation_data)
+}
+inline void PlayerSnapshot::set_formation_data(const char* value,
+    size_t size) {
+  
+  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:PlayerSnapshot.formation_data)
+}
+inline std::string* PlayerSnapshot::_internal_mutable_formation_data() {
+  
+  return formation_data_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* PlayerSnapshot::release_formation_data() {
+  // @@protoc_insertion_point(field_release:PlayerSnapshot.formation_data)
+  return formation_data_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void PlayerSnapshot::set_allocated_formation_data(std::string* formation_data) {
+  if (formation_data != nullptr) {
+    
+  } else {
+    
+  }
+  formation_data_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), formation_data,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:PlayerSnapshot.formation_data)
+}
+inline std::string* PlayerSnapshot::unsafe_arena_release_formation_data() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:PlayerSnapshot.formation_data)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return formation_data_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void PlayerSnapshot::unsafe_arena_set_allocated_formation_data(
+    std::string* formation_data) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (formation_data != nullptr) {
+    
+  } else {
+    
+  }
+  formation_data_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      formation_data, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:PlayerSnapshot.formation_data)
+}
+
+// int32 honor_value = 5;
+inline void PlayerSnapshot::clear_honor_value() {
+  honor_value_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 PlayerSnapshot::_internal_honor_value() const {
+  return honor_value_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 PlayerSnapshot::honor_value() const {
+  // @@protoc_insertion_point(field_get:PlayerSnapshot.honor_value)
+  return _internal_honor_value();
+}
+inline void PlayerSnapshot::_internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  honor_value_ = value;
+}
+inline void PlayerSnapshot::set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_honor_value(value);
+  // @@protoc_insertion_point(field_set:PlayerSnapshot.honor_value)
+}
+
+// -------------------------------------------------------------------
+
+// AllSnapshotsMessage
+
+// string match_id = 1;
+inline void AllSnapshotsMessage::clear_match_id() {
+  match_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& AllSnapshotsMessage::match_id() const {
+  // @@protoc_insertion_point(field_get:AllSnapshotsMessage.match_id)
+  return _internal_match_id();
+}
+inline void AllSnapshotsMessage::set_match_id(const std::string& value) {
+  _internal_set_match_id(value);
+  // @@protoc_insertion_point(field_set:AllSnapshotsMessage.match_id)
+}
+inline std::string* AllSnapshotsMessage::mutable_match_id() {
+  // @@protoc_insertion_point(field_mutable:AllSnapshotsMessage.match_id)
+  return _internal_mutable_match_id();
+}
+inline const std::string& AllSnapshotsMessage::_internal_match_id() const {
+  return match_id_.Get();
+}
+inline void AllSnapshotsMessage::_internal_set_match_id(const std::string& value) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void AllSnapshotsMessage::set_match_id(std::string&& value) {
+  
+  match_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:AllSnapshotsMessage.match_id)
+}
+inline void AllSnapshotsMessage::set_match_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:AllSnapshotsMessage.match_id)
+}
+inline void AllSnapshotsMessage::set_match_id(const char* value,
+    size_t size) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:AllSnapshotsMessage.match_id)
+}
+inline std::string* AllSnapshotsMessage::_internal_mutable_match_id() {
+  
+  return match_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* AllSnapshotsMessage::release_match_id() {
+  // @@protoc_insertion_point(field_release:AllSnapshotsMessage.match_id)
+  return match_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void AllSnapshotsMessage::set_allocated_match_id(std::string* match_id) {
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), match_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:AllSnapshotsMessage.match_id)
+}
+inline std::string* AllSnapshotsMessage::unsafe_arena_release_match_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:AllSnapshotsMessage.match_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return match_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void AllSnapshotsMessage::unsafe_arena_set_allocated_match_id(
+    std::string* match_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      match_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AllSnapshotsMessage.match_id)
+}
+
+// int32 round = 2;
+inline void AllSnapshotsMessage::clear_round() {
+  round_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 AllSnapshotsMessage::_internal_round() const {
+  return round_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 AllSnapshotsMessage::round() const {
+  // @@protoc_insertion_point(field_get:AllSnapshotsMessage.round)
+  return _internal_round();
+}
+inline void AllSnapshotsMessage::_internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  round_ = value;
+}
+inline void AllSnapshotsMessage::set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_round(value);
+  // @@protoc_insertion_point(field_set:AllSnapshotsMessage.round)
+}
+
+// repeated .PlayerSnapshot snapshots = 3;
+inline int AllSnapshotsMessage::_internal_snapshots_size() const {
+  return snapshots_.size();
+}
+inline int AllSnapshotsMessage::snapshots_size() const {
+  return _internal_snapshots_size();
+}
+inline void AllSnapshotsMessage::clear_snapshots() {
+  snapshots_.Clear();
+}
+inline ::PlayerSnapshot* AllSnapshotsMessage::mutable_snapshots(int index) {
+  // @@protoc_insertion_point(field_mutable:AllSnapshotsMessage.snapshots)
+  return snapshots_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::PlayerSnapshot >*
+AllSnapshotsMessage::mutable_snapshots() {
+  // @@protoc_insertion_point(field_mutable_list:AllSnapshotsMessage.snapshots)
+  return &snapshots_;
+}
+inline const ::PlayerSnapshot& AllSnapshotsMessage::_internal_snapshots(int index) const {
+  return snapshots_.Get(index);
+}
+inline const ::PlayerSnapshot& AllSnapshotsMessage::snapshots(int index) const {
+  // @@protoc_insertion_point(field_get:AllSnapshotsMessage.snapshots)
+  return _internal_snapshots(index);
+}
+inline ::PlayerSnapshot* AllSnapshotsMessage::_internal_add_snapshots() {
+  return snapshots_.Add();
+}
+inline ::PlayerSnapshot* AllSnapshotsMessage::add_snapshots() {
+  // @@protoc_insertion_point(field_add:AllSnapshotsMessage.snapshots)
+  return _internal_add_snapshots();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::PlayerSnapshot >&
+AllSnapshotsMessage::snapshots() const {
+  // @@protoc_insertion_point(field_list:AllSnapshotsMessage.snapshots)
+  return snapshots_;
+}
+
+// int32 seed = 4;
+inline void AllSnapshotsMessage::clear_seed() {
+  seed_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 AllSnapshotsMessage::_internal_seed() const {
+  return seed_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 AllSnapshotsMessage::seed() const {
+  // @@protoc_insertion_point(field_get:AllSnapshotsMessage.seed)
+  return _internal_seed();
+}
+inline void AllSnapshotsMessage::_internal_set_seed(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  seed_ = value;
+}
+inline void AllSnapshotsMessage::set_seed(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_seed(value);
+  // @@protoc_insertion_point(field_set:AllSnapshotsMessage.seed)
+}
+
+// -------------------------------------------------------------------
+
+// BattleResultReportMessage
+
+// string match_id = 1;
+inline void BattleResultReportMessage::clear_match_id() {
+  match_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& BattleResultReportMessage::match_id() const {
+  // @@protoc_insertion_point(field_get:BattleResultReportMessage.match_id)
+  return _internal_match_id();
+}
+inline void BattleResultReportMessage::set_match_id(const std::string& value) {
+  _internal_set_match_id(value);
+  // @@protoc_insertion_point(field_set:BattleResultReportMessage.match_id)
+}
+inline std::string* BattleResultReportMessage::mutable_match_id() {
+  // @@protoc_insertion_point(field_mutable:BattleResultReportMessage.match_id)
+  return _internal_mutable_match_id();
+}
+inline const std::string& BattleResultReportMessage::_internal_match_id() const {
+  return match_id_.Get();
+}
+inline void BattleResultReportMessage::_internal_set_match_id(const std::string& value) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void BattleResultReportMessage::set_match_id(std::string&& value) {
+  
+  match_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:BattleResultReportMessage.match_id)
+}
+inline void BattleResultReportMessage::set_match_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:BattleResultReportMessage.match_id)
+}
+inline void BattleResultReportMessage::set_match_id(const char* value,
+    size_t size) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:BattleResultReportMessage.match_id)
+}
+inline std::string* BattleResultReportMessage::_internal_mutable_match_id() {
+  
+  return match_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* BattleResultReportMessage::release_match_id() {
+  // @@protoc_insertion_point(field_release:BattleResultReportMessage.match_id)
+  return match_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void BattleResultReportMessage::set_allocated_match_id(std::string* match_id) {
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), match_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:BattleResultReportMessage.match_id)
+}
+inline std::string* BattleResultReportMessage::unsafe_arena_release_match_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:BattleResultReportMessage.match_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return match_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void BattleResultReportMessage::unsafe_arena_set_allocated_match_id(
+    std::string* match_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      match_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:BattleResultReportMessage.match_id)
+}
+
+// int32 round = 2;
+inline void BattleResultReportMessage::clear_round() {
+  round_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattleResultReportMessage::_internal_round() const {
+  return round_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattleResultReportMessage::round() const {
+  // @@protoc_insertion_point(field_get:BattleResultReportMessage.round)
+  return _internal_round();
+}
+inline void BattleResultReportMessage::_internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  round_ = value;
+}
+inline void BattleResultReportMessage::set_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_round(value);
+  // @@protoc_insertion_point(field_set:BattleResultReportMessage.round)
+}
+
+// int32 honor_value = 3;
+inline void BattleResultReportMessage::clear_honor_value() {
+  honor_value_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattleResultReportMessage::_internal_honor_value() const {
+  return honor_value_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattleResultReportMessage::honor_value() const {
+  // @@protoc_insertion_point(field_get:BattleResultReportMessage.honor_value)
+  return _internal_honor_value();
+}
+inline void BattleResultReportMessage::_internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  honor_value_ = value;
+}
+inline void BattleResultReportMessage::set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_honor_value(value);
+  // @@protoc_insertion_point(field_set:BattleResultReportMessage.honor_value)
+}
+
+// -------------------------------------------------------------------
+
+// RankingEntry
+
+// string player_id = 1;
+inline void RankingEntry::clear_player_id() {
+  player_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& RankingEntry::player_id() const {
+  // @@protoc_insertion_point(field_get:RankingEntry.player_id)
+  return _internal_player_id();
+}
+inline void RankingEntry::set_player_id(const std::string& value) {
+  _internal_set_player_id(value);
+  // @@protoc_insertion_point(field_set:RankingEntry.player_id)
+}
+inline std::string* RankingEntry::mutable_player_id() {
+  // @@protoc_insertion_point(field_mutable:RankingEntry.player_id)
+  return _internal_mutable_player_id();
+}
+inline const std::string& RankingEntry::_internal_player_id() const {
+  return player_id_.Get();
+}
+inline void RankingEntry::_internal_set_player_id(const std::string& value) {
+  
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void RankingEntry::set_player_id(std::string&& value) {
+  
+  player_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:RankingEntry.player_id)
+}
+inline void RankingEntry::set_player_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:RankingEntry.player_id)
+}
+inline void RankingEntry::set_player_id(const char* value,
+    size_t size) {
+  
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:RankingEntry.player_id)
+}
+inline std::string* RankingEntry::_internal_mutable_player_id() {
+  
+  return player_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* RankingEntry::release_player_id() {
+  // @@protoc_insertion_point(field_release:RankingEntry.player_id)
+  return player_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void RankingEntry::set_allocated_player_id(std::string* player_id) {
+  if (player_id != nullptr) {
+    
+  } else {
+    
+  }
+  player_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), player_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:RankingEntry.player_id)
+}
+inline std::string* RankingEntry::unsafe_arena_release_player_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:RankingEntry.player_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return player_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void RankingEntry::unsafe_arena_set_allocated_player_id(
+    std::string* player_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (player_id != nullptr) {
+    
+  } else {
+    
+  }
+  player_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      player_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:RankingEntry.player_id)
+}
+
+// int32 honor_value = 2;
+inline void RankingEntry::clear_honor_value() {
+  honor_value_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 RankingEntry::_internal_honor_value() const {
+  return honor_value_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 RankingEntry::honor_value() const {
+  // @@protoc_insertion_point(field_get:RankingEntry.honor_value)
+  return _internal_honor_value();
+}
+inline void RankingEntry::_internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  honor_value_ = value;
+}
+inline void RankingEntry::set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_honor_value(value);
+  // @@protoc_insertion_point(field_set:RankingEntry.honor_value)
+}
+
+// int32 rank = 3;
+inline void RankingEntry::clear_rank() {
+  rank_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 RankingEntry::_internal_rank() const {
+  return rank_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 RankingEntry::rank() const {
+  // @@protoc_insertion_point(field_get:RankingEntry.rank)
+  return _internal_rank();
+}
+inline void RankingEntry::_internal_set_rank(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  rank_ = value;
+}
+inline void RankingEntry::set_rank(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_rank(value);
+  // @@protoc_insertion_point(field_set:RankingEntry.rank)
+}
+
+// -------------------------------------------------------------------
+
+// SettlementMessage
+
+// string match_id = 1;
+inline void SettlementMessage::clear_match_id() {
+  match_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& SettlementMessage::match_id() const {
+  // @@protoc_insertion_point(field_get:SettlementMessage.match_id)
+  return _internal_match_id();
+}
+inline void SettlementMessage::set_match_id(const std::string& value) {
+  _internal_set_match_id(value);
+  // @@protoc_insertion_point(field_set:SettlementMessage.match_id)
+}
+inline std::string* SettlementMessage::mutable_match_id() {
+  // @@protoc_insertion_point(field_mutable:SettlementMessage.match_id)
+  return _internal_mutable_match_id();
+}
+inline const std::string& SettlementMessage::_internal_match_id() const {
+  return match_id_.Get();
+}
+inline void SettlementMessage::_internal_set_match_id(const std::string& value) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void SettlementMessage::set_match_id(std::string&& value) {
+  
+  match_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:SettlementMessage.match_id)
+}
+inline void SettlementMessage::set_match_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:SettlementMessage.match_id)
+}
+inline void SettlementMessage::set_match_id(const char* value,
+    size_t size) {
+  
+  match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:SettlementMessage.match_id)
+}
+inline std::string* SettlementMessage::_internal_mutable_match_id() {
+  
+  return match_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* SettlementMessage::release_match_id() {
+  // @@protoc_insertion_point(field_release:SettlementMessage.match_id)
+  return match_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void SettlementMessage::set_allocated_match_id(std::string* match_id) {
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), match_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:SettlementMessage.match_id)
+}
+inline std::string* SettlementMessage::unsafe_arena_release_match_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:SettlementMessage.match_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return match_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void SettlementMessage::unsafe_arena_set_allocated_match_id(
+    std::string* match_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (match_id != nullptr) {
+    
+  } else {
+    
+  }
+  match_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      match_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:SettlementMessage.match_id)
+}
+
+// repeated .RankingEntry rankings = 2;
+inline int SettlementMessage::_internal_rankings_size() const {
+  return rankings_.size();
+}
+inline int SettlementMessage::rankings_size() const {
+  return _internal_rankings_size();
+}
+inline void SettlementMessage::clear_rankings() {
+  rankings_.Clear();
+}
+inline ::RankingEntry* SettlementMessage::mutable_rankings(int index) {
+  // @@protoc_insertion_point(field_mutable:SettlementMessage.rankings)
+  return rankings_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RankingEntry >*
+SettlementMessage::mutable_rankings() {
+  // @@protoc_insertion_point(field_mutable_list:SettlementMessage.rankings)
+  return &rankings_;
+}
+inline const ::RankingEntry& SettlementMessage::_internal_rankings(int index) const {
+  return rankings_.Get(index);
+}
+inline const ::RankingEntry& SettlementMessage::rankings(int index) const {
+  // @@protoc_insertion_point(field_get:SettlementMessage.rankings)
+  return _internal_rankings(index);
+}
+inline ::RankingEntry* SettlementMessage::_internal_add_rankings() {
+  return rankings_.Add();
+}
+inline ::RankingEntry* SettlementMessage::add_rankings() {
+  // @@protoc_insertion_point(field_add:SettlementMessage.rankings)
+  return _internal_add_rankings();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RankingEntry >&
+SettlementMessage::rankings() const {
+  // @@protoc_insertion_point(field_list:SettlementMessage.rankings)
+  return rankings_;
 }
 
 // -------------------------------------------------------------------
@@ -538,130 +3593,701 @@ inline void NetworkMessage::set_msg_id(::MessageType value) {
   // @@protoc_insertion_point(field_set:NetworkMessage.msg_id)
 }
 
-// uint32 player_id = 2;
+// string player_id = 2;
 inline void NetworkMessage::clear_player_id() {
-  player_id_ = 0u;
+  player_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 NetworkMessage::_internal_player_id() const {
-  return player_id_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::uint32 NetworkMessage::player_id() const {
+inline const std::string& NetworkMessage::player_id() const {
   // @@protoc_insertion_point(field_get:NetworkMessage.player_id)
   return _internal_player_id();
 }
-inline void NetworkMessage::_internal_set_player_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  
-  player_id_ = value;
-}
-inline void NetworkMessage::set_player_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+inline void NetworkMessage::set_player_id(const std::string& value) {
   _internal_set_player_id(value);
   // @@protoc_insertion_point(field_set:NetworkMessage.player_id)
 }
-
-// uint32 timestamp = 3;
-inline void NetworkMessage::clear_timestamp() {
-  timestamp_ = 0u;
+inline std::string* NetworkMessage::mutable_player_id() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.player_id)
+  return _internal_mutable_player_id();
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 NetworkMessage::_internal_timestamp() const {
-  return timestamp_;
+inline const std::string& NetworkMessage::_internal_player_id() const {
+  return player_id_.Get();
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 NetworkMessage::timestamp() const {
-  // @@protoc_insertion_point(field_get:NetworkMessage.timestamp)
-  return _internal_timestamp();
-}
-inline void NetworkMessage::_internal_set_timestamp(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+inline void NetworkMessage::_internal_set_player_id(const std::string& value) {
   
-  timestamp_ = value;
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
 }
-inline void NetworkMessage::set_timestamp(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _internal_set_timestamp(value);
-  // @@protoc_insertion_point(field_set:NetworkMessage.timestamp)
+inline void NetworkMessage::set_player_id(std::string&& value) {
+  
+  player_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:NetworkMessage.player_id)
+}
+inline void NetworkMessage::set_player_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:NetworkMessage.player_id)
+}
+inline void NetworkMessage::set_player_id(const char* value,
+    size_t size) {
+  
+  player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:NetworkMessage.player_id)
+}
+inline std::string* NetworkMessage::_internal_mutable_player_id() {
+  
+  return player_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* NetworkMessage::release_player_id() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.player_id)
+  return player_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void NetworkMessage::set_allocated_player_id(std::string* player_id) {
+  if (player_id != nullptr) {
+    
+  } else {
+    
+  }
+  player_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), player_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:NetworkMessage.player_id)
+}
+inline std::string* NetworkMessage::unsafe_arena_release_player_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.player_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return player_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_player_id(
+    std::string* player_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (player_id != nullptr) {
+    
+  } else {
+    
+  }
+  player_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      player_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.player_id)
 }
 
-// .HeartbeatMessage heartbeat = 4;
+// .HeartbeatMessage heartbeat = 5;
 inline bool NetworkMessage::_internal_has_heartbeat() const {
-  return this != internal_default_instance() && heartbeat_ != nullptr;
+  return data_case() == kHeartbeat;
 }
 inline bool NetworkMessage::has_heartbeat() const {
   return _internal_has_heartbeat();
 }
+inline void NetworkMessage::set_has_heartbeat() {
+  _oneof_case_[0] = kHeartbeat;
+}
 inline void NetworkMessage::clear_heartbeat() {
-  if (GetArena() == nullptr && heartbeat_ != nullptr) {
-    delete heartbeat_;
+  if (_internal_has_heartbeat()) {
+    if (GetArena() == nullptr) {
+      delete data_.heartbeat_;
+    }
+    clear_has_data();
   }
-  heartbeat_ = nullptr;
+}
+inline ::HeartbeatMessage* NetworkMessage::release_heartbeat() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.heartbeat)
+  if (_internal_has_heartbeat()) {
+    clear_has_data();
+      ::HeartbeatMessage* temp = data_.heartbeat_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.heartbeat_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
 }
 inline const ::HeartbeatMessage& NetworkMessage::_internal_heartbeat() const {
-  const ::HeartbeatMessage* p = heartbeat_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::HeartbeatMessage*>(
-      &::_HeartbeatMessage_default_instance_);
+  return _internal_has_heartbeat()
+      ? *data_.heartbeat_
+      : *reinterpret_cast< ::HeartbeatMessage*>(&::_HeartbeatMessage_default_instance_);
 }
 inline const ::HeartbeatMessage& NetworkMessage::heartbeat() const {
   // @@protoc_insertion_point(field_get:NetworkMessage.heartbeat)
   return _internal_heartbeat();
 }
-inline void NetworkMessage::unsafe_arena_set_allocated_heartbeat(
-    ::HeartbeatMessage* heartbeat) {
-  if (GetArena() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(heartbeat_);
-  }
-  heartbeat_ = heartbeat;
-  if (heartbeat) {
-    
+inline ::HeartbeatMessage* NetworkMessage::unsafe_arena_release_heartbeat() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.heartbeat)
+  if (_internal_has_heartbeat()) {
+    clear_has_data();
+    ::HeartbeatMessage* temp = data_.heartbeat_;
+    data_.heartbeat_ = nullptr;
+    return temp;
   } else {
-    
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_heartbeat(::HeartbeatMessage* heartbeat) {
+  clear_data();
+  if (heartbeat) {
+    set_has_heartbeat();
+    data_.heartbeat_ = heartbeat;
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.heartbeat)
 }
-inline ::HeartbeatMessage* NetworkMessage::release_heartbeat() {
-  auto temp = unsafe_arena_release_heartbeat();
-  if (GetArena() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-  return temp;
-}
-inline ::HeartbeatMessage* NetworkMessage::unsafe_arena_release_heartbeat() {
-  // @@protoc_insertion_point(field_release:NetworkMessage.heartbeat)
-  
-  ::HeartbeatMessage* temp = heartbeat_;
-  heartbeat_ = nullptr;
-  return temp;
-}
 inline ::HeartbeatMessage* NetworkMessage::_internal_mutable_heartbeat() {
-  
-  if (heartbeat_ == nullptr) {
-    auto* p = CreateMaybeMessage<::HeartbeatMessage>(GetArena());
-    heartbeat_ = p;
+  if (!_internal_has_heartbeat()) {
+    clear_data();
+    set_has_heartbeat();
+    data_.heartbeat_ = CreateMaybeMessage< ::HeartbeatMessage >(GetArena());
   }
-  return heartbeat_;
+  return data_.heartbeat_;
 }
 inline ::HeartbeatMessage* NetworkMessage::mutable_heartbeat() {
   // @@protoc_insertion_point(field_mutable:NetworkMessage.heartbeat)
   return _internal_mutable_heartbeat();
 }
-inline void NetworkMessage::set_allocated_heartbeat(::HeartbeatMessage* heartbeat) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
-  if (message_arena == nullptr) {
-    delete heartbeat_;
-  }
-  if (heartbeat) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(heartbeat);
-    if (message_arena != submessage_arena) {
-      heartbeat = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, heartbeat, submessage_arena);
+
+// .ConnectRequestMessage connect_request = 6;
+inline bool NetworkMessage::_internal_has_connect_request() const {
+  return data_case() == kConnectRequest;
+}
+inline bool NetworkMessage::has_connect_request() const {
+  return _internal_has_connect_request();
+}
+inline void NetworkMessage::set_has_connect_request() {
+  _oneof_case_[0] = kConnectRequest;
+}
+inline void NetworkMessage::clear_connect_request() {
+  if (_internal_has_connect_request()) {
+    if (GetArena() == nullptr) {
+      delete data_.connect_request_;
     }
-    
-  } else {
-    
+    clear_has_data();
   }
-  heartbeat_ = heartbeat;
-  // @@protoc_insertion_point(field_set_allocated:NetworkMessage.heartbeat)
+}
+inline ::ConnectRequestMessage* NetworkMessage::release_connect_request() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.connect_request)
+  if (_internal_has_connect_request()) {
+    clear_has_data();
+      ::ConnectRequestMessage* temp = data_.connect_request_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.connect_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::ConnectRequestMessage& NetworkMessage::_internal_connect_request() const {
+  return _internal_has_connect_request()
+      ? *data_.connect_request_
+      : *reinterpret_cast< ::ConnectRequestMessage*>(&::_ConnectRequestMessage_default_instance_);
+}
+inline const ::ConnectRequestMessage& NetworkMessage::connect_request() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.connect_request)
+  return _internal_connect_request();
+}
+inline ::ConnectRequestMessage* NetworkMessage::unsafe_arena_release_connect_request() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.connect_request)
+  if (_internal_has_connect_request()) {
+    clear_has_data();
+    ::ConnectRequestMessage* temp = data_.connect_request_;
+    data_.connect_request_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_connect_request(::ConnectRequestMessage* connect_request) {
+  clear_data();
+  if (connect_request) {
+    set_has_connect_request();
+    data_.connect_request_ = connect_request;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.connect_request)
+}
+inline ::ConnectRequestMessage* NetworkMessage::_internal_mutable_connect_request() {
+  if (!_internal_has_connect_request()) {
+    clear_data();
+    set_has_connect_request();
+    data_.connect_request_ = CreateMaybeMessage< ::ConnectRequestMessage >(GetArena());
+  }
+  return data_.connect_request_;
+}
+inline ::ConnectRequestMessage* NetworkMessage::mutable_connect_request() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.connect_request)
+  return _internal_mutable_connect_request();
 }
 
+// .GameStartMessage game_start = 7;
+inline bool NetworkMessage::_internal_has_game_start() const {
+  return data_case() == kGameStart;
+}
+inline bool NetworkMessage::has_game_start() const {
+  return _internal_has_game_start();
+}
+inline void NetworkMessage::set_has_game_start() {
+  _oneof_case_[0] = kGameStart;
+}
+inline void NetworkMessage::clear_game_start() {
+  if (_internal_has_game_start()) {
+    if (GetArena() == nullptr) {
+      delete data_.game_start_;
+    }
+    clear_has_data();
+  }
+}
+inline ::GameStartMessage* NetworkMessage::release_game_start() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.game_start)
+  if (_internal_has_game_start()) {
+    clear_has_data();
+      ::GameStartMessage* temp = data_.game_start_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.game_start_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::GameStartMessage& NetworkMessage::_internal_game_start() const {
+  return _internal_has_game_start()
+      ? *data_.game_start_
+      : *reinterpret_cast< ::GameStartMessage*>(&::_GameStartMessage_default_instance_);
+}
+inline const ::GameStartMessage& NetworkMessage::game_start() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.game_start)
+  return _internal_game_start();
+}
+inline ::GameStartMessage* NetworkMessage::unsafe_arena_release_game_start() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.game_start)
+  if (_internal_has_game_start()) {
+    clear_has_data();
+    ::GameStartMessage* temp = data_.game_start_;
+    data_.game_start_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_game_start(::GameStartMessage* game_start) {
+  clear_data();
+  if (game_start) {
+    set_has_game_start();
+    data_.game_start_ = game_start;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.game_start)
+}
+inline ::GameStartMessage* NetworkMessage::_internal_mutable_game_start() {
+  if (!_internal_has_game_start()) {
+    clear_data();
+    set_has_game_start();
+    data_.game_start_ = CreateMaybeMessage< ::GameStartMessage >(GetArena());
+  }
+  return data_.game_start_;
+}
+inline ::GameStartMessage* NetworkMessage::mutable_game_start() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.game_start)
+  return _internal_mutable_game_start();
+}
+
+// .BattlePrepTimerMessage battle_prep_timer = 8;
+inline bool NetworkMessage::_internal_has_battle_prep_timer() const {
+  return data_case() == kBattlePrepTimer;
+}
+inline bool NetworkMessage::has_battle_prep_timer() const {
+  return _internal_has_battle_prep_timer();
+}
+inline void NetworkMessage::set_has_battle_prep_timer() {
+  _oneof_case_[0] = kBattlePrepTimer;
+}
+inline void NetworkMessage::clear_battle_prep_timer() {
+  if (_internal_has_battle_prep_timer()) {
+    if (GetArena() == nullptr) {
+      delete data_.battle_prep_timer_;
+    }
+    clear_has_data();
+  }
+}
+inline ::BattlePrepTimerMessage* NetworkMessage::release_battle_prep_timer() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.battle_prep_timer)
+  if (_internal_has_battle_prep_timer()) {
+    clear_has_data();
+      ::BattlePrepTimerMessage* temp = data_.battle_prep_timer_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.battle_prep_timer_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::BattlePrepTimerMessage& NetworkMessage::_internal_battle_prep_timer() const {
+  return _internal_has_battle_prep_timer()
+      ? *data_.battle_prep_timer_
+      : *reinterpret_cast< ::BattlePrepTimerMessage*>(&::_BattlePrepTimerMessage_default_instance_);
+}
+inline const ::BattlePrepTimerMessage& NetworkMessage::battle_prep_timer() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.battle_prep_timer)
+  return _internal_battle_prep_timer();
+}
+inline ::BattlePrepTimerMessage* NetworkMessage::unsafe_arena_release_battle_prep_timer() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.battle_prep_timer)
+  if (_internal_has_battle_prep_timer()) {
+    clear_has_data();
+    ::BattlePrepTimerMessage* temp = data_.battle_prep_timer_;
+    data_.battle_prep_timer_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_battle_prep_timer(::BattlePrepTimerMessage* battle_prep_timer) {
+  clear_data();
+  if (battle_prep_timer) {
+    set_has_battle_prep_timer();
+    data_.battle_prep_timer_ = battle_prep_timer;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.battle_prep_timer)
+}
+inline ::BattlePrepTimerMessage* NetworkMessage::_internal_mutable_battle_prep_timer() {
+  if (!_internal_has_battle_prep_timer()) {
+    clear_data();
+    set_has_battle_prep_timer();
+    data_.battle_prep_timer_ = CreateMaybeMessage< ::BattlePrepTimerMessage >(GetArena());
+  }
+  return data_.battle_prep_timer_;
+}
+inline ::BattlePrepTimerMessage* NetworkMessage::mutable_battle_prep_timer() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.battle_prep_timer)
+  return _internal_mutable_battle_prep_timer();
+}
+
+// .BattlePrepSnapshotMessage battle_prep_snapshot = 9;
+inline bool NetworkMessage::_internal_has_battle_prep_snapshot() const {
+  return data_case() == kBattlePrepSnapshot;
+}
+inline bool NetworkMessage::has_battle_prep_snapshot() const {
+  return _internal_has_battle_prep_snapshot();
+}
+inline void NetworkMessage::set_has_battle_prep_snapshot() {
+  _oneof_case_[0] = kBattlePrepSnapshot;
+}
+inline void NetworkMessage::clear_battle_prep_snapshot() {
+  if (_internal_has_battle_prep_snapshot()) {
+    if (GetArena() == nullptr) {
+      delete data_.battle_prep_snapshot_;
+    }
+    clear_has_data();
+  }
+}
+inline ::BattlePrepSnapshotMessage* NetworkMessage::release_battle_prep_snapshot() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.battle_prep_snapshot)
+  if (_internal_has_battle_prep_snapshot()) {
+    clear_has_data();
+      ::BattlePrepSnapshotMessage* temp = data_.battle_prep_snapshot_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.battle_prep_snapshot_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::BattlePrepSnapshotMessage& NetworkMessage::_internal_battle_prep_snapshot() const {
+  return _internal_has_battle_prep_snapshot()
+      ? *data_.battle_prep_snapshot_
+      : *reinterpret_cast< ::BattlePrepSnapshotMessage*>(&::_BattlePrepSnapshotMessage_default_instance_);
+}
+inline const ::BattlePrepSnapshotMessage& NetworkMessage::battle_prep_snapshot() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.battle_prep_snapshot)
+  return _internal_battle_prep_snapshot();
+}
+inline ::BattlePrepSnapshotMessage* NetworkMessage::unsafe_arena_release_battle_prep_snapshot() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.battle_prep_snapshot)
+  if (_internal_has_battle_prep_snapshot()) {
+    clear_has_data();
+    ::BattlePrepSnapshotMessage* temp = data_.battle_prep_snapshot_;
+    data_.battle_prep_snapshot_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_battle_prep_snapshot(::BattlePrepSnapshotMessage* battle_prep_snapshot) {
+  clear_data();
+  if (battle_prep_snapshot) {
+    set_has_battle_prep_snapshot();
+    data_.battle_prep_snapshot_ = battle_prep_snapshot;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.battle_prep_snapshot)
+}
+inline ::BattlePrepSnapshotMessage* NetworkMessage::_internal_mutable_battle_prep_snapshot() {
+  if (!_internal_has_battle_prep_snapshot()) {
+    clear_data();
+    set_has_battle_prep_snapshot();
+    data_.battle_prep_snapshot_ = CreateMaybeMessage< ::BattlePrepSnapshotMessage >(GetArena());
+  }
+  return data_.battle_prep_snapshot_;
+}
+inline ::BattlePrepSnapshotMessage* NetworkMessage::mutable_battle_prep_snapshot() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.battle_prep_snapshot)
+  return _internal_mutable_battle_prep_snapshot();
+}
+
+// .AllSnapshotsMessage all_snapshots = 10;
+inline bool NetworkMessage::_internal_has_all_snapshots() const {
+  return data_case() == kAllSnapshots;
+}
+inline bool NetworkMessage::has_all_snapshots() const {
+  return _internal_has_all_snapshots();
+}
+inline void NetworkMessage::set_has_all_snapshots() {
+  _oneof_case_[0] = kAllSnapshots;
+}
+inline void NetworkMessage::clear_all_snapshots() {
+  if (_internal_has_all_snapshots()) {
+    if (GetArena() == nullptr) {
+      delete data_.all_snapshots_;
+    }
+    clear_has_data();
+  }
+}
+inline ::AllSnapshotsMessage* NetworkMessage::release_all_snapshots() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.all_snapshots)
+  if (_internal_has_all_snapshots()) {
+    clear_has_data();
+      ::AllSnapshotsMessage* temp = data_.all_snapshots_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.all_snapshots_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::AllSnapshotsMessage& NetworkMessage::_internal_all_snapshots() const {
+  return _internal_has_all_snapshots()
+      ? *data_.all_snapshots_
+      : *reinterpret_cast< ::AllSnapshotsMessage*>(&::_AllSnapshotsMessage_default_instance_);
+}
+inline const ::AllSnapshotsMessage& NetworkMessage::all_snapshots() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.all_snapshots)
+  return _internal_all_snapshots();
+}
+inline ::AllSnapshotsMessage* NetworkMessage::unsafe_arena_release_all_snapshots() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.all_snapshots)
+  if (_internal_has_all_snapshots()) {
+    clear_has_data();
+    ::AllSnapshotsMessage* temp = data_.all_snapshots_;
+    data_.all_snapshots_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_all_snapshots(::AllSnapshotsMessage* all_snapshots) {
+  clear_data();
+  if (all_snapshots) {
+    set_has_all_snapshots();
+    data_.all_snapshots_ = all_snapshots;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.all_snapshots)
+}
+inline ::AllSnapshotsMessage* NetworkMessage::_internal_mutable_all_snapshots() {
+  if (!_internal_has_all_snapshots()) {
+    clear_data();
+    set_has_all_snapshots();
+    data_.all_snapshots_ = CreateMaybeMessage< ::AllSnapshotsMessage >(GetArena());
+  }
+  return data_.all_snapshots_;
+}
+inline ::AllSnapshotsMessage* NetworkMessage::mutable_all_snapshots() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.all_snapshots)
+  return _internal_mutable_all_snapshots();
+}
+
+// .BattleResultReportMessage battle_result_report = 11;
+inline bool NetworkMessage::_internal_has_battle_result_report() const {
+  return data_case() == kBattleResultReport;
+}
+inline bool NetworkMessage::has_battle_result_report() const {
+  return _internal_has_battle_result_report();
+}
+inline void NetworkMessage::set_has_battle_result_report() {
+  _oneof_case_[0] = kBattleResultReport;
+}
+inline void NetworkMessage::clear_battle_result_report() {
+  if (_internal_has_battle_result_report()) {
+    if (GetArena() == nullptr) {
+      delete data_.battle_result_report_;
+    }
+    clear_has_data();
+  }
+}
+inline ::BattleResultReportMessage* NetworkMessage::release_battle_result_report() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.battle_result_report)
+  if (_internal_has_battle_result_report()) {
+    clear_has_data();
+      ::BattleResultReportMessage* temp = data_.battle_result_report_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.battle_result_report_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::BattleResultReportMessage& NetworkMessage::_internal_battle_result_report() const {
+  return _internal_has_battle_result_report()
+      ? *data_.battle_result_report_
+      : *reinterpret_cast< ::BattleResultReportMessage*>(&::_BattleResultReportMessage_default_instance_);
+}
+inline const ::BattleResultReportMessage& NetworkMessage::battle_result_report() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.battle_result_report)
+  return _internal_battle_result_report();
+}
+inline ::BattleResultReportMessage* NetworkMessage::unsafe_arena_release_battle_result_report() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.battle_result_report)
+  if (_internal_has_battle_result_report()) {
+    clear_has_data();
+    ::BattleResultReportMessage* temp = data_.battle_result_report_;
+    data_.battle_result_report_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_battle_result_report(::BattleResultReportMessage* battle_result_report) {
+  clear_data();
+  if (battle_result_report) {
+    set_has_battle_result_report();
+    data_.battle_result_report_ = battle_result_report;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.battle_result_report)
+}
+inline ::BattleResultReportMessage* NetworkMessage::_internal_mutable_battle_result_report() {
+  if (!_internal_has_battle_result_report()) {
+    clear_data();
+    set_has_battle_result_report();
+    data_.battle_result_report_ = CreateMaybeMessage< ::BattleResultReportMessage >(GetArena());
+  }
+  return data_.battle_result_report_;
+}
+inline ::BattleResultReportMessage* NetworkMessage::mutable_battle_result_report() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.battle_result_report)
+  return _internal_mutable_battle_result_report();
+}
+
+// .SettlementMessage settlement = 12;
+inline bool NetworkMessage::_internal_has_settlement() const {
+  return data_case() == kSettlement;
+}
+inline bool NetworkMessage::has_settlement() const {
+  return _internal_has_settlement();
+}
+inline void NetworkMessage::set_has_settlement() {
+  _oneof_case_[0] = kSettlement;
+}
+inline void NetworkMessage::clear_settlement() {
+  if (_internal_has_settlement()) {
+    if (GetArena() == nullptr) {
+      delete data_.settlement_;
+    }
+    clear_has_data();
+  }
+}
+inline ::SettlementMessage* NetworkMessage::release_settlement() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.settlement)
+  if (_internal_has_settlement()) {
+    clear_has_data();
+      ::SettlementMessage* temp = data_.settlement_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.settlement_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::SettlementMessage& NetworkMessage::_internal_settlement() const {
+  return _internal_has_settlement()
+      ? *data_.settlement_
+      : *reinterpret_cast< ::SettlementMessage*>(&::_SettlementMessage_default_instance_);
+}
+inline const ::SettlementMessage& NetworkMessage::settlement() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.settlement)
+  return _internal_settlement();
+}
+inline ::SettlementMessage* NetworkMessage::unsafe_arena_release_settlement() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.settlement)
+  if (_internal_has_settlement()) {
+    clear_has_data();
+    ::SettlementMessage* temp = data_.settlement_;
+    data_.settlement_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_settlement(::SettlementMessage* settlement) {
+  clear_data();
+  if (settlement) {
+    set_has_settlement();
+    data_.settlement_ = settlement;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.settlement)
+}
+inline ::SettlementMessage* NetworkMessage::_internal_mutable_settlement() {
+  if (!_internal_has_settlement()) {
+    clear_data();
+    set_has_settlement();
+    data_.settlement_ = CreateMaybeMessage< ::SettlementMessage >(GetArena());
+  }
+  return data_.settlement_;
+}
+inline ::SettlementMessage* NetworkMessage::mutable_settlement() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.settlement)
+  return _internal_mutable_settlement();
+}
+
+inline bool NetworkMessage::has_data() const {
+  return data_case() != DATA_NOT_SET;
+}
+inline void NetworkMessage::clear_has_data() {
+  _oneof_case_[0] = DATA_NOT_SET;
+}
+inline NetworkMessage::DataCase NetworkMessage::data_case() const {
+  return NetworkMessage::DataCase(_oneof_case_[0]);
+}
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 
