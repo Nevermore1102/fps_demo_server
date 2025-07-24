@@ -17,17 +17,17 @@ fi
 
 # 创建必要的目录
 mkdir -p data
-mkdir -p scripts
+# mkdir -p scripts
 
 # 拷贝 game_server 到当前目录
 cp "../build/game_server" .
 echo "已更新 game_server"
 
-# 拷贝 Lua 脚本
-if [ -d "../scripts" ]; then
-    cp -r ../scripts/* scripts/
-    echo "已更新 Lua 脚本"
-fi
+# # 拷贝 Lua 脚本
+# if [ -d "../scripts" ]; then
+#     cp -r ../scripts/* scripts/
+#     echo "已更新 Lua 脚本"
+# fi
 
 # 设置执行权限
 chmod +x game_server
