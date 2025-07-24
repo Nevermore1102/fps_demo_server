@@ -49,18 +49,18 @@ void CppEngine::onHeartbeat(const std::shared_ptr<Connection>& conn, const Messa
     spdlog::info("P arsed NetworkMessage:");
     spdlog::info("  Message Type: {}", MessageType_Name(row_msg.msg_id()));
     spdlog::info("  Player ID: {}", row_msg.player_id());
-    spdlog::info("  Timestamp: {}", row_msg.timestamp());
-    spdlog::info("  data: {}", row_msg.heartbeat().data());
+    // spdlog::info("  Timestamp: {}", row_msg.timestamp());
+    // spdlog::info("  data: {}", row_msg.heartbeat().data());
 
 
     // 发送心跳响应
     NetworkMessage pb_msg;
     pb_msg.set_msg_id(MessageType::HEARTBEAT);
-    pb_msg.set_timestamp(static_cast<uint32_t>(time(nullptr)));
+    // pb_msg.set_timestamp(static_cast<uint32_t>(time(nullptr)));
     
     // 创建心跳消息体
     HeartbeatMessage* heartbeat = pb_msg.mutable_heartbeat();
-    heartbeat->set_data("服务端收到心跳包");
+    // heartbeat->set_data("服务端收到心跳包");
 
 
     Message response;
