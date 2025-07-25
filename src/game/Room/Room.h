@@ -39,6 +39,12 @@ public:
 
     // 获取当前回合
     int32_t getCurrentRound() const { return currentRound_; }
+    
+    // 快照管理
+    bool recordPlayerSnapshot(const std::string& playerId, const std::string& formationData, int32_t honorValue, int32_t round);
+    bool allSnapshotsReceived() const;
+    void broadcastAllSnapshots();
+    void clearSnapshots();
 
 private:
     // 基础信息
@@ -67,6 +73,6 @@ private:
     void onCountdownTick();                     // 定时器回调：每秒调用一次，处理倒计时逻辑
     void onCountdownFinished();                 // 定时器回调：备战倒计时结束时调用
     void BroadcastResults();                    // 广播游戏结果
-    std::vector<RankingEntry> getRankings();    // 获取排名
+    std::vector<std::shared_ptr<RankingEntry>> getRankings();    // 获取排名
     void cleanupRoom();                         // 清理房间
 };

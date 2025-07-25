@@ -143,7 +143,79 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
 }
 
 void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Player Prep Snapshot: {}", conn->getId());
+    spdlog::info("Received BATTLE_PREP_SNAPSHOT from connection: {}", conn->getId());
+    
+    // 解析消息
+    NetworkMessage pb_msg;
+    if (!msg.getBodyAsProto(pb_msg)) {
+        spdlog::error("Failed to parse battle prep snapshot message body");
+        return;
+    }
+    
+    // 检查是否有快照数据
+    if (!pb_msg.has_battle_prep_snapshot()) {
+        spdlog::error("Message does not contain battle prep snapshot data");
+        return;
+    }
+    
+    const auto& snapshot = pb_msg.battle_prep_snapshot();
+    
+    // 提取消息数据
+    std::string playerId = pb_msg.player_id();
+    std::string matchId = snapshot.match_id();
+    int32_t round = snapshot.round();
+    std::string formationData = snapshot.formation_data();
+    int32_t honorValue = snapshot.honor_value();
+    
+    spdlog::info("Processing snapshot - Player: {}, Match: {}, Round: {}, Honor: {}", 
+                playerId, matchId, round, honorValue);
+    
+    // 验证数据完整性
+    if (playerId.empty() || matchId.empty()) {
+        spdlog::error("Invalid snapshot data: player_id or match_id is empty");
+        return;
+    }
+    
+    // 获取房间管理器并找到对应房间
+    auto& roomManager = RoomManager::getInstance();
+    auto room = roomManager.getRoom(matchId);
+    
+    if (!room) {
+        spdlog::error("Room {} not found for snapshot", matchId);
+        return;
+    }
+    
+    // 验证玩家是否在房间中
+    auto player = room->getPlayer(playerId);
+    if (!player) {
+        spdlog::error("Player {} not found in room {}", playerId, matchId);
+        return;
+    }
+    
+    // 记录玩家快照
+    if (!room->recordPlayerSnapshot(playerId, formationData, honorValue, round)) {
+        spdlog::error("Failed to record snapshot for player {} in room {}", playerId, matchId);
+        return;
+    }
+    
+    spdlog::info("Successfully recorded snapshot for player {} in room {}", playerId, matchId);
+    
+    // 检查是否所有玩家都已提交快照
+    if (room->allSnapshotsReceived()) {
+        spdlog::info("All snapshots received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
+        room->broadcastAllSnapshots();
+        
+        // 清理快照为下一轮准备
+        room->clearSnapshots();
+    } else {
+        size_t receivedCount = 0;
+        for (const auto& roomPlayer : room->getPlayers()) {
+            // 这里需要一个方法来检查特定玩家是否已提交快照
+            // 暂时用玩家数量和已收到的快照数量来判断
+        }
+        spdlog::info("Waiting for more snapshots in room {} (received: {}/{})", 
+                    matchId, receivedCount, room->getPlayerCount());
+    }
 }
 
 void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
