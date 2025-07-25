@@ -21,10 +21,17 @@ message HeartbeatMessage {
 message ConnectRequestMessage {
 }
 
+// 自定义数据类型：玩家基础信息
+message PlayerBasicInfo {
+    string player_id = 1;
+    string player_name = 2;
+    int32 icon_id = 3;
+}
+
 // 对局开始广播（服务器→所有客户端）
 message GameStartMessage {
     string match_id = 1;
-    repeated string player_ids = 2;
+    repeated PlayerBasicInfo players_info = 2;
 }
 
 // 备战倒计时广播（服务器→客户端）
