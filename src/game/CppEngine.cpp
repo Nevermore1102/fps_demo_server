@@ -1,7 +1,9 @@
 #include "CppEngine.h"
+#include <google/protobuf/message.h>
 #include <spdlog/spdlog.h>
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
+#include "Room/RoomManager.h"
 
 CppEngine::CppEngine() {
     // 可在此初始化需要的成员
@@ -11,6 +13,18 @@ bool CppEngine::handleMessage(const std::shared_ptr<Connection>& conn, const Mes
     switch (msg.getType()) {
         case MessageType::HEARTBEAT:
             onHeartbeat(conn, msg);
+            break;
+        case MessageType::CONNECT:
+            onConnect(conn, msg);
+            break;
+        case MessageType::START_MATCH:
+            onStartMatch(conn, msg);
+            break;
+        case MessageType::BATTLE_PREP_SNAPSHOT:
+            onPrepSnapshot(conn, msg);
+            break;
+        case MessageType::BATTLE_RESULT:
+            onBattleResult(conn, msg);
             break;
         // case MessageType::PLAYER_UPDATE:
         //     onPlayerUpdate(conn, msg);
@@ -72,6 +86,71 @@ void CppEngine::onHeartbeat(const std::shared_ptr<Connection>& conn, const Messa
      spdlog::info("发送心跳结束", conn->getId());
 }
 
+void CppEngine::onConnect(const std::shared_ptr<Connection>& conn, const Message& msg) {
+    spdlog::info("Player connected: {}", conn->getId());
+}
+
+void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Message& msg) {
+    spdlog::info("Player Start Match: {}", conn->getId());
+    
+    // 解析消息获取玩家ID
+    NetworkMessage pb_msg;
+    if (!msg.getBodyAsProto(pb_msg)) {
+        spdlog::error("Failed to parse start match message body");
+        return;
+    }
+    
+    std::string playerId = pb_msg.player_id();
+    if (playerId.empty()) {
+        // 如果消息中没有玩家ID，使用连接ID作为玩家ID
+        // playerId = conn->getId();
+        spdlog::error("Player ID is empty");
+        return ;
+    }
+    
+    spdlog::info("Player {} requesting to start match", playerId);
+    
+    // 创建新的Player对象
+    auto player = std::make_shared<Player>(playerId, conn);
+    player->setState(PlayerState::CONNECTED);
+    
+    // 获取RoomManager实例并加入匹配队列
+    auto& roomManager = RoomManager::getInstance();
+    roomManager.joinWaitRoom(player);
+    
+    spdlog::info("Player {} added to match queue", playerId);
+    
+    // 检查是否有房间可以开始游戏
+    auto playerRoom = roomManager.getPlayerRoom(playerId);
+    if (playerRoom && playerRoom->isFull()) {
+        spdlog::info("Room {} is full, attempting to start game", playerRoom->getId());
+        
+        // 尝试开始游戏
+        if (roomManager.startGameInRoom(std::to_string(playerRoom->getId()))) {
+            spdlog::info("Game successfully started in room {}", playerRoom->getId());
+        } else {
+            spdlog::warn("Failed to start game in room {}", playerRoom->getId());
+        }
+    } else {
+        if (playerRoom) {
+            spdlog::info("Player {} assigned to room {}, waiting for more players ({}/{})", 
+                        playerId, playerRoom->getId(), 
+                        playerRoom->getPlayerCount(), MAX_PLAYERS);
+        } else {
+            spdlog::warn("Player {} not assigned to any room", playerId);
+        }
+    }
+}
+
+void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Message& msg) {
+    spdlog::info("Player Prep Snapshot: {}", conn->getId());
+}
+
+void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
+    spdlog::info("Player Battle Result: {}", conn->getId());
+
+}
+
 // void CppEngine::onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg) {
 //     NetworkMessage pb_msg;
 //     if (!msg.getBodyAsProto(pb_msg)) {
@@ -113,10 +192,10 @@ void CppEngine::onHeartbeat(const std::shared_ptr<Connection>& conn, const Messa
 //     }
 // }
 
-void CppEngine::onPlayerJoin(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Player joined: {}", conn->getId());
-}
+// void CppEngine::onPlayerJoin(const std::shared_ptr<Connection>& conn, const Message& msg) {
+//     spdlog::info("Player joined: {}", conn->getId());
+// }
 
-void CppEngine::onPlayerLeave(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Player left: {}", conn->getId());
-} 
+// void CppEngine::onPlayerLeave(const std::shared_ptr<Connection>& conn, const Message& msg) {
+//     spdlog::info("Player left: {}", conn->getId());
+// } 

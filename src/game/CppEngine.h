@@ -24,9 +24,15 @@ public:
 
     // 可扩展的C++处理函数
     void onHeartbeat(const std::shared_ptr<Connection>& conn, const Message& msg);
-    void onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg);
-    void onPlayerAttribute(const std::shared_ptr<Connection>& conn, const Message& msg);
-    void onPlayerState(const std::shared_ptr<Connection>& conn, const Message& msg);
-    void onPlayerJoin(const std::shared_ptr<Connection>& conn, const Message& msg);
-    void onPlayerLeave(const std::shared_ptr<Connection>& conn, const Message& msg);
+
+    void onConnect(const std::shared_ptr<Connection>& conn, const Message& msg);
+    void onStartMatch(const std::shared_ptr<Connection>& conn, const Message& msg);
+    void onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Message& msg);
+    void onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg);
+
+    // void onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg);
+    // void onPlayerAttribute(const std::shared_ptr<Connection>& conn, const Message& msg);
+    // void onPlayerState(const std::shared_ptr<Connection>& conn, const Message& msg);
+    // void onPlayerJoin(const std::shared_ptr<Connection>& conn, const Message& msg);
+    // void onPlayerLeave(const std::shared_ptr<Connection>& conn, const Message& msg);
 }; 
