@@ -25,6 +25,9 @@ public:
     void SetPlayerImageId(const std::string& player_imageid) { player_imageid_ = player_imageid; }
     void SetConnection(const std::shared_ptr<Connection>& connection) { connection_ = connection; }
     void setState(PlayerState state) { state_ = state; }
+    void SetHonorValue(int32_t honor_value) { honor_value_ = honor_value; }
+    void SetPlayerName(const std::string& player_name) { player_name_ = player_name; }
+    void SetIconId(int32_t icon_id) { icon_id_ = icon_id; }
 
     // Getters
     const std::string& GetRoomId() const { return room_id_; }
@@ -33,10 +36,15 @@ public:
     const std::string& GetPlayerImageId() const { return player_imageid_; }
     PlayerState getState() const { return state_; }
     std::shared_ptr<Connection> GetConnection() const { return connection_; }
+    int32_t GetHonorValue() const { return honor_value_; }
+    const std::string& GetPlayerName() const { return player_name_; }
+    int32_t GetIconId() const { return icon_id_; }
 
 private:
     // 基础信息
     std::string player_id_;
+    std::string player_name_;
+    int32_t icon_id_;
     std::string room_id_;
     PlayerState state_;
     std::shared_ptr<Connection> connection_;
