@@ -28,8 +28,13 @@
 
 2. 运行测试：
 ```bash
-./build/test/test_client connection  # 测试连接
-./build/test/test_client shutdown   # 测试服务器关闭
+# ./build/test/test_client connection  # 测试连接
+# ./build/test/test_client shutdown   # 测试服务器关闭
+# 连接/心跳/匹配开始测试
+./build/test/test_client connection
+./build/test/test_client shutdown
+./build/test/test_client match_start
+
 ```
 
 ## 注意事项

@@ -112,41 +112,63 @@ void TestClientBase::readCallback(struct bufferevent* bev, void* ctx) {
     if (client->is_destroying_) return;
 
     struct evbuffer* input = bufferevent_get_input(bev);
-    size_t len = evbuffer_get_length(input);
+    size_t available = evbuffer_get_length(input);
     
-    if (len == 0) return;
-
-    // 读取数据
-    std::vector<uint8_t> data(len);
-    evbuffer_remove(input, data.data(), len);
+    std::cout << "接收到数据，可用字节数: " << available << std::endl;
+    
+    if (available == 0) return;
 
     // 处理所有完整的消息
-    size_t offset = 0;
-    while (offset + sizeof(MessageHeader) <= data.size()) {
-        const MessageHeader* header = reinterpret_cast<const MessageHeader*>(data.data() + offset);
-        size_t total_size = sizeof(MessageHeader) + header->body_size;
-
-        if (offset + total_size > data.size()) {
+    while (available >= sizeof(uint32_t)) {
+        // 先peek长度字段，不从缓冲区移除
+        uint32_t net_len;
+        if (evbuffer_copyout(input, &net_len, sizeof(net_len)) != sizeof(net_len)) {
+            break;
+        }
+        
+        // 转换为主机字节序
+        uint32_t body_len = ntohl(net_len);
+        
+        std::cout << "消息体长度: " << body_len << std::endl;
+        
+        // 检查消息大小限制
+        if (body_len > 10 * 1024 * 1024) {  // 10MB限制
+            client->onError("Message body too large: " + std::to_string(body_len));
+            return;
+        }
+        
+        size_t total_msg_size = sizeof(uint32_t) + body_len;
+        
+        // 检查是否有完整的消息
+        if (available < total_msg_size) {
             // 消息不完整，等待更多数据
+            std::cout << "消息不完整，等待更多数据。需要: " << total_msg_size << ", 可用: " << available << std::endl;
             break;
         }
 
-        // 处理单条消息
-        std::vector<uint8_t> message_data(data.begin() + offset, data.begin() + offset + total_size);
-        Message msg;
-        if (msg.deserialize(message_data)) {
-            client->onMessageReceived(msg);
-        } else {
-            client->onError("Failed to deserialize message at offset " + std::to_string(offset));
+        // 读取完整的消息数据
+        std::vector<uint8_t> message_data(total_msg_size);
+        size_t actual_read = evbuffer_remove(input, message_data.data(), total_msg_size);
+        
+        if (actual_read != total_msg_size) {
+            client->onError("Failed to read complete message");
+            return;
         }
 
-        offset += total_size;
-    }
+        std::cout << "成功读取完整消息，大小: " << total_msg_size << std::endl;
 
-    // 如果有未处理完的数据，放回缓冲区
-    if (offset < data.size()) {
-        std::vector<uint8_t> remaining(data.begin() + offset, data.end());
-        evbuffer_prepend(input, remaining.data(), remaining.size());
+        // 反序列化消息
+        Message msg;
+        if (msg.deserialize(message_data)) {
+            std::cout << "消息反序列化成功，类型: " << static_cast<int>(msg.getType()) << std::endl;
+            client->onMessageReceived(msg);
+        } else {
+            client->onError("Failed to deserialize message");
+            return;
+        }
+
+        // 更新可用数据长度
+        available = evbuffer_get_length(input);
     }
 }
 

@@ -3,6 +3,7 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
+#include "proto/NetworkMessage.pb.h"
 
 class ServerShutdownTest : public TestBase {
 public:
@@ -16,65 +17,61 @@ public:
         if (!client_.connect()) {
             return false;
         }
-
-        // 发送心跳消息
-        Message heartbeat(MessageType::HEARTBEAT);
-        client_.sendMessage(heartbeat);
-
-        // 等待心跳响应
+        sendHeartbeat();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-        // 运行事件循环，直到断开连接
         while (!disconnected_) {
             client_.runOnce();
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
-
-        // 确保客户端正确清理
         client_.cleanup();
-
         return disconnected_;
     }
-
     void sendMessage(const Message& msg) override {
         client_.sendMessage(msg);
     }
-
 private:
+    void sendHeartbeat() {
+        NetworkMessage net_msg;
+        net_msg.set_msg_id(MessageType::HEARTBEAT);
+        HeartbeatMessage* heartbeat = net_msg.mutable_heartbeat();
+        (void)heartbeat;
+        net_msg.set_player_id("test_player");
+        Message msg;
+        msg.setBodyFromProto(net_msg);
+        msg = Message(MessageType::HEARTBEAT, msg.getBody());
+        client_.sendMessage(msg);
+    }
     class TestClient : public TestClientBase {
     public:
         TestClient(const std::string& host, uint16_t port, ServerShutdownTest* test)
             : TestClientBase(host, port), test_(test) {}
-
     protected:
         void onMessageReceived(const Message& msg) override {
-            std::cout << "Received message type: " << static_cast<int>(msg.getType()) << std::endl;
-            
-            if (msg.getType() == MessageType::HEARTBEAT) {
+            NetworkMessage net_msg;
+            if (!msg.getBodyAsProto(net_msg)) {
+                std::cout << "收到无法解析的protobuf消息" << std::endl;
+                return;
+            }
+            if (net_msg.msg_id() == MessageType::HEARTBEAT) {
                 test_->heartbeat_received_ = true;
+                std::cout << "收到心跳响应" << std::endl;
             }
         }
-
         void onConnected() override {
-            std::cout << "Connected to server" << std::endl;
+            std::cout << "已连接服务器" << std::endl;
         }
-
         void onDisconnected() override {
-            std::cout << "Disconnected from server" << std::endl;
+            std::cout << "与服务器断开连接" << std::endl;
             test_->disconnected_ = true;
         }
-
         void onError(const std::string& error) override {
-            std::cerr << "Error: " << error << std::endl;
+            std::cerr << "错误: " << error << std::endl;
         }
-
     private:
         ServerShutdownTest* test_;
     };
-
     TestClient client_;
     bool heartbeat_received_;
     bool disconnected_;
-
     friend class TestClient;
 }; 

@@ -108,7 +108,7 @@ install(DIRECTORY lua/ DESTINATION lua)
 install(DIRECTORY save/ DESTINATION save)
 
 # 添加测试目录
-# add_subdirectory(test)
+add_subdirectory(test)
 
 # 设置输出目录
 set_target_properties(game_server PROPERTIES
