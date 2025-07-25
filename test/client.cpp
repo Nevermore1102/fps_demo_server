@@ -6,6 +6,10 @@
 // #include "LuaMessageTest.h"
 #include "MatchStartTest.h"
 
+
+// 添加全局变量
+std::string g_playerName = "";
+
 void printUsage(const char* program) {
     std::cout << "Usage: " << program << " [test_name]" << std::endl;
     std::cout << "Available tests:" << std::endl;
@@ -49,6 +53,9 @@ int main(int argc, char* argv[]) {
     if (argc > 1) {
         // 运行指定的测试
         std::string testName = argv[1];
+        if (argc > 2) {
+            g_playerName = argv[2];
+        }
         if (!manager.runTest(testName, host, port)) {
             std::cerr << "Test failed: " << testName << std::endl;
             return 1;
