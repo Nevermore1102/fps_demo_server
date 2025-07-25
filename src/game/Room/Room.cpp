@@ -139,10 +139,10 @@ void Room::startBattlePrepTimer() {
     startCountdownTimer(PREPARE_TIME);
 }
 
-// 定时器回调：每秒调用一次，处理倒计时逻辑
+// 定时器回调：每x秒调用一次，处理倒计时逻辑
 void Room::onCountdownTick() {
     if (countdown_remaining_seconds_ > 0) {
-        --countdown_remaining_seconds_;
+        countdown_remaining_seconds_-=BROADCAST_INTERVAL;
 
         // 剩余时间消息 {type：剩余时间广播，对局id，轮次，备战剩余时间}
         NetworkMessage msg;
