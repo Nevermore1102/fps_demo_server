@@ -64,7 +64,7 @@ void Room::startGame() {
     if (isFull()) {
         setState(RoomState::GAMING);
 
-        // 广播游戏开始消息 {type：对局开始，对局id，所有玩家id}
+        // 广播游戏开始消息 {type：对局开始，对局id，所有玩家信息}
         NetworkMessage msg;
         msg.set_msg_id(MessageType::GAME_START);
         GameStartMessage* start_msg = msg.mutable_game_start();
@@ -80,6 +80,8 @@ void Room::startGame() {
             }
         }
         broadcastMessage(msg);
+
+        startBattlePrepTimer();  // 启动备战倒计时
 
         spdlog::info("Game started in room {}", room_id_);
     } else {
