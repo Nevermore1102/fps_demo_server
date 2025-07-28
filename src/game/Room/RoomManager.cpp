@@ -125,7 +125,7 @@ void RoomManager::processMatching() {
         if (room->isFull()) {
             room->setState(RoomState::FULL);
             spdlog::info("Room {} is full with {} players", 
-                        room->getId(), room->getPlayerCount());
+                        room->getId(), room->getAllPlayerCount());
         }
     }
 }
@@ -216,7 +216,7 @@ bool RoomManager::isRoomFull(const std::string& roomId) const {
 // 获取房间中的玩家数量
 size_t RoomManager::getRoomPlayerCount(const std::string& roomId) const {
     auto room = const_cast<RoomManager*>(this)->getRoom(roomId);
-    return room ? room->getPlayerCount() : 0;
+    return room ? room->getAllPlayerCount() : 0;
 }
 
 // 获取所有房间信息（用于调试和监控）
@@ -228,7 +228,7 @@ std::vector<std::pair<std::string, size_t>> RoomManager::getAllRoomsInfo() const
     
     for (const auto& roomPair : rooms_) {
         roomsInfo.emplace_back(std::to_string(roomPair.first), 
-                              roomPair.second->getPlayerCount());
+                              roomPair.second->getAllPlayerCount());
     }
     
     return roomsInfo;
