@@ -41,6 +41,7 @@ public:
     // 清理任务
     void cleanupEmptyRooms();
     void cleanupFinishedRooms();
+    void safeRemoveRoom(const std::string& roomId);  // 安全删除房间
     
 private:
     RoomManager() : roomIdCounter_(1) {}

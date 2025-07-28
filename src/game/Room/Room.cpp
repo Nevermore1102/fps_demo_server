@@ -106,6 +106,7 @@ void Room::startGame() {
         }
         broadcastMessage(msg);
 
+        nextRound();  // 回合+1
         startBattlePrepTimer();  // 启动备战倒计时
 
         spdlog::info("Game started in room {}", room_id_);
@@ -198,6 +199,7 @@ bool Room::allGamingRankingsReceived() const{
     
     return true;
 }
+
 // 广播结果给所有玩家
 void Room::BroadcastResults() {
     auto rankings = getRankings();
@@ -287,11 +289,14 @@ std::vector<std::shared_ptr<RankingEntry>> Room::getRankings() {
     return rankings;
 }
 
+// 房间清理
 void Room::cleanupRoom() {
     players_.clear();
     playerMap_.clear();
     currentSnapshots_.clear();
-    state_ = RoomState::FINISHED;
+    allHonorValue_.clear();
+    exitPlayers_.clear();
+    setState(RoomState::FINISHED);
 }
 
 // 记录玩家快照

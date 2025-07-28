@@ -48,12 +48,23 @@ void RoomManager::removeRoom(const std::string& roomId) {
         if (it != rooms_.end()) {
             spdlog::info("Removing room {}", roomId);
             
+            auto room = it->second;
+            
             // 清理房间内玩家的房间ID
-            for (auto& player : it->second->getPlayers()) {
-                player->SetRoomId("");
+            for (auto& player : room->getPlayers()) {
+                if (player) {
+                    player->SetRoomId("");
+                    player->setState(PlayerState::DISCONNECTED);
+                }
             }
             
+            // 确保房间资源完全清理
+            room->cleanupRoom();
+            
+            // 从容器中移除
             rooms_.erase(it);
+            
+            spdlog::info("Room {} removed and cleaned up successfully", roomId);
         }
     } catch (const std::exception& e) {
         spdlog::error("Invalid room ID format when removing: {}", roomId);

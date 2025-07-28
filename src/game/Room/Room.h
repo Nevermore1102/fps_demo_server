@@ -10,6 +10,7 @@
 #define MAX_PLAYERS 2           // 房间最大玩家数
 #define PREPARE_TIME 30         // 准备时间（秒）
 #define BROADCAST_INTERVAL 5    // 广播间隔（秒）
+#define ROUND_NUM 7             // 游戏总轮次
 
 enum class RoomState {
     WAITING,    // 等待玩家
@@ -21,7 +22,8 @@ enum class RoomState {
 class Room{
 public:
     Room(const int32_t room_id = 0):room_id_(room_id),
-                                    max_players_(MAX_PLAYERS){}
+                                    max_players_(MAX_PLAYERS),
+                                    currentRound_(0){}
     ~Room() = default;
 
     // 基础信息
@@ -46,6 +48,12 @@ public:
 
     // 获取当前回合
     int32_t getCurrentRound() const { return currentRound_; }
+
+    // 回合+1
+    void nextRound() {++currentRound_; };
+
+    // 启动备战倒计时
+    void startBattlePrepTimer();
     
     // 快照管理
     bool recordPlayerSnapshot(const std::string& playerId, const std::string& formationData, int32_t honorValue, int32_t round);
@@ -62,6 +70,10 @@ public:
     // 玩家断线或退出
     void onPlayerExit(const std::string& playerId, int32_t exit_round, int32_t honorValue);
     void broadcastExitMessage();
+    std::unordered_map<std::string, ExitPlayerInfo> exitPlayers_;
+
+    // 房间清理
+    void cleanupRoom();
 
 private:
     // 基础信息
@@ -76,7 +88,6 @@ private:
     std::unordered_map<std::string, std::shared_ptr<Player>> playerMap_;
     std::unordered_map<std::string, PlayerSnapshot> currentSnapshots_;
     std::unordered_map<std::string, int32_t> allHonorValue_;
-    std::unordered_map<std::string, ExitPlayerInfo> exitPlayers_;
 
     // 定时器相关：剩余倒计时秒数，定时器线程
     int32_t countdown_remaining_seconds_;
@@ -89,9 +100,7 @@ private:
     int32_t getRemainingTime() const;           // 获取当前剩余时间（秒）
     void broadcastMessage(const NetworkMessage& msg);
     void broadcastToOthers(const std::string& excludePlayerId, const NetworkMessage& msg);
-    void startBattlePrepTimer();                // 启动备战倒计时
     void onCountdownTick();                     // 定时器回调：每秒调用一次，处理倒计时逻辑
     void onCountdownFinished();                 // 定时器回调：备战倒计时结束时调用
     std::vector<std::shared_ptr<RankingEntry>> getRankings();    // 获取总排名
-    void cleanupRoom();                         // 清理房间
 };

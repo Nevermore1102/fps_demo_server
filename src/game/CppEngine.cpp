@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <google/protobuf/message.h>
 #include <spdlog/spdlog.h>
+#include "game/Room/Room.h"
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
 #include "Room/RoomManager.h"
@@ -211,28 +212,22 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
         
         // 清理快照为下一轮准备
         room->clearSnapshots();
-    }
-    //test git1
-    //test git1
-    //test git1
 
+        // 继续下一轮战斗
+        if(room->getCurrentRound() <= ROUND_NUM){
+            room->nextRound();  // 回合+1
+            room->startBattlePrepTimer();  // 启动备战倒计时
+        }
+        // 战斗结束，等待结算
+        else {
+            spdlog::info("Game finished in room {}, waiting client for battle results", matchId);
+        }
+    }
 }
 
 // 处理战斗结果消息 {type:战斗结果，对局id，playerid1，轮次，荣耀值}
 void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
     spdlog::info("Player Battle Result: {}", conn->getId());
-    // // 解析消息获取玩家ID
-    // NetworkMessage pb_msg;
-    // if (!msg.getBodyAsProto(pb_msg)) {
-    //     spdlog::error("Failed to parse battle result message body");
-    //     return;
-    //test git1
-    //test git1
-    //test git1
-    //test git1
-    //test git1
-
-
     // 解析消息获取玩家ID
     NetworkMessage pb_msg;
     if (!msg.getBodyAsProto(pb_msg)) {
@@ -289,6 +284,7 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     if (room->allGamingRankingsReceived()) {
         spdlog::info("All gaming rankings received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
         room->BroadcastResults();
+        
     }
 }
 
