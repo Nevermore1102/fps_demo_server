@@ -79,6 +79,9 @@ public:
                 std::cout<< "快照未收到，当前轮次：" << currTurn << std::endl;
                 return false;
             }
+
+            sendEndMatch();
+
             currTurn++;
             std::cout << "结束一个回合：currTurn: " <<currTurn<< std::endl;
 
@@ -123,6 +126,19 @@ private:
         msg.setBodyFromProto(net_msg);
         client_.sendMessage(msg);
         std::cout << "开始匹配消息消息，id：" <<net_msg.player_id()<< std::endl;
+    }
+
+    void sendEndMatch() {
+        NetworkMessage net_msg;
+        net_msg.set_msg_id(MessageType::BATTLE_RESULT);
+        BattleResultReportMessage* cmsg = net_msg.mutable_battle_result_report();
+        net_msg.set_player_id(g_playerName);
+        cmsg->set_match_id(std::to_string(match_id_));
+        cmsg->set_round(currTurn);
+        Message msg(MessageType::BATTLE_RESULT);
+        msg.setBodyFromProto(net_msg);
+        client_.sendMessage(msg);
+        std::cout << "战斗结束结算消息回复，round" <<currTurn<< std::endl;
     }
 
     //send snapshot
