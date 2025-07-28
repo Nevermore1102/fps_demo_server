@@ -30,7 +30,7 @@ cp "../build/game_server" .
 echo "已更新 game_server"
 
 cp "../build/test/test_client" .
-echo "已更新 game_server"
+echo "已更新 test_client"
 
 # # 拷贝 Lua 脚本
 # if [ -d "../scripts" ]; then

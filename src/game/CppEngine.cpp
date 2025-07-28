@@ -60,7 +60,7 @@ bool CppEngine::handleMessage(const std::shared_ptr<Connection>& conn, const Mes
 void CppEngine::onHeartbeat(const std::shared_ptr<Connection>& conn, const Message& msg) {
     spdlog::debug("Received heartbeat from {}", conn->getId());
     
-    msg.logMessage();
+    // msg.logMessage();
 
     NetworkMessage row_msg;
     // 尝试从消息体中解析protobuf对象

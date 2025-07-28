@@ -152,7 +152,7 @@ void Room::broadcastMessage(const NetworkMessage& msg) {
                     spdlog::error("Failed to send message to player: {}", player->GetPlayerId());
                 else{
                     spdlog::info("Message sent to player: {}", player->GetPlayerId());
-                    body.logMessage();  // 打印消息详情
+                    // body.logMessage();  // 打印消息详情
                 }
             }
         }
@@ -174,7 +174,7 @@ void Room::broadcastToOthers(const std::string& excludePlayerId, const NetworkMe
                     spdlog::error("Failed to send message to player: {}", player->GetPlayerId());
                 else{
                     spdlog::info("Message sent to player: {}", player->GetPlayerId());
-                    body.logMessage();  // 打印消息详情
+                    // body.logMessage();  // 打印消息详情
                 }
             }
         }
