@@ -37,5 +37,7 @@ save/*.dat
 # node 目录配置
 node/*
 !node/start.sh
+node_test/*
+!node_test/cps.sh
 node/data/
 node/game_server 
