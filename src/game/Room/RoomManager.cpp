@@ -17,6 +17,12 @@ void RoomManager::joinWaitRoom(const std::shared_ptr<Player>& player) {
     // 设置玩家状态
     player->setState(PlayerState::CONNECTED);
     
+    // 添加连接映射
+    auto conn = player->GetConnection();
+    if (conn) {
+        addPlayerConnection(conn, player);
+    }
+    
     // 添加到等待队列
     wait_rooms_.push_back(player);
     
@@ -173,6 +179,12 @@ bool RoomManager::removePlayerFromWaitQueue(const std::string& playerId) {
         });
     
     if (it != wait_rooms_.end()) {
+        // 移除连接映射
+        auto conn = (*it)->GetConnection();
+        if (conn) {
+            removePlayerConnection(conn);
+        }
+        
         wait_rooms_.erase(it);
         spdlog::info("Player {} removed from wait queue", playerId);
         return true;
@@ -190,6 +202,12 @@ bool RoomManager::removePlayerFromRoom(const std::string& playerId) {
         auto player = room->getPlayer(playerId);
         
         if (player) {
+            // 移除连接映射
+            auto conn = player->GetConnection();
+            if (conn) {
+                removePlayerConnection(conn);
+            }
+            
             // 从房间的玩家列表中移除（需要修改Room类来支持移除玩家）
             // 这里由于Room类没有removePlayer方法，我们需要手动操作
             auto& players = const_cast<std::vector<std::shared_ptr<Player>>&>(room->getPlayers());
@@ -286,17 +304,36 @@ void RoomManager::cleanupEmptyRooms() {
 }
 
 // 清理已结束的房间
-void RoomManager::cleanupFinishedRooms() {
-    std::lock_guard<std::mutex> lock(roomsMutex_);
+// void RoomManager::cleanupFinishedRooms() {
+//     std::lock_guard<std::mutex> lock(roomsMutex_);
     
-    auto it = rooms_.begin();
-    while (it != rooms_.end()) {
-        if (it->second->getState() == RoomState::FINISHED) {
-            spdlog::info("Cleaning up finished room {}", it->first);
-            it = rooms_.erase(it);
-        } else {
-            ++it;
+//     auto it = rooms_.begin();
+//     while (it != rooms_.end()) {
+//         if (it->second->getState() == RoomState::FINISHED) {
+//             spdlog::info("Cleaning up finished room {}", it->first);
+//             it = rooms_.erase(it);
+//         } else {
+//             ++it;
+//         }
+//     }
+// }
+
+// 清理已结束的房间
+void RoomManager::cleanupFinishedRooms() {
+    std::vector<std::string> roomsToRemove;
+    
+    {
+        std::lock_guard<std::mutex> lock(roomsMutex_);
+        for (const auto& roomPair : rooms_) {
+            if (roomPair.second->getState() == RoomState::FINISHED) {
+                roomsToRemove.push_back(std::to_string(roomPair.first));
+            }
         }
+    }
+    
+    // 使用安全删除方法
+    for (const auto& roomId : roomsToRemove) {
+        safeRemoveRoom(roomId);
     }
 }
 
@@ -314,5 +351,243 @@ void RoomManager::cleanupDisconnectedPlayers() {
         } else {
             ++it;
         }
+    }
+}
+
+// 添加连接-玩家映射
+void RoomManager::addPlayerConnection(const std::shared_ptr<Connection>& conn, const std::shared_ptr<Player>& player) {
+    std::lock_guard<std::mutex> lock(playersMutex_);
+    
+    if (!conn || !player) {
+        spdlog::error("Invalid connection or player pointer");
+        return;
+    }
+    
+    // 检查连接是否已存在
+    auto it = Connections_player_.find(conn);
+    if (it != Connections_player_.end()) {
+        spdlog::warn("Connection {} already exists, updating player mapping", conn->getId());
+    }
+    
+    Connections_player_[conn] = player;
+    spdlog::info("Added connection mapping: {} -> {}", conn->getId(), player->GetPlayerId());
+}
+
+// 移除连接-玩家映射
+void RoomManager::removePlayerConnection(const std::shared_ptr<Connection>& conn) {
+    std::lock_guard<std::mutex> lock(playersMutex_);
+    
+    if (!conn) {
+        spdlog::error("Invalid connection pointer");
+        return;
+    }
+    
+    auto it = Connections_player_.find(conn);
+    if (it != Connections_player_.end()) {
+        spdlog::info("Removing connection mapping: {} -> {}", 
+                    conn->getId(), it->second->GetPlayerId());
+        Connections_player_.erase(it);
+    } else {
+        spdlog::warn("Connection {} not found in mapping", conn->getId());
+    }
+}
+
+// 通过连接获取玩家
+std::shared_ptr<Player> RoomManager::getPlayerByConnection(const std::shared_ptr<Connection>& conn) {
+    std::lock_guard<std::mutex> lock(playersMutex_);
+    
+    if (!conn) {
+        spdlog::error("Invalid connection pointer");
+        return nullptr;
+    }
+    
+    auto it = Connections_player_.find(conn);
+    if (it != Connections_player_.end()) {
+        return it->second;
+    }
+    
+    spdlog::debug("No player found for connection {}", conn->getId());
+    return nullptr;
+}
+
+// 通过玩家ID获取连接
+std::shared_ptr<Connection> RoomManager::getConnectionByPlayerId(const std::string& playerId) {
+    std::lock_guard<std::mutex> lock(playersMutex_);
+    
+    if (playerId.empty()) {
+        spdlog::error("Empty player ID");
+        return nullptr;
+    }
+    
+    for (const auto& pair : Connections_player_) {
+        if (pair.second && pair.second->GetPlayerId() == playerId) {
+            return pair.first;
+        }
+    }
+    
+    spdlog::debug("No connection found for player {}", playerId);
+    return nullptr;
+}
+
+// 检查连接是否活跃
+bool RoomManager::isConnectionActive(const std::shared_ptr<Connection>& conn) const {
+    std::lock_guard<std::mutex> lock(playersMutex_);
+    
+    if (!conn) {
+        return false;
+    }
+    
+    auto it = Connections_player_.find(conn);
+    if (it != Connections_player_.end()) {
+        // 检查连接是否仍然有效
+        return conn->isConnected() && it->second->getState() != PlayerState::DISCONNECTED;
+    }
+    
+    return false;
+}
+
+// 清理无效连接
+void RoomManager::cleanupInactiveConnections() {
+    std::lock_guard<std::mutex> lock(playersMutex_);
+    
+    auto it = Connections_player_.begin();
+    while (it != Connections_player_.end()) {
+        const auto& conn = it->first;
+        const auto& player = it->second;
+        
+        // 检查连接是否无效或玩家已断线
+        if (!conn || !player || !conn->isConnected() || player->getState() == PlayerState::DISCONNECTED) {
+            spdlog::info("Cleaning up inactive connection: {} -> {}", 
+                        conn ? conn->getId() : "null", 
+                        player ? player->GetPlayerId() : "null");
+            
+            // 如果玩家存在，设置为断线状态
+            if (player) {
+                player->setState(PlayerState::DISCONNECTED);
+            }
+            
+            it = Connections_player_.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+// 处理连接断开
+void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& conn) {
+    if (!conn) {
+        spdlog::error("Invalid connection pointer in handleConnectionDisconnect");
+        return;
+    }
+    
+    spdlog::info("Handling connection disconnect: {}", conn->getId());
+    
+    // 获取对应的玩家
+    auto player = getPlayerByConnection(conn);
+    if (!player) {
+        spdlog::warn("No player found for disconnected connection: {}", conn->getId());
+        // 仍然从连接池中移除
+        removePlayerConnection(conn);
+        return;
+    }
+    
+    std::string playerId = player->GetPlayerId();
+    PlayerState currentState = player->getState();
+    
+    spdlog::info("Player {} (state: {}) disconnected", playerId, static_cast<int>(currentState));
+    
+    // 设置玩家状态为断线
+    player->setState(PlayerState::DISCONNECTED);
+    
+    // 根据玩家当前状态进行不同处理
+    switch (currentState) {
+        case PlayerState::CONNECTED: {
+            // 玩家在等待匹配状态，从等待队列中移除
+            if (removePlayerFromWaitQueue(playerId)) {
+                spdlog::info("Player {} removed from wait queue due to disconnect", playerId);
+            }
+            break;
+        }
+        
+        case PlayerState::GAMING: {
+            // 玩家在游戏中，需要通知房间内其他玩家
+            auto room = getPlayerRoom(playerId);
+            if (room) {
+                spdlog::info("Notifying room {} about player {} disconnect", room->getId(), playerId);
+                
+                // 广播玩家退出消息给房间内其他玩家
+                
+                room->broadcastPlayerDisconnect(playerId);
+                
+                // 从房间中移除玩家
+                removePlayerFromRoom(playerId);
+                
+                // 检查房间是否需要结束或继续游戏
+                if (room->isEmpty()) {
+                    spdlog::info("Room {} is empty after disconnect, marking as finished", room->getId());
+                    room->setState(RoomState::FINISHED);
+                } else {
+                    spdlog::info("Room {} continues with {} players", room->getId(), room->getPlayerCount());
+                    // 可以在这里添加其他逻辑，比如暂停游戏等
+                }
+            }
+            break;
+        }
+        
+        case PlayerState::FINISHED: {
+            // 游戏已结束，只需要清理
+            removePlayerFromRoom(playerId);
+            spdlog::info("Player {} disconnected after game finished", playerId);
+            break;
+        }
+        
+        case PlayerState::DISCONNECTED: {
+            // 已经是断线状态，只需要清理
+            spdlog::info("Player {} was already disconnected", playerId);
+            break;
+        }
+    }
+    
+    // 移除连接映射
+    removePlayerConnection(conn);
+    
+    spdlog::info("Connection disconnect handling completed for player {}", playerId);
+}
+
+// 安全删除房间
+void RoomManager::safeRemoveRoom(const std::string& roomId) {
+    std::lock_guard<std::mutex> lock(roomsMutex_);
+    
+    try {
+        int32_t id = std::stoi(roomId);
+        auto it = rooms_.find(id);
+        if (it != rooms_.end()) {
+            spdlog::info("Safely removing room {}", roomId);
+            
+            auto room = it->second;
+            
+            // 通知所有玩家游戏结束
+            if (room->getState() == RoomState::GAMING) {
+                room->BroadcastResults(); // 广播最终结果
+            }
+            
+            // 清理所有玩家状态
+            for (auto& player : room->getPlayers()) {
+                if (player) {
+                    player->SetRoomId("");
+                    player->setState(PlayerState::FINISHED);
+                }
+            }
+            
+            // 确保房间完全清理（包括停止线程）
+            room->cleanupRoom();
+            
+            // 从容器中移除（这时Room的析构函数会被调用）
+            rooms_.erase(it);
+            
+            spdlog::info("Room {} safely removed and all resources cleaned up", roomId);
+        }
+    } catch (const std::exception& e) {
+        spdlog::error("Invalid room ID format when safely removing: {}", roomId);
     }
 }

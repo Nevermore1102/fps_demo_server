@@ -1,6 +1,7 @@
 #pragma once
 #include <event2/event.h>
 #include <spdlog/spdlog.h>
+#include "game/Room/RoomManager.h"
 #include "net/TcpServer.h"
 #include "core/EventLoop.h"
 #include "proto/Message.h"
@@ -8,6 +9,7 @@
 #include "MessageProcessor.h"
 #include "CppEngine.h"
 #include <memory>
+#include "net/ConnectionPool.h"
 
 class GameServer {
 public:
@@ -81,6 +83,22 @@ private:
             [](const std::shared_ptr<Connection>& conn) {
                 spdlog::info("New connection: {}", conn->getId());
             });
+
+        // 设置连接关闭回调
+        tcp_server_.setCloseCallback(
+            [](const std::shared_ptr<Connection>& conn) {
+                spdlog::info("Connection closed: {}", conn->getId());
+                
+                // 获取房间管理器实例
+                auto& roomManager = RoomManager::getInstance();
+                
+                // 处理连接断开逻辑
+                roomManager.handleConnectionDisconnect(conn);
+                
+                // 从连接池中移除连接
+                ConnectionPool::getInstance().removeConnection(conn->getId());
+            }
+        );
 
         // 启动服务器
         return tcp_server_.start();

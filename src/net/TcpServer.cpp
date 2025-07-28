@@ -128,9 +128,15 @@ void TcpServer::onAccept(evutil_socket_t fd, struct sockaddr* addr) {
     }
 
     // 设置关闭回调
-    conn->setCloseCallback([this](const std::shared_ptr<Connection>& conn) {
-        ConnectionPool::getInstance().removeConnection(conn->getId());
-    });
+    if (close_conn_cb_) {
+        conn->setCloseCallback(close_conn_cb_);
+    }
+    else {
+        conn->setCloseCallback([this](const std::shared_ptr<Connection>& conn) {
+            spdlog::info("Connection closed: {}", conn->getId());
+            ConnectionPool::getInstance().removeConnection(conn->getId());
+        });
+    }
 
     // 添加到连接池
     ConnectionPool::getInstance().addConnection(conn);

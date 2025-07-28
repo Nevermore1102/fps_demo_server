@@ -25,6 +25,7 @@ class TcpServer {
 public:
     using MessageCallback = Connection::MessageCallback;
     using NewConnectionCallback = std::function<void(const std::shared_ptr<Connection>&)>;
+    using CloseConnectionCallback = std::function<void(const std::shared_ptr<Connection>&)>;
 
     TcpServer(const std::string& host, uint16_t port);
     ~TcpServer();
@@ -36,6 +37,7 @@ public:
     // 设置回调
     void setMessageCallback(MessageCallback cb) { message_cb_ = cb; }
     void setNewConnectionCallback(NewConnectionCallback cb) { new_conn_cb_ = cb; }
+    void setCloseCallback(CloseConnectionCallback cb) { close_conn_cb_ = cb; }
 
     // 广播消息给所有连接
     void broadcast(const Message& msg);
@@ -59,4 +61,5 @@ private:
 
     MessageCallback message_cb_;
     NewConnectionCallback new_conn_cb_;
+    CloseConnectionCallback close_conn_cb_;
 }; 

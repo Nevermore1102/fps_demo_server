@@ -7,6 +7,7 @@
 #include <atomic>
 #include "Room.h"
 #include "game/Player/Player.h"
+#include "net/Connection.h"
 
 class RoomManager {
 public:
@@ -26,6 +27,17 @@ public:
     bool removePlayerFromWaitQueue(const std::string& playerId);
     bool removePlayerFromRoom(const std::string& playerId);
 
+    // 连接-玩家映射管理
+    void addPlayerConnection(const std::shared_ptr<Connection>& conn, const std::shared_ptr<Player>& player);
+    void removePlayerConnection(const std::shared_ptr<Connection>& conn);
+    std::shared_ptr<Player> getPlayerByConnection(const std::shared_ptr<Connection>& conn);
+    std::shared_ptr<Connection> getConnectionByPlayerId(const std::string& playerId);
+    bool isConnectionActive(const std::shared_ptr<Connection>& conn) const;
+    void cleanupInactiveConnections();
+    
+    // 连接断开处理
+    void handleConnectionDisconnect(const std::shared_ptr<Connection>& conn);
+
     // 房间状态查询
     bool isRoomFull(const std::string& roomId) const;
     size_t getRoomPlayerCount(const std::string& roomId) const;
@@ -43,6 +55,7 @@ public:
     void cleanupFinishedRooms();
     void safeRemoveRoom(const std::string& roomId);  // 安全删除房间
     
+
 private:
     RoomManager() : roomIdCounter_(1) {}
     ~RoomManager() = default;
@@ -62,6 +75,7 @@ private:
     // 数据成员
     std::vector<std::shared_ptr<Player>> wait_rooms_; // 等待匹配的玩家队列
     std::unordered_map<int32_t, std::shared_ptr<Room>> rooms_; // 房间ID到房间对象的映射
+    std::unordered_map<std::shared_ptr<Connection>, std::shared_ptr<Player>> Connections_player_; // 玩家连接到玩家对象的映射
 
     // 线程安全
     mutable std::mutex playersMutex_;
