@@ -23,7 +23,7 @@ class Room{
 public:
     Room(const int32_t room_id = 0):room_id_(room_id),
                                     max_players_(MAX_PLAYERS),
-                                    currentRound_(0){}
+                                    currentRound_(1){}
     ~Room();
 
     // 基础信息
@@ -65,6 +65,7 @@ public:
     bool insertRanking(const std::string& playerId, int32_t honorValue); // 插入游戏中玩家荣耀值
     bool insertExitRanking(const std::string& playerId, int32_t honorValue); // 插入退出玩家荣耀值
     bool allGamingRankingsReceived() const; // 检查是否所有游戏中玩家都已提交排名
+    void clearRankings();
     void BroadcastResults();    // 广播游戏结果
 
     // 玩家断线或退出

@@ -221,6 +221,11 @@ bool Room::allGamingRankingsReceived() const{
     return true;
 }
 
+void Room::clearRankings() {
+    allHonorValue_.clear();
+    spdlog::info("Cleared all rankings for room {}", room_id_);
+}
+
 // 广播结果给所有玩家
 void Room::BroadcastResults() {
     auto rankings = getRankings();

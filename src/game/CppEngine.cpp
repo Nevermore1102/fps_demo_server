@@ -19,15 +19,19 @@ bool CppEngine::handleMessage(const std::shared_ptr<Connection>& conn, const Mes
         case MessageType::CONNECT:
             onConnect(conn, msg);
             break;
+        // 开始匹配
         case MessageType::START_MATCH:
             onStartMatch(conn, msg);
             break;
+        // 备战快照
         case MessageType::BATTLE_PREP_SNAPSHOT:
             onPrepSnapshot(conn, msg);
             break;
+        // 战斗结果
         case MessageType::BATTLE_RESULT:
             onBattleResult(conn, msg);
             break;
+        // 主动退出
         case MessageType::EXIT:
             onExit(conn,msg);
             break;
@@ -147,6 +151,7 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
     }
 }
 
+// 备战结束，收到玩家快照，集齐快照后广播
 void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Message& msg) {
     spdlog::info("Received BATTLE_PREP_SNAPSHOT from connection: {}", conn->getId());
     
@@ -212,20 +217,11 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
         
         // 清理快照为下一轮准备
         room->clearSnapshots();
-
-        // 继续下一轮战斗
-        if(room->getCurrentRound() <= ROUND_NUM){
-            room->nextRound();  // 回合+1
-            room->startBattlePrepTimer();  // 启动备战倒计时
-        }
-        // 战斗结束，等待结算
-        else {
-            spdlog::info("Game finished in room {}, waiting client for battle results", matchId);
-        }
     }
 }
 
-// 处理战斗结果消息 {type:战斗结果，对局id，playerid1，轮次，荣耀值}
+// 处理战斗后的消息 {type:战斗结果，对局id，playerid1，轮次，荣耀值}
+// 如果是最后一轮，需要单独处理
 void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
     spdlog::info("Player Battle Result: {}", conn->getId());
     // 解析消息获取玩家ID
@@ -271,6 +267,11 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
         spdlog::error("Player {} not found in room {}", playerId, matchId);
         return;
     }
+    // 更新玩家最新的荣耀值
+    else{
+        player->SetHonorValue(honorValue);
+        player->SetRound(round);
+    }
     
     // 记录战斗结果
     if (!room->insertRanking(playerId, honorValue)) {
@@ -283,8 +284,21 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     // 检查是否所有游戏中玩家都已提交战斗结果
     if (room->allGamingRankingsReceived()) {
         spdlog::info("All gaming rankings received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
-        room->BroadcastResults();
         
+        // 继续下一轮战斗
+        if(room->getCurrentRound() < ROUND_NUM){
+            room->clearRankings();  // 清理排名数据
+
+            room->nextRound();  // 回合+1
+            room->startBattlePrepTimer();  // 启动备战倒计时
+        }
+        // 战斗结束，广播结算，清理房间
+        else {
+            room->BroadcastResults();
+
+            roomManager.removeRoom(matchId);
+            spdlog::info("Game finished in room {}, broadcasting battle results", matchId);
+        }
     }
 }
 

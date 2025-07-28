@@ -61,6 +61,8 @@ void RoomManager::removeRoom(const std::string& roomId) {
                 if (player) {
                     player->SetRoomId("");
                     player->setState(PlayerState::DISCONNECTED);
+                    auto conn = player->GetConnection();
+                    Connections_player_.erase(conn);
                 }
             }
             
@@ -333,7 +335,7 @@ void RoomManager::cleanupFinishedRooms() {
     
     // 使用安全删除方法
     for (const auto& roomId : roomsToRemove) {
-        safeRemoveRoom(roomId);
+        removeRoom(roomId);
     }
 }
 
@@ -552,42 +554,4 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
     removePlayerConnection(conn);
     
     spdlog::info("Connection disconnect handling completed for player {}", playerId);
-}
-
-// 安全删除房间
-void RoomManager::safeRemoveRoom(const std::string& roomId) {
-    std::lock_guard<std::mutex> lock(roomsMutex_);
-    
-    try {
-        int32_t id = std::stoi(roomId);
-        auto it = rooms_.find(id);
-        if (it != rooms_.end()) {
-            spdlog::info("Safely removing room {}", roomId);
-            
-            auto room = it->second;
-            
-            // 通知所有玩家游戏结束
-            if (room->getState() == RoomState::GAMING) {
-                room->BroadcastResults(); // 广播最终结果
-            }
-            
-            // 清理所有玩家状态
-            for (auto& player : room->getPlayers()) {
-                if (player) {
-                    player->SetRoomId("");
-                    player->setState(PlayerState::FINISHED);
-                }
-            }
-            
-            // 确保房间完全清理（包括停止线程）
-            room->cleanupRoom();
-            
-            // 从容器中移除（这时Room的析构函数会被调用）
-            rooms_.erase(it);
-            
-            spdlog::info("Room {} safely removed and all resources cleaned up", roomId);
-        }
-    } catch (const std::exception& e) {
-        spdlog::error("Invalid room ID format when safely removing: {}", roomId);
-    }
 }

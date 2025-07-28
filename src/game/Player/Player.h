@@ -28,6 +28,7 @@ public:
     void SetPlayerName(const std::string& player_name) { player_name_ = player_name; }
     void SetIconId(int32_t icon_id) { icon_id_ = icon_id; }
     void SetLatestSnapshot(const std::shared_ptr<PlayerSnapshot>& snapshot) { latest_snapshot_ = snapshot; }
+    void SetRound(int32_t round) { latest_snapshot_->set_round(round); }
 
     // Getters
     const std::string& GetRoomId() const { return room_id_; }
