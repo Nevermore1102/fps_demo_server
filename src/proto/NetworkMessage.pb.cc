@@ -19,6 +19,9 @@ extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_
 extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_BattlePrepTimerMessage_src_2fproto_2fNetworkMessage_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_BattleResultReportMessage_src_2fproto_2fNetworkMessage_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ConnectRequestMessage_src_2fproto_2fNetworkMessage_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ExitBroadcastMessage_src_2fproto_2fNetworkMessage_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ExitMessage_src_2fproto_2fNetworkMessage_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_GameStartMessage_src_2fproto_2fNetworkMessage_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_HeartbeatMessage_src_2fproto_2fNetworkMessage_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_src_2fproto_2fNetworkMessage_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_PlayerBasicInfo_src_2fproto_2fNetworkMessage_2eproto;
@@ -69,6 +72,18 @@ class SettlementMessageDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SettlementMessage> _instance;
 } _SettlementMessage_default_instance_;
+class ExitPlayerInfoDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ExitPlayerInfo> _instance;
+} _ExitPlayerInfo_default_instance_;
+class ExitMessageDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ExitMessage> _instance;
+} _ExitMessage_default_instance_;
+class ExitBroadcastMessageDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ExitBroadcastMessage> _instance;
+} _ExitBroadcastMessage_default_instance_;
 class NetworkMessageDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<NetworkMessage> _instance;
@@ -80,6 +95,8 @@ class NetworkMessageDefaultTypeInternal {
   const ::AllSnapshotsMessage* all_snapshots_;
   const ::BattleResultReportMessage* battle_result_report_;
   const ::SettlementMessage* settlement_;
+  const ::ExitMessage* exit_;
+  const ::ExitBroadcastMessage* exit_broadcast_;
 } _NetworkMessage_default_instance_;
 static void InitDefaultsscc_info_AllSnapshotsMessage_src_2fproto_2fNetworkMessage_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -152,6 +169,50 @@ static void InitDefaultsscc_info_ConnectRequestMessage_src_2fproto_2fNetworkMess
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ConnectRequestMessage_src_2fproto_2fNetworkMessage_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_ConnectRequestMessage_src_2fproto_2fNetworkMessage_2eproto}, {}};
 
+static void InitDefaultsscc_info_ExitBroadcastMessage_src_2fproto_2fNetworkMessage_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_ExitBroadcastMessage_default_instance_;
+    new (ptr) ::ExitBroadcastMessage();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ExitBroadcastMessage::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ExitBroadcastMessage_src_2fproto_2fNetworkMessage_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_ExitBroadcastMessage_src_2fproto_2fNetworkMessage_2eproto}, {
+      &scc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto.base,}};
+
+static void InitDefaultsscc_info_ExitMessage_src_2fproto_2fNetworkMessage_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_ExitMessage_default_instance_;
+    new (ptr) ::ExitMessage();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ExitMessage::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ExitMessage_src_2fproto_2fNetworkMessage_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_ExitMessage_src_2fproto_2fNetworkMessage_2eproto}, {
+      &scc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto.base,}};
+
+static void InitDefaultsscc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_ExitPlayerInfo_default_instance_;
+    new (ptr) ::ExitPlayerInfo();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ExitPlayerInfo::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto}, {}};
+
 static void InitDefaultsscc_info_GameStartMessage_src_2fproto_2fNetworkMessage_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -192,8 +253,8 @@ static void InitDefaultsscc_info_NetworkMessage_src_2fproto_2fNetworkMessage_2ep
   ::NetworkMessage::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<8> scc_info_NetworkMessage_src_2fproto_2fNetworkMessage_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 8, 0, InitDefaultsscc_info_NetworkMessage_src_2fproto_2fNetworkMessage_2eproto}, {
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<10> scc_info_NetworkMessage_src_2fproto_2fNetworkMessage_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 10, 0, InitDefaultsscc_info_NetworkMessage_src_2fproto_2fNetworkMessage_2eproto}, {
       &scc_info_HeartbeatMessage_src_2fproto_2fNetworkMessage_2eproto.base,
       &scc_info_ConnectRequestMessage_src_2fproto_2fNetworkMessage_2eproto.base,
       &scc_info_GameStartMessage_src_2fproto_2fNetworkMessage_2eproto.base,
@@ -201,7 +262,9 @@ static void InitDefaultsscc_info_NetworkMessage_src_2fproto_2fNetworkMessage_2ep
       &scc_info_BattlePrepSnapshotMessage_src_2fproto_2fNetworkMessage_2eproto.base,
       &scc_info_AllSnapshotsMessage_src_2fproto_2fNetworkMessage_2eproto.base,
       &scc_info_BattleResultReportMessage_src_2fproto_2fNetworkMessage_2eproto.base,
-      &scc_info_SettlementMessage_src_2fproto_2fNetworkMessage_2eproto.base,}};
+      &scc_info_SettlementMessage_src_2fproto_2fNetworkMessage_2eproto.base,
+      &scc_info_ExitMessage_src_2fproto_2fNetworkMessage_2eproto.base,
+      &scc_info_ExitBroadcastMessage_src_2fproto_2fNetworkMessage_2eproto.base,}};
 
 static void InitDefaultsscc_info_PlayerBasicInfo_src_2fproto_2fNetworkMessage_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -260,7 +323,7 @@ static void InitDefaultsscc_info_SettlementMessage_src_2fproto_2fNetworkMessage_
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_SettlementMessage_src_2fproto_2fNetworkMessage_2eproto}, {
       &scc_info_RankingEntry_src_2fproto_2fNetworkMessage_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_src_2fproto_2fNetworkMessage_2eproto[12];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_src_2fproto_2fNetworkMessage_2eproto[15];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_src_2fproto_2fNetworkMessage_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_src_2fproto_2fNetworkMessage_2eproto = nullptr;
 
@@ -350,6 +413,26 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_src_2fproto_2fNetworkMessage_2
   PROTOBUF_FIELD_OFFSET(::SettlementMessage, match_id_),
   PROTOBUF_FIELD_OFFSET(::SettlementMessage, rankings_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ExitPlayerInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ExitPlayerInfo, exit_player_id_),
+  PROTOBUF_FIELD_OFFSET(::ExitPlayerInfo, exit_round_),
+  PROTOBUF_FIELD_OFFSET(::ExitPlayerInfo, exit_honor_value_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ExitMessage, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ExitMessage, exit_info_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ExitBroadcastMessage, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ExitBroadcastMessage, exit_players_info_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::NetworkMessage, _internal_metadata_),
   ~0u,  // no _extensions_
   PROTOBUF_FIELD_OFFSET(::NetworkMessage, _oneof_case_[0]),
@@ -364,6 +447,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_src_2fproto_2fNetworkMessage_2
   offsetof(::NetworkMessageDefaultTypeInternal, all_snapshots_),
   offsetof(::NetworkMessageDefaultTypeInternal, battle_result_report_),
   offsetof(::NetworkMessageDefaultTypeInternal, settlement_),
+  offsetof(::NetworkMessageDefaultTypeInternal, exit_),
+  offsetof(::NetworkMessageDefaultTypeInternal, exit_broadcast_),
   PROTOBUF_FIELD_OFFSET(::NetworkMessage, data_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -378,7 +463,10 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 61, -1, sizeof(::BattleResultReportMessage)},
   { 69, -1, sizeof(::RankingEntry)},
   { 77, -1, sizeof(::SettlementMessage)},
-  { 84, -1, sizeof(::NetworkMessage)},
+  { 84, -1, sizeof(::ExitPlayerInfo)},
+  { 92, -1, sizeof(::ExitMessage)},
+  { 98, -1, sizeof(::ExitBroadcastMessage)},
+  { 104, -1, sizeof(::NetworkMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -393,6 +481,9 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_BattleResultReportMessage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_RankingEntry_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_SettlementMessage_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_ExitPlayerInfo_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_ExitMessage_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_ExitBroadcastMessage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_NetworkMessage_default_instance_),
 };
 
@@ -418,33 +509,44 @@ const char descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto[] PROT
   "r_value\030\003 \001(\005\"D\n\014RankingEntry\022\021\n\tplayer_"
   "id\030\001 \001(\t\022\023\n\013honor_value\030\002 \001(\005\022\014\n\004rank\030\003 "
   "\001(\005\"F\n\021SettlementMessage\022\020\n\010match_id\030\001 \001"
-  "(\t\022\037\n\010rankings\030\002 \003(\0132\r.RankingEntry\"\324\003\n\016"
-  "NetworkMessage\022\034\n\006msg_id\030\001 \001(\0162\014.Message"
-  "Type\022\021\n\tplayer_id\030\002 \001(\t\022&\n\theartbeat\030\005 \001"
-  "(\0132\021.HeartbeatMessageH\000\0221\n\017connect_reque"
-  "st\030\006 \001(\0132\026.ConnectRequestMessageH\000\022\'\n\nga"
-  "me_start\030\007 \001(\0132\021.GameStartMessageH\000\0224\n\021b"
-  "attle_prep_timer\030\010 \001(\0132\027.BattlePrepTimer"
-  "MessageH\000\022:\n\024battle_prep_snapshot\030\t \001(\0132"
-  "\032.BattlePrepSnapshotMessageH\000\022-\n\rall_sna"
-  "pshots\030\n \001(\0132\024.AllSnapshotsMessageH\000\022:\n\024"
-  "battle_result_report\030\013 \001(\0132\032.BattleResul"
-  "tReportMessageH\000\022(\n\nsettlement\030\014 \001(\0132\022.S"
-  "ettlementMessageH\000B\006\n\004data*\261\001\n\013MessageTy"
-  "pe\022\r\n\tHEARTBEAT\020\000\022\013\n\007CONNECT\020\001\022\017\n\013START_"
-  "MATCH\020\002\022\016\n\nGAME_START\020\003\022\025\n\021BATTLE_PREP_T"
-  "IMER\020\004\022\030\n\024BATTLE_PREP_SNAPSHOT\020\005\022\021\n\rALL_"
-  "SNAPSHOTS\020\006\022\021\n\rBATTLE_RESULT\020\007\022\016\n\nSETTLE"
-  "MENT\020\010b\006proto3"
+  "(\t\022\037\n\010rankings\030\002 \003(\0132\r.RankingEntry\"V\n\016E"
+  "xitPlayerInfo\022\026\n\016exit_player_id\030\001 \001(\t\022\022\n"
+  "\nexit_round\030\002 \001(\005\022\030\n\020exit_honor_value\030\003 "
+  "\001(\005\"1\n\013ExitMessage\022\"\n\texit_info\030\001 \001(\0132\017."
+  "ExitPlayerInfo\"B\n\024ExitBroadcastMessage\022*"
+  "\n\021exit_players_info\030\001 \003(\0132\017.ExitPlayerIn"
+  "fo\"\243\004\n\016NetworkMessage\022\034\n\006msg_id\030\001 \001(\0162\014."
+  "MessageType\022\021\n\tplayer_id\030\002 \001(\t\022&\n\theartb"
+  "eat\030\005 \001(\0132\021.HeartbeatMessageH\000\0221\n\017connec"
+  "t_request\030\006 \001(\0132\026.ConnectRequestMessageH"
+  "\000\022\'\n\ngame_start\030\007 \001(\0132\021.GameStartMessage"
+  "H\000\0224\n\021battle_prep_timer\030\010 \001(\0132\027.BattlePr"
+  "epTimerMessageH\000\022:\n\024battle_prep_snapshot"
+  "\030\t \001(\0132\032.BattlePrepSnapshotMessageH\000\022-\n\r"
+  "all_snapshots\030\n \001(\0132\024.AllSnapshotsMessag"
+  "eH\000\022:\n\024battle_result_report\030\013 \001(\0132\032.Batt"
+  "leResultReportMessageH\000\022(\n\nsettlement\030\014 "
+  "\001(\0132\022.SettlementMessageH\000\022\034\n\004exit\030\r \001(\0132"
+  "\014.ExitMessageH\000\022/\n\016exit_broadcast\030\016 \001(\0132"
+  "\025.ExitBroadcastMessageH\000B\006\n\004data*\315\001\n\013Mes"
+  "sageType\022\r\n\tHEARTBEAT\020\000\022\013\n\007CONNECT\020\001\022\017\n\013"
+  "START_MATCH\020\002\022\016\n\nGAME_START\020\003\022\025\n\021BATTLE_"
+  "PREP_TIMER\020\004\022\030\n\024BATTLE_PREP_SNAPSHOT\020\005\022\021"
+  "\n\rALL_SNAPSHOTS\020\006\022\021\n\rBATTLE_RESULT\020\007\022\016\n\n"
+  "SETTLEMENT\020\010\022\010\n\004EXIT\020\t\022\020\n\014DISCONNECTED\020\n"
+  "b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_src_2fproto_2fNetworkMessage_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_src_2fproto_2fNetworkMessage_2eproto_sccs[12] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_src_2fproto_2fNetworkMessage_2eproto_sccs[15] = {
   &scc_info_AllSnapshotsMessage_src_2fproto_2fNetworkMessage_2eproto.base,
   &scc_info_BattlePrepSnapshotMessage_src_2fproto_2fNetworkMessage_2eproto.base,
   &scc_info_BattlePrepTimerMessage_src_2fproto_2fNetworkMessage_2eproto.base,
   &scc_info_BattleResultReportMessage_src_2fproto_2fNetworkMessage_2eproto.base,
   &scc_info_ConnectRequestMessage_src_2fproto_2fNetworkMessage_2eproto.base,
+  &scc_info_ExitBroadcastMessage_src_2fproto_2fNetworkMessage_2eproto.base,
+  &scc_info_ExitMessage_src_2fproto_2fNetworkMessage_2eproto.base,
+  &scc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto.base,
   &scc_info_GameStartMessage_src_2fproto_2fNetworkMessage_2eproto.base,
   &scc_info_HeartbeatMessage_src_2fproto_2fNetworkMessage_2eproto.base,
   &scc_info_NetworkMessage_src_2fproto_2fNetworkMessage_2eproto.base,
@@ -455,10 +557,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_src
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_src_2fproto_2fNetworkMessage_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_src_2fproto_2fNetworkMessage_2eproto = {
-  false, false, descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto, "src/proto/NetworkMessage.proto", 1534,
-  &descriptor_table_src_2fproto_2fNetworkMessage_2eproto_once, descriptor_table_src_2fproto_2fNetworkMessage_2eproto_sccs, descriptor_table_src_2fproto_2fNetworkMessage_2eproto_deps, 12, 0,
+  false, false, descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto, "src/proto/NetworkMessage.proto", 1848,
+  &descriptor_table_src_2fproto_2fNetworkMessage_2eproto_once, descriptor_table_src_2fproto_2fNetworkMessage_2eproto_sccs, descriptor_table_src_2fproto_2fNetworkMessage_2eproto_deps, 15, 0,
   schemas, file_default_instances, TableStruct_src_2fproto_2fNetworkMessage_2eproto::offsets,
-  file_level_metadata_src_2fproto_2fNetworkMessage_2eproto, 12, file_level_enum_descriptors_src_2fproto_2fNetworkMessage_2eproto, file_level_service_descriptors_src_2fproto_2fNetworkMessage_2eproto,
+  file_level_metadata_src_2fproto_2fNetworkMessage_2eproto, 15, file_level_enum_descriptors_src_2fproto_2fNetworkMessage_2eproto, file_level_service_descriptors_src_2fproto_2fNetworkMessage_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -478,6 +580,8 @@ bool MessageType_IsValid(int value) {
     case 6:
     case 7:
     case 8:
+    case 9:
+    case 10:
       return true;
     default:
       return false;
@@ -3339,6 +3443,694 @@ void SettlementMessage::InternalSwap(SettlementMessage* other) {
 
 // ===================================================================
 
+void ExitPlayerInfo::InitAsDefaultInstance() {
+}
+class ExitPlayerInfo::_Internal {
+ public:
+};
+
+ExitPlayerInfo::ExitPlayerInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:ExitPlayerInfo)
+}
+ExitPlayerInfo::ExitPlayerInfo(const ExitPlayerInfo& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  exit_player_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_exit_player_id().empty()) {
+    exit_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from._internal_exit_player_id(),
+      GetArena());
+  }
+  ::memcpy(&exit_round_, &from.exit_round_,
+    static_cast<size_t>(reinterpret_cast<char*>(&exit_honor_value_) -
+    reinterpret_cast<char*>(&exit_round_)) + sizeof(exit_honor_value_));
+  // @@protoc_insertion_point(copy_constructor:ExitPlayerInfo)
+}
+
+void ExitPlayerInfo::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto.base);
+  exit_player_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&exit_round_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&exit_honor_value_) -
+      reinterpret_cast<char*>(&exit_round_)) + sizeof(exit_honor_value_));
+}
+
+ExitPlayerInfo::~ExitPlayerInfo() {
+  // @@protoc_insertion_point(destructor:ExitPlayerInfo)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void ExitPlayerInfo::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+  exit_player_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void ExitPlayerInfo::ArenaDtor(void* object) {
+  ExitPlayerInfo* _this = reinterpret_cast< ExitPlayerInfo* >(object);
+  (void)_this;
+}
+void ExitPlayerInfo::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ExitPlayerInfo::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ExitPlayerInfo& ExitPlayerInfo::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ExitPlayerInfo_src_2fproto_2fNetworkMessage_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void ExitPlayerInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:ExitPlayerInfo)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  exit_player_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::memset(&exit_round_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&exit_honor_value_) -
+      reinterpret_cast<char*>(&exit_round_)) + sizeof(exit_honor_value_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ExitPlayerInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // string exit_player_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_exit_player_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "ExitPlayerInfo.exit_player_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 exit_round = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          exit_round_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 exit_honor_value = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          exit_honor_value_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* ExitPlayerInfo::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ExitPlayerInfo)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string exit_player_id = 1;
+  if (this->exit_player_id().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_exit_player_id().data(), static_cast<int>(this->_internal_exit_player_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "ExitPlayerInfo.exit_player_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_exit_player_id(), target);
+  }
+
+  // int32 exit_round = 2;
+  if (this->exit_round() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_exit_round(), target);
+  }
+
+  // int32 exit_honor_value = 3;
+  if (this->exit_honor_value() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_exit_honor_value(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ExitPlayerInfo)
+  return target;
+}
+
+size_t ExitPlayerInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ExitPlayerInfo)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string exit_player_id = 1;
+  if (this->exit_player_id().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_exit_player_id());
+  }
+
+  // int32 exit_round = 2;
+  if (this->exit_round() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_exit_round());
+  }
+
+  // int32 exit_honor_value = 3;
+  if (this->exit_honor_value() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_exit_honor_value());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ExitPlayerInfo::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ExitPlayerInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ExitPlayerInfo* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ExitPlayerInfo>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ExitPlayerInfo)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ExitPlayerInfo)
+    MergeFrom(*source);
+  }
+}
+
+void ExitPlayerInfo::MergeFrom(const ExitPlayerInfo& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ExitPlayerInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.exit_player_id().size() > 0) {
+    _internal_set_exit_player_id(from._internal_exit_player_id());
+  }
+  if (from.exit_round() != 0) {
+    _internal_set_exit_round(from._internal_exit_round());
+  }
+  if (from.exit_honor_value() != 0) {
+    _internal_set_exit_honor_value(from._internal_exit_honor_value());
+  }
+}
+
+void ExitPlayerInfo::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ExitPlayerInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ExitPlayerInfo::CopyFrom(const ExitPlayerInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ExitPlayerInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ExitPlayerInfo::IsInitialized() const {
+  return true;
+}
+
+void ExitPlayerInfo::InternalSwap(ExitPlayerInfo* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  exit_player_id_.Swap(&other->exit_player_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ExitPlayerInfo, exit_honor_value_)
+      + sizeof(ExitPlayerInfo::exit_honor_value_)
+      - PROTOBUF_FIELD_OFFSET(ExitPlayerInfo, exit_round_)>(
+          reinterpret_cast<char*>(&exit_round_),
+          reinterpret_cast<char*>(&other->exit_round_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ExitPlayerInfo::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void ExitMessage::InitAsDefaultInstance() {
+  ::_ExitMessage_default_instance_._instance.get_mutable()->exit_info_ = const_cast< ::ExitPlayerInfo*>(
+      ::ExitPlayerInfo::internal_default_instance());
+}
+class ExitMessage::_Internal {
+ public:
+  static const ::ExitPlayerInfo& exit_info(const ExitMessage* msg);
+};
+
+const ::ExitPlayerInfo&
+ExitMessage::_Internal::exit_info(const ExitMessage* msg) {
+  return *msg->exit_info_;
+}
+ExitMessage::ExitMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:ExitMessage)
+}
+ExitMessage::ExitMessage(const ExitMessage& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_exit_info()) {
+    exit_info_ = new ::ExitPlayerInfo(*from.exit_info_);
+  } else {
+    exit_info_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:ExitMessage)
+}
+
+void ExitMessage::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ExitMessage_src_2fproto_2fNetworkMessage_2eproto.base);
+  exit_info_ = nullptr;
+}
+
+ExitMessage::~ExitMessage() {
+  // @@protoc_insertion_point(destructor:ExitMessage)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void ExitMessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+  if (this != internal_default_instance()) delete exit_info_;
+}
+
+void ExitMessage::ArenaDtor(void* object) {
+  ExitMessage* _this = reinterpret_cast< ExitMessage* >(object);
+  (void)_this;
+}
+void ExitMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ExitMessage::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ExitMessage& ExitMessage::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ExitMessage_src_2fproto_2fNetworkMessage_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void ExitMessage::Clear() {
+// @@protoc_insertion_point(message_clear_start:ExitMessage)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArena() == nullptr && exit_info_ != nullptr) {
+    delete exit_info_;
+  }
+  exit_info_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ExitMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // .ExitPlayerInfo exit_info = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_exit_info(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* ExitMessage::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ExitMessage)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .ExitPlayerInfo exit_info = 1;
+  if (this->has_exit_info()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::exit_info(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ExitMessage)
+  return target;
+}
+
+size_t ExitMessage::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ExitMessage)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .ExitPlayerInfo exit_info = 1;
+  if (this->has_exit_info()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *exit_info_);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ExitMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ExitMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ExitMessage* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ExitMessage>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ExitMessage)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ExitMessage)
+    MergeFrom(*source);
+  }
+}
+
+void ExitMessage::MergeFrom(const ExitMessage& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ExitMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.has_exit_info()) {
+    _internal_mutable_exit_info()->::ExitPlayerInfo::MergeFrom(from._internal_exit_info());
+  }
+}
+
+void ExitMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ExitMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ExitMessage::CopyFrom(const ExitMessage& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ExitMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ExitMessage::IsInitialized() const {
+  return true;
+}
+
+void ExitMessage::InternalSwap(ExitMessage* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(exit_info_, other->exit_info_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ExitMessage::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void ExitBroadcastMessage::InitAsDefaultInstance() {
+}
+class ExitBroadcastMessage::_Internal {
+ public:
+};
+
+ExitBroadcastMessage::ExitBroadcastMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena),
+  exit_players_info_(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:ExitBroadcastMessage)
+}
+ExitBroadcastMessage::ExitBroadcastMessage(const ExitBroadcastMessage& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      exit_players_info_(from.exit_players_info_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:ExitBroadcastMessage)
+}
+
+void ExitBroadcastMessage::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ExitBroadcastMessage_src_2fproto_2fNetworkMessage_2eproto.base);
+}
+
+ExitBroadcastMessage::~ExitBroadcastMessage() {
+  // @@protoc_insertion_point(destructor:ExitBroadcastMessage)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void ExitBroadcastMessage::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+}
+
+void ExitBroadcastMessage::ArenaDtor(void* object) {
+  ExitBroadcastMessage* _this = reinterpret_cast< ExitBroadcastMessage* >(object);
+  (void)_this;
+}
+void ExitBroadcastMessage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ExitBroadcastMessage::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ExitBroadcastMessage& ExitBroadcastMessage::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ExitBroadcastMessage_src_2fproto_2fNetworkMessage_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void ExitBroadcastMessage::Clear() {
+// @@protoc_insertion_point(message_clear_start:ExitBroadcastMessage)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  exit_players_info_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ExitBroadcastMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // repeated .ExitPlayerInfo exit_players_info = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_exit_players_info(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* ExitBroadcastMessage::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ExitBroadcastMessage)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .ExitPlayerInfo exit_players_info = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_exit_players_info_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_exit_players_info(i), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ExitBroadcastMessage)
+  return target;
+}
+
+size_t ExitBroadcastMessage::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ExitBroadcastMessage)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .ExitPlayerInfo exit_players_info = 1;
+  total_size += 1UL * this->_internal_exit_players_info_size();
+  for (const auto& msg : this->exit_players_info_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ExitBroadcastMessage::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ExitBroadcastMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ExitBroadcastMessage* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ExitBroadcastMessage>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ExitBroadcastMessage)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ExitBroadcastMessage)
+    MergeFrom(*source);
+  }
+}
+
+void ExitBroadcastMessage::MergeFrom(const ExitBroadcastMessage& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ExitBroadcastMessage)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  exit_players_info_.MergeFrom(from.exit_players_info_);
+}
+
+void ExitBroadcastMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ExitBroadcastMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ExitBroadcastMessage::CopyFrom(const ExitBroadcastMessage& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ExitBroadcastMessage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ExitBroadcastMessage::IsInitialized() const {
+  return true;
+}
+
+void ExitBroadcastMessage::InternalSwap(ExitBroadcastMessage* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  exit_players_info_.InternalSwap(&other->exit_players_info_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ExitBroadcastMessage::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
 void NetworkMessage::InitAsDefaultInstance() {
   ::_NetworkMessage_default_instance_.heartbeat_ = const_cast< ::HeartbeatMessage*>(
       ::HeartbeatMessage::internal_default_instance());
@@ -3356,6 +4148,10 @@ void NetworkMessage::InitAsDefaultInstance() {
       ::BattleResultReportMessage::internal_default_instance());
   ::_NetworkMessage_default_instance_.settlement_ = const_cast< ::SettlementMessage*>(
       ::SettlementMessage::internal_default_instance());
+  ::_NetworkMessage_default_instance_.exit_ = const_cast< ::ExitMessage*>(
+      ::ExitMessage::internal_default_instance());
+  ::_NetworkMessage_default_instance_.exit_broadcast_ = const_cast< ::ExitBroadcastMessage*>(
+      ::ExitBroadcastMessage::internal_default_instance());
 }
 class NetworkMessage::_Internal {
  public:
@@ -3367,6 +4163,8 @@ class NetworkMessage::_Internal {
   static const ::AllSnapshotsMessage& all_snapshots(const NetworkMessage* msg);
   static const ::BattleResultReportMessage& battle_result_report(const NetworkMessage* msg);
   static const ::SettlementMessage& settlement(const NetworkMessage* msg);
+  static const ::ExitMessage& exit(const NetworkMessage* msg);
+  static const ::ExitBroadcastMessage& exit_broadcast(const NetworkMessage* msg);
 };
 
 const ::HeartbeatMessage&
@@ -3400,6 +4198,14 @@ NetworkMessage::_Internal::battle_result_report(const NetworkMessage* msg) {
 const ::SettlementMessage&
 NetworkMessage::_Internal::settlement(const NetworkMessage* msg) {
   return *msg->data_.settlement_;
+}
+const ::ExitMessage&
+NetworkMessage::_Internal::exit(const NetworkMessage* msg) {
+  return *msg->data_.exit_;
+}
+const ::ExitBroadcastMessage&
+NetworkMessage::_Internal::exit_broadcast(const NetworkMessage* msg) {
+  return *msg->data_.exit_broadcast_;
 }
 void NetworkMessage::set_allocated_heartbeat(::HeartbeatMessage* heartbeat) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
@@ -3521,6 +4327,36 @@ void NetworkMessage::set_allocated_settlement(::SettlementMessage* settlement) {
   }
   // @@protoc_insertion_point(field_set_allocated:NetworkMessage.settlement)
 }
+void NetworkMessage::set_allocated_exit(::ExitMessage* exit) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_data();
+  if (exit) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(exit);
+    if (message_arena != submessage_arena) {
+      exit = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, exit, submessage_arena);
+    }
+    set_has_exit();
+    data_.exit_ = exit;
+  }
+  // @@protoc_insertion_point(field_set_allocated:NetworkMessage.exit)
+}
+void NetworkMessage::set_allocated_exit_broadcast(::ExitBroadcastMessage* exit_broadcast) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  clear_data();
+  if (exit_broadcast) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(exit_broadcast);
+    if (message_arena != submessage_arena) {
+      exit_broadcast = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, exit_broadcast, submessage_arena);
+    }
+    set_has_exit_broadcast();
+    data_.exit_broadcast_ = exit_broadcast;
+  }
+  // @@protoc_insertion_point(field_set_allocated:NetworkMessage.exit_broadcast)
+}
 NetworkMessage::NetworkMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
@@ -3568,6 +4404,14 @@ NetworkMessage::NetworkMessage(const NetworkMessage& from)
     }
     case kSettlement: {
       _internal_mutable_settlement()->::SettlementMessage::MergeFrom(from._internal_settlement());
+      break;
+    }
+    case kExit: {
+      _internal_mutable_exit()->::ExitMessage::MergeFrom(from._internal_exit());
+      break;
+    }
+    case kExitBroadcast: {
+      _internal_mutable_exit_broadcast()->::ExitBroadcastMessage::MergeFrom(from._internal_exit_broadcast());
       break;
     }
     case DATA_NOT_SET: {
@@ -3661,6 +4505,18 @@ void NetworkMessage::clear_data() {
     case kSettlement: {
       if (GetArena() == nullptr) {
         delete data_.settlement_;
+      }
+      break;
+    }
+    case kExit: {
+      if (GetArena() == nullptr) {
+        delete data_.exit_;
+      }
+      break;
+    }
+    case kExitBroadcast: {
+      if (GetArena() == nullptr) {
+        delete data_.exit_broadcast_;
       }
       break;
     }
@@ -3762,6 +4618,20 @@ const char* NetworkMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
       case 12:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 98)) {
           ptr = ctx->ParseMessage(_internal_mutable_settlement(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .ExitMessage exit = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 106)) {
+          ptr = ctx->ParseMessage(_internal_mutable_exit(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .ExitBroadcastMessage exit_broadcast = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 114)) {
+          ptr = ctx->ParseMessage(_internal_mutable_exit_broadcast(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -3874,6 +4744,22 @@ failure:
         12, _Internal::settlement(this), target, stream);
   }
 
+  // .ExitMessage exit = 13;
+  if (_internal_has_exit()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        13, _Internal::exit(this), target, stream);
+  }
+
+  // .ExitBroadcastMessage exit_broadcast = 14;
+  if (_internal_has_exit_broadcast()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        14, _Internal::exit_broadcast(this), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3960,6 +4846,20 @@ size_t NetworkMessage::ByteSizeLong() const {
           *data_.settlement_);
       break;
     }
+    // .ExitMessage exit = 13;
+    case kExit: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *data_.exit_);
+      break;
+    }
+    // .ExitBroadcastMessage exit_broadcast = 14;
+    case kExitBroadcast: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *data_.exit_broadcast_);
+      break;
+    }
     case DATA_NOT_SET: {
       break;
     }
@@ -4034,6 +4934,14 @@ void NetworkMessage::MergeFrom(const NetworkMessage& from) {
       _internal_mutable_settlement()->::SettlementMessage::MergeFrom(from._internal_settlement());
       break;
     }
+    case kExit: {
+      _internal_mutable_exit()->::ExitMessage::MergeFrom(from._internal_exit());
+      break;
+    }
+    case kExitBroadcast: {
+      _internal_mutable_exit_broadcast()->::ExitBroadcastMessage::MergeFrom(from._internal_exit_broadcast());
+      break;
+    }
     case DATA_NOT_SET: {
       break;
     }
@@ -4106,6 +5014,15 @@ template<> PROTOBUF_NOINLINE ::RankingEntry* Arena::CreateMaybeMessage< ::Rankin
 }
 template<> PROTOBUF_NOINLINE ::SettlementMessage* Arena::CreateMaybeMessage< ::SettlementMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::SettlementMessage >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ExitPlayerInfo* Arena::CreateMaybeMessage< ::ExitPlayerInfo >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ExitPlayerInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ExitMessage* Arena::CreateMaybeMessage< ::ExitMessage >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ExitMessage >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ExitBroadcastMessage* Arena::CreateMaybeMessage< ::ExitBroadcastMessage >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ExitBroadcastMessage >(arena);
 }
 template<> PROTOBUF_NOINLINE ::NetworkMessage* Arena::CreateMaybeMessage< ::NetworkMessage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::NetworkMessage >(arena);

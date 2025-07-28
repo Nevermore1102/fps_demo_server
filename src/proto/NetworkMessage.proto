@@ -2,15 +2,17 @@ syntax = "proto3";
 
 // 消息类型枚举
 enum MessageType {
-    HEARTBEAT = 0;
-    CONNECT = 1;
-    START_MATCH = 2;
-    GAME_START = 3;
-    BATTLE_PREP_TIMER = 4;
-    BATTLE_PREP_SNAPSHOT = 5;
-    ALL_SNAPSHOTS = 6;
-    BATTLE_RESULT = 7;
-    SETTLEMENT = 8;
+    HEARTBEAT = 0;              // 心跳消息
+    CONNECT = 1;                // 连接
+    START_MATCH = 2;            // 匹配请求
+    GAME_START = 3;             // 对局开始
+    BATTLE_PREP_TIMER = 4;      // 备战倒计时
+    BATTLE_PREP_SNAPSHOT = 5;   // 备战快照
+    ALL_SNAPSHOTS = 6;          // 所有玩家快照
+    BATTLE_RESULT = 7;          // 战斗结果上报
+    SETTLEMENT = 8;             // 结算信息
+    EXIT = 9;                   // 玩家退出房间
+    DISCONNECTED = 10;          // 玩家断线
 }
 
 // 心跳消息
@@ -86,6 +88,24 @@ message SettlementMessage {
     repeated RankingEntry rankings = 2;
 }
 
+// 20250728updated
+// 自定义数据类型：退出玩家信息
+message ExitPlayerInfo {
+    string exit_player_id = 1;
+    int32 exit_round = 2;
+    int32 exit_honor_value = 3; // 退出时的荣耀值
+}
+
+// 退出房间消息（客户端→服务器）
+message ExitMessage {
+    ExitPlayerInfo exit_info = 1;
+}
+
+// 广播退出/断线消息（服务器→所有在线客户端）
+message ExitBroadcastMessage {
+    repeated ExitPlayerInfo exit_players_info = 1;
+}
+
 // 基础消息结构
 message NetworkMessage {
     MessageType msg_id = 1;
@@ -100,5 +120,7 @@ message NetworkMessage {
         AllSnapshotsMessage all_snapshots = 10;
         BattleResultReportMessage battle_result_report = 11;
         SettlementMessage settlement = 12;
+        ExitMessage exit = 13;
+        ExitBroadcastMessage exit_broadcast = 14;
     }
 }

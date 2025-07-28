@@ -48,7 +48,7 @@ struct TableStruct_src_2fproto_2fNetworkMessage_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[12]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[15]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -70,6 +70,15 @@ extern BattleResultReportMessageDefaultTypeInternal _BattleResultReportMessage_d
 class ConnectRequestMessage;
 class ConnectRequestMessageDefaultTypeInternal;
 extern ConnectRequestMessageDefaultTypeInternal _ConnectRequestMessage_default_instance_;
+class ExitBroadcastMessage;
+class ExitBroadcastMessageDefaultTypeInternal;
+extern ExitBroadcastMessageDefaultTypeInternal _ExitBroadcastMessage_default_instance_;
+class ExitMessage;
+class ExitMessageDefaultTypeInternal;
+extern ExitMessageDefaultTypeInternal _ExitMessage_default_instance_;
+class ExitPlayerInfo;
+class ExitPlayerInfoDefaultTypeInternal;
+extern ExitPlayerInfoDefaultTypeInternal _ExitPlayerInfo_default_instance_;
 class GameStartMessage;
 class GameStartMessageDefaultTypeInternal;
 extern GameStartMessageDefaultTypeInternal _GameStartMessage_default_instance_;
@@ -97,6 +106,9 @@ template<> ::BattlePrepSnapshotMessage* Arena::CreateMaybeMessage<::BattlePrepSn
 template<> ::BattlePrepTimerMessage* Arena::CreateMaybeMessage<::BattlePrepTimerMessage>(Arena*);
 template<> ::BattleResultReportMessage* Arena::CreateMaybeMessage<::BattleResultReportMessage>(Arena*);
 template<> ::ConnectRequestMessage* Arena::CreateMaybeMessage<::ConnectRequestMessage>(Arena*);
+template<> ::ExitBroadcastMessage* Arena::CreateMaybeMessage<::ExitBroadcastMessage>(Arena*);
+template<> ::ExitMessage* Arena::CreateMaybeMessage<::ExitMessage>(Arena*);
+template<> ::ExitPlayerInfo* Arena::CreateMaybeMessage<::ExitPlayerInfo>(Arena*);
 template<> ::GameStartMessage* Arena::CreateMaybeMessage<::GameStartMessage>(Arena*);
 template<> ::HeartbeatMessage* Arena::CreateMaybeMessage<::HeartbeatMessage>(Arena*);
 template<> ::NetworkMessage* Arena::CreateMaybeMessage<::NetworkMessage>(Arena*);
@@ -116,12 +128,14 @@ enum MessageType : int {
   ALL_SNAPSHOTS = 6,
   BATTLE_RESULT = 7,
   SETTLEMENT = 8,
+  EXIT = 9,
+  DISCONNECTED = 10,
   MessageType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   MessageType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool MessageType_IsValid(int value);
 constexpr MessageType MessageType_MIN = HEARTBEAT;
-constexpr MessageType MessageType_MAX = SETTLEMENT;
+constexpr MessageType MessageType_MAX = DISCONNECTED;
 constexpr int MessageType_ARRAYSIZE = MessageType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageType_descriptor();
@@ -2076,6 +2090,473 @@ class SettlementMessage PROTOBUF_FINAL :
 };
 // -------------------------------------------------------------------
 
+class ExitPlayerInfo PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ExitPlayerInfo) */ {
+ public:
+  inline ExitPlayerInfo() : ExitPlayerInfo(nullptr) {};
+  virtual ~ExitPlayerInfo();
+
+  ExitPlayerInfo(const ExitPlayerInfo& from);
+  ExitPlayerInfo(ExitPlayerInfo&& from) noexcept
+    : ExitPlayerInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline ExitPlayerInfo& operator=(const ExitPlayerInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ExitPlayerInfo& operator=(ExitPlayerInfo&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ExitPlayerInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ExitPlayerInfo* internal_default_instance() {
+    return reinterpret_cast<const ExitPlayerInfo*>(
+               &_ExitPlayerInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(ExitPlayerInfo& a, ExitPlayerInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ExitPlayerInfo* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ExitPlayerInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ExitPlayerInfo* New() const final {
+    return CreateMaybeMessage<ExitPlayerInfo>(nullptr);
+  }
+
+  ExitPlayerInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ExitPlayerInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ExitPlayerInfo& from);
+  void MergeFrom(const ExitPlayerInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ExitPlayerInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ExitPlayerInfo";
+  }
+  protected:
+  explicit ExitPlayerInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kExitPlayerIdFieldNumber = 1,
+    kExitRoundFieldNumber = 2,
+    kExitHonorValueFieldNumber = 3,
+  };
+  // string exit_player_id = 1;
+  void clear_exit_player_id();
+  const std::string& exit_player_id() const;
+  void set_exit_player_id(const std::string& value);
+  void set_exit_player_id(std::string&& value);
+  void set_exit_player_id(const char* value);
+  void set_exit_player_id(const char* value, size_t size);
+  std::string* mutable_exit_player_id();
+  std::string* release_exit_player_id();
+  void set_allocated_exit_player_id(std::string* exit_player_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_exit_player_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_exit_player_id(
+      std::string* exit_player_id);
+  private:
+  const std::string& _internal_exit_player_id() const;
+  void _internal_set_exit_player_id(const std::string& value);
+  std::string* _internal_mutable_exit_player_id();
+  public:
+
+  // int32 exit_round = 2;
+  void clear_exit_round();
+  ::PROTOBUF_NAMESPACE_ID::int32 exit_round() const;
+  void set_exit_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_exit_round() const;
+  void _internal_set_exit_round(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // int32 exit_honor_value = 3;
+  void clear_exit_honor_value();
+  ::PROTOBUF_NAMESPACE_ID::int32 exit_honor_value() const;
+  void set_exit_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_exit_honor_value() const;
+  void _internal_set_exit_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:ExitPlayerInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr exit_player_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 exit_round_;
+  ::PROTOBUF_NAMESPACE_ID::int32 exit_honor_value_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ExitMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ExitMessage) */ {
+ public:
+  inline ExitMessage() : ExitMessage(nullptr) {};
+  virtual ~ExitMessage();
+
+  ExitMessage(const ExitMessage& from);
+  ExitMessage(ExitMessage&& from) noexcept
+    : ExitMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline ExitMessage& operator=(const ExitMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ExitMessage& operator=(ExitMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ExitMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ExitMessage* internal_default_instance() {
+    return reinterpret_cast<const ExitMessage*>(
+               &_ExitMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  friend void swap(ExitMessage& a, ExitMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ExitMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ExitMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ExitMessage* New() const final {
+    return CreateMaybeMessage<ExitMessage>(nullptr);
+  }
+
+  ExitMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ExitMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ExitMessage& from);
+  void MergeFrom(const ExitMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ExitMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ExitMessage";
+  }
+  protected:
+  explicit ExitMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kExitInfoFieldNumber = 1,
+  };
+  // .ExitPlayerInfo exit_info = 1;
+  bool has_exit_info() const;
+  private:
+  bool _internal_has_exit_info() const;
+  public:
+  void clear_exit_info();
+  const ::ExitPlayerInfo& exit_info() const;
+  ::ExitPlayerInfo* release_exit_info();
+  ::ExitPlayerInfo* mutable_exit_info();
+  void set_allocated_exit_info(::ExitPlayerInfo* exit_info);
+  private:
+  const ::ExitPlayerInfo& _internal_exit_info() const;
+  ::ExitPlayerInfo* _internal_mutable_exit_info();
+  public:
+  void unsafe_arena_set_allocated_exit_info(
+      ::ExitPlayerInfo* exit_info);
+  ::ExitPlayerInfo* unsafe_arena_release_exit_info();
+
+  // @@protoc_insertion_point(class_scope:ExitMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::ExitPlayerInfo* exit_info_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ExitBroadcastMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ExitBroadcastMessage) */ {
+ public:
+  inline ExitBroadcastMessage() : ExitBroadcastMessage(nullptr) {};
+  virtual ~ExitBroadcastMessage();
+
+  ExitBroadcastMessage(const ExitBroadcastMessage& from);
+  ExitBroadcastMessage(ExitBroadcastMessage&& from) noexcept
+    : ExitBroadcastMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline ExitBroadcastMessage& operator=(const ExitBroadcastMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ExitBroadcastMessage& operator=(ExitBroadcastMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ExitBroadcastMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ExitBroadcastMessage* internal_default_instance() {
+    return reinterpret_cast<const ExitBroadcastMessage*>(
+               &_ExitBroadcastMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  friend void swap(ExitBroadcastMessage& a, ExitBroadcastMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ExitBroadcastMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ExitBroadcastMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ExitBroadcastMessage* New() const final {
+    return CreateMaybeMessage<ExitBroadcastMessage>(nullptr);
+  }
+
+  ExitBroadcastMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ExitBroadcastMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ExitBroadcastMessage& from);
+  void MergeFrom(const ExitBroadcastMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ExitBroadcastMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ExitBroadcastMessage";
+  }
+  protected:
+  explicit ExitBroadcastMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kExitPlayersInfoFieldNumber = 1,
+  };
+  // repeated .ExitPlayerInfo exit_players_info = 1;
+  int exit_players_info_size() const;
+  private:
+  int _internal_exit_players_info_size() const;
+  public:
+  void clear_exit_players_info();
+  ::ExitPlayerInfo* mutable_exit_players_info(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ExitPlayerInfo >*
+      mutable_exit_players_info();
+  private:
+  const ::ExitPlayerInfo& _internal_exit_players_info(int index) const;
+  ::ExitPlayerInfo* _internal_add_exit_players_info();
+  public:
+  const ::ExitPlayerInfo& exit_players_info(int index) const;
+  ::ExitPlayerInfo* add_exit_players_info();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ExitPlayerInfo >&
+      exit_players_info() const;
+
+  // @@protoc_insertion_point(class_scope:ExitBroadcastMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ExitPlayerInfo > exit_players_info_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
 class NetworkMessage PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:NetworkMessage) */ {
  public:
@@ -2121,6 +2602,8 @@ class NetworkMessage PROTOBUF_FINAL :
     kAllSnapshots = 10,
     kBattleResultReport = 11,
     kSettlement = 12,
+    kExit = 13,
+    kExitBroadcast = 14,
     DATA_NOT_SET = 0,
   };
 
@@ -2130,7 +2613,7 @@ class NetworkMessage PROTOBUF_FINAL :
                &_NetworkMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    14;
 
   friend void swap(NetworkMessage& a, NetworkMessage& b) {
     a.Swap(&b);
@@ -2211,6 +2694,8 @@ class NetworkMessage PROTOBUF_FINAL :
     kAllSnapshotsFieldNumber = 10,
     kBattleResultReportFieldNumber = 11,
     kSettlementFieldNumber = 12,
+    kExitFieldNumber = 13,
+    kExitBroadcastFieldNumber = 14,
   };
   // string player_id = 2;
   void clear_player_id();
@@ -2390,6 +2875,42 @@ class NetworkMessage PROTOBUF_FINAL :
       ::SettlementMessage* settlement);
   ::SettlementMessage* unsafe_arena_release_settlement();
 
+  // .ExitMessage exit = 13;
+  bool has_exit() const;
+  private:
+  bool _internal_has_exit() const;
+  public:
+  void clear_exit();
+  const ::ExitMessage& exit() const;
+  ::ExitMessage* release_exit();
+  ::ExitMessage* mutable_exit();
+  void set_allocated_exit(::ExitMessage* exit);
+  private:
+  const ::ExitMessage& _internal_exit() const;
+  ::ExitMessage* _internal_mutable_exit();
+  public:
+  void unsafe_arena_set_allocated_exit(
+      ::ExitMessage* exit);
+  ::ExitMessage* unsafe_arena_release_exit();
+
+  // .ExitBroadcastMessage exit_broadcast = 14;
+  bool has_exit_broadcast() const;
+  private:
+  bool _internal_has_exit_broadcast() const;
+  public:
+  void clear_exit_broadcast();
+  const ::ExitBroadcastMessage& exit_broadcast() const;
+  ::ExitBroadcastMessage* release_exit_broadcast();
+  ::ExitBroadcastMessage* mutable_exit_broadcast();
+  void set_allocated_exit_broadcast(::ExitBroadcastMessage* exit_broadcast);
+  private:
+  const ::ExitBroadcastMessage& _internal_exit_broadcast() const;
+  ::ExitBroadcastMessage* _internal_mutable_exit_broadcast();
+  public:
+  void unsafe_arena_set_allocated_exit_broadcast(
+      ::ExitBroadcastMessage* exit_broadcast);
+  ::ExitBroadcastMessage* unsafe_arena_release_exit_broadcast();
+
   void clear_data();
   DataCase data_case() const;
   // @@protoc_insertion_point(class_scope:NetworkMessage)
@@ -2403,6 +2924,8 @@ class NetworkMessage PROTOBUF_FINAL :
   void set_has_all_snapshots();
   void set_has_battle_result_report();
   void set_has_settlement();
+  void set_has_exit();
+  void set_has_exit_broadcast();
 
   inline bool has_data() const;
   inline void clear_has_data();
@@ -2422,6 +2945,8 @@ class NetworkMessage PROTOBUF_FINAL :
     ::AllSnapshotsMessage* all_snapshots_;
     ::BattleResultReportMessage* battle_result_report_;
     ::SettlementMessage* settlement_;
+    ::ExitMessage* exit_;
+    ::ExitBroadcastMessage* exit_broadcast_;
   } data_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -3911,6 +4436,259 @@ SettlementMessage::rankings() const {
 
 // -------------------------------------------------------------------
 
+// ExitPlayerInfo
+
+// string exit_player_id = 1;
+inline void ExitPlayerInfo::clear_exit_player_id() {
+  exit_player_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& ExitPlayerInfo::exit_player_id() const {
+  // @@protoc_insertion_point(field_get:ExitPlayerInfo.exit_player_id)
+  return _internal_exit_player_id();
+}
+inline void ExitPlayerInfo::set_exit_player_id(const std::string& value) {
+  _internal_set_exit_player_id(value);
+  // @@protoc_insertion_point(field_set:ExitPlayerInfo.exit_player_id)
+}
+inline std::string* ExitPlayerInfo::mutable_exit_player_id() {
+  // @@protoc_insertion_point(field_mutable:ExitPlayerInfo.exit_player_id)
+  return _internal_mutable_exit_player_id();
+}
+inline const std::string& ExitPlayerInfo::_internal_exit_player_id() const {
+  return exit_player_id_.Get();
+}
+inline void ExitPlayerInfo::_internal_set_exit_player_id(const std::string& value) {
+  
+  exit_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void ExitPlayerInfo::set_exit_player_id(std::string&& value) {
+  
+  exit_player_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:ExitPlayerInfo.exit_player_id)
+}
+inline void ExitPlayerInfo::set_exit_player_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  exit_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:ExitPlayerInfo.exit_player_id)
+}
+inline void ExitPlayerInfo::set_exit_player_id(const char* value,
+    size_t size) {
+  
+  exit_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:ExitPlayerInfo.exit_player_id)
+}
+inline std::string* ExitPlayerInfo::_internal_mutable_exit_player_id() {
+  
+  return exit_player_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* ExitPlayerInfo::release_exit_player_id() {
+  // @@protoc_insertion_point(field_release:ExitPlayerInfo.exit_player_id)
+  return exit_player_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void ExitPlayerInfo::set_allocated_exit_player_id(std::string* exit_player_id) {
+  if (exit_player_id != nullptr) {
+    
+  } else {
+    
+  }
+  exit_player_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), exit_player_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:ExitPlayerInfo.exit_player_id)
+}
+inline std::string* ExitPlayerInfo::unsafe_arena_release_exit_player_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:ExitPlayerInfo.exit_player_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return exit_player_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void ExitPlayerInfo::unsafe_arena_set_allocated_exit_player_id(
+    std::string* exit_player_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (exit_player_id != nullptr) {
+    
+  } else {
+    
+  }
+  exit_player_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      exit_player_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ExitPlayerInfo.exit_player_id)
+}
+
+// int32 exit_round = 2;
+inline void ExitPlayerInfo::clear_exit_round() {
+  exit_round_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ExitPlayerInfo::_internal_exit_round() const {
+  return exit_round_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ExitPlayerInfo::exit_round() const {
+  // @@protoc_insertion_point(field_get:ExitPlayerInfo.exit_round)
+  return _internal_exit_round();
+}
+inline void ExitPlayerInfo::_internal_set_exit_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  exit_round_ = value;
+}
+inline void ExitPlayerInfo::set_exit_round(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_exit_round(value);
+  // @@protoc_insertion_point(field_set:ExitPlayerInfo.exit_round)
+}
+
+// int32 exit_honor_value = 3;
+inline void ExitPlayerInfo::clear_exit_honor_value() {
+  exit_honor_value_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ExitPlayerInfo::_internal_exit_honor_value() const {
+  return exit_honor_value_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ExitPlayerInfo::exit_honor_value() const {
+  // @@protoc_insertion_point(field_get:ExitPlayerInfo.exit_honor_value)
+  return _internal_exit_honor_value();
+}
+inline void ExitPlayerInfo::_internal_set_exit_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  exit_honor_value_ = value;
+}
+inline void ExitPlayerInfo::set_exit_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_exit_honor_value(value);
+  // @@protoc_insertion_point(field_set:ExitPlayerInfo.exit_honor_value)
+}
+
+// -------------------------------------------------------------------
+
+// ExitMessage
+
+// .ExitPlayerInfo exit_info = 1;
+inline bool ExitMessage::_internal_has_exit_info() const {
+  return this != internal_default_instance() && exit_info_ != nullptr;
+}
+inline bool ExitMessage::has_exit_info() const {
+  return _internal_has_exit_info();
+}
+inline void ExitMessage::clear_exit_info() {
+  if (GetArena() == nullptr && exit_info_ != nullptr) {
+    delete exit_info_;
+  }
+  exit_info_ = nullptr;
+}
+inline const ::ExitPlayerInfo& ExitMessage::_internal_exit_info() const {
+  const ::ExitPlayerInfo* p = exit_info_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::ExitPlayerInfo*>(
+      &::_ExitPlayerInfo_default_instance_);
+}
+inline const ::ExitPlayerInfo& ExitMessage::exit_info() const {
+  // @@protoc_insertion_point(field_get:ExitMessage.exit_info)
+  return _internal_exit_info();
+}
+inline void ExitMessage::unsafe_arena_set_allocated_exit_info(
+    ::ExitPlayerInfo* exit_info) {
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(exit_info_);
+  }
+  exit_info_ = exit_info;
+  if (exit_info) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:ExitMessage.exit_info)
+}
+inline ::ExitPlayerInfo* ExitMessage::release_exit_info() {
+  auto temp = unsafe_arena_release_exit_info();
+  if (GetArena() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::ExitPlayerInfo* ExitMessage::unsafe_arena_release_exit_info() {
+  // @@protoc_insertion_point(field_release:ExitMessage.exit_info)
+  
+  ::ExitPlayerInfo* temp = exit_info_;
+  exit_info_ = nullptr;
+  return temp;
+}
+inline ::ExitPlayerInfo* ExitMessage::_internal_mutable_exit_info() {
+  
+  if (exit_info_ == nullptr) {
+    auto* p = CreateMaybeMessage<::ExitPlayerInfo>(GetArena());
+    exit_info_ = p;
+  }
+  return exit_info_;
+}
+inline ::ExitPlayerInfo* ExitMessage::mutable_exit_info() {
+  // @@protoc_insertion_point(field_mutable:ExitMessage.exit_info)
+  return _internal_mutable_exit_info();
+}
+inline void ExitMessage::set_allocated_exit_info(::ExitPlayerInfo* exit_info) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
+  if (message_arena == nullptr) {
+    delete exit_info_;
+  }
+  if (exit_info) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(exit_info);
+    if (message_arena != submessage_arena) {
+      exit_info = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, exit_info, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  exit_info_ = exit_info;
+  // @@protoc_insertion_point(field_set_allocated:ExitMessage.exit_info)
+}
+
+// -------------------------------------------------------------------
+
+// ExitBroadcastMessage
+
+// repeated .ExitPlayerInfo exit_players_info = 1;
+inline int ExitBroadcastMessage::_internal_exit_players_info_size() const {
+  return exit_players_info_.size();
+}
+inline int ExitBroadcastMessage::exit_players_info_size() const {
+  return _internal_exit_players_info_size();
+}
+inline void ExitBroadcastMessage::clear_exit_players_info() {
+  exit_players_info_.Clear();
+}
+inline ::ExitPlayerInfo* ExitBroadcastMessage::mutable_exit_players_info(int index) {
+  // @@protoc_insertion_point(field_mutable:ExitBroadcastMessage.exit_players_info)
+  return exit_players_info_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ExitPlayerInfo >*
+ExitBroadcastMessage::mutable_exit_players_info() {
+  // @@protoc_insertion_point(field_mutable_list:ExitBroadcastMessage.exit_players_info)
+  return &exit_players_info_;
+}
+inline const ::ExitPlayerInfo& ExitBroadcastMessage::_internal_exit_players_info(int index) const {
+  return exit_players_info_.Get(index);
+}
+inline const ::ExitPlayerInfo& ExitBroadcastMessage::exit_players_info(int index) const {
+  // @@protoc_insertion_point(field_get:ExitBroadcastMessage.exit_players_info)
+  return _internal_exit_players_info(index);
+}
+inline ::ExitPlayerInfo* ExitBroadcastMessage::_internal_add_exit_players_info() {
+  return exit_players_info_.Add();
+}
+inline ::ExitPlayerInfo* ExitBroadcastMessage::add_exit_players_info() {
+  // @@protoc_insertion_point(field_add:ExitBroadcastMessage.exit_players_info)
+  return _internal_add_exit_players_info();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ExitPlayerInfo >&
+ExitBroadcastMessage::exit_players_info() const {
+  // @@protoc_insertion_point(field_list:ExitBroadcastMessage.exit_players_info)
+  return exit_players_info_;
+}
+
+// -------------------------------------------------------------------
+
 // NetworkMessage
 
 // .MessageType msg_id = 1;
@@ -4598,6 +5376,152 @@ inline ::SettlementMessage* NetworkMessage::mutable_settlement() {
   return _internal_mutable_settlement();
 }
 
+// .ExitMessage exit = 13;
+inline bool NetworkMessage::_internal_has_exit() const {
+  return data_case() == kExit;
+}
+inline bool NetworkMessage::has_exit() const {
+  return _internal_has_exit();
+}
+inline void NetworkMessage::set_has_exit() {
+  _oneof_case_[0] = kExit;
+}
+inline void NetworkMessage::clear_exit() {
+  if (_internal_has_exit()) {
+    if (GetArena() == nullptr) {
+      delete data_.exit_;
+    }
+    clear_has_data();
+  }
+}
+inline ::ExitMessage* NetworkMessage::release_exit() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.exit)
+  if (_internal_has_exit()) {
+    clear_has_data();
+      ::ExitMessage* temp = data_.exit_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.exit_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::ExitMessage& NetworkMessage::_internal_exit() const {
+  return _internal_has_exit()
+      ? *data_.exit_
+      : *reinterpret_cast< ::ExitMessage*>(&::_ExitMessage_default_instance_);
+}
+inline const ::ExitMessage& NetworkMessage::exit() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.exit)
+  return _internal_exit();
+}
+inline ::ExitMessage* NetworkMessage::unsafe_arena_release_exit() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.exit)
+  if (_internal_has_exit()) {
+    clear_has_data();
+    ::ExitMessage* temp = data_.exit_;
+    data_.exit_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_exit(::ExitMessage* exit) {
+  clear_data();
+  if (exit) {
+    set_has_exit();
+    data_.exit_ = exit;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.exit)
+}
+inline ::ExitMessage* NetworkMessage::_internal_mutable_exit() {
+  if (!_internal_has_exit()) {
+    clear_data();
+    set_has_exit();
+    data_.exit_ = CreateMaybeMessage< ::ExitMessage >(GetArena());
+  }
+  return data_.exit_;
+}
+inline ::ExitMessage* NetworkMessage::mutable_exit() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.exit)
+  return _internal_mutable_exit();
+}
+
+// .ExitBroadcastMessage exit_broadcast = 14;
+inline bool NetworkMessage::_internal_has_exit_broadcast() const {
+  return data_case() == kExitBroadcast;
+}
+inline bool NetworkMessage::has_exit_broadcast() const {
+  return _internal_has_exit_broadcast();
+}
+inline void NetworkMessage::set_has_exit_broadcast() {
+  _oneof_case_[0] = kExitBroadcast;
+}
+inline void NetworkMessage::clear_exit_broadcast() {
+  if (_internal_has_exit_broadcast()) {
+    if (GetArena() == nullptr) {
+      delete data_.exit_broadcast_;
+    }
+    clear_has_data();
+  }
+}
+inline ::ExitBroadcastMessage* NetworkMessage::release_exit_broadcast() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.exit_broadcast)
+  if (_internal_has_exit_broadcast()) {
+    clear_has_data();
+      ::ExitBroadcastMessage* temp = data_.exit_broadcast_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.exit_broadcast_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::ExitBroadcastMessage& NetworkMessage::_internal_exit_broadcast() const {
+  return _internal_has_exit_broadcast()
+      ? *data_.exit_broadcast_
+      : *reinterpret_cast< ::ExitBroadcastMessage*>(&::_ExitBroadcastMessage_default_instance_);
+}
+inline const ::ExitBroadcastMessage& NetworkMessage::exit_broadcast() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.exit_broadcast)
+  return _internal_exit_broadcast();
+}
+inline ::ExitBroadcastMessage* NetworkMessage::unsafe_arena_release_exit_broadcast() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.exit_broadcast)
+  if (_internal_has_exit_broadcast()) {
+    clear_has_data();
+    ::ExitBroadcastMessage* temp = data_.exit_broadcast_;
+    data_.exit_broadcast_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_exit_broadcast(::ExitBroadcastMessage* exit_broadcast) {
+  clear_data();
+  if (exit_broadcast) {
+    set_has_exit_broadcast();
+    data_.exit_broadcast_ = exit_broadcast;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.exit_broadcast)
+}
+inline ::ExitBroadcastMessage* NetworkMessage::_internal_mutable_exit_broadcast() {
+  if (!_internal_has_exit_broadcast()) {
+    clear_data();
+    set_has_exit_broadcast();
+    data_.exit_broadcast_ = CreateMaybeMessage< ::ExitBroadcastMessage >(GetArena());
+  }
+  return data_.exit_broadcast_;
+}
+inline ::ExitBroadcastMessage* NetworkMessage::mutable_exit_broadcast() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.exit_broadcast)
+  return _internal_mutable_exit_broadcast();
+}
+
 inline bool NetworkMessage::has_data() const {
   return data_case() != DATA_NOT_SET;
 }
@@ -4610,6 +5534,12 @@ inline NetworkMessage::DataCase NetworkMessage::data_case() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
