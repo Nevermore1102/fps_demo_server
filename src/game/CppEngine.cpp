@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <google/protobuf/message.h>
 #include <spdlog/spdlog.h>
+#include <string>
 #include "game/Room/Room.h"
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
@@ -210,29 +211,17 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
     
     // 提取消息数据
     std::string playerId = pb_msg.player_id();
-    std::string matchId = snapshot.match_id();
     int32_t round = snapshot.round();
     std::string formationData = snapshot.formation_data();
     int32_t honorValue = snapshot.honor_value();
-    
-    spdlog::info("Processing snapshot - Player: {}, Match: {}, Round: {}, Honor: {}", 
-                playerId, matchId, round, honorValue);
-    
-    // 验证数据完整性
-    if (playerId.empty() || matchId.empty()) {
-        spdlog::error("Invalid snapshot data: player_id or match_id is empty");
-        return;
-    }
-    
+
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
-    auto room = roomManager.getRoom(matchId);
-    
-    if (!room) {
-        spdlog::error("Room {} not found for snapshot", matchId);
-        return;
-    }
-    
+    auto room = roomManager.getPlayerRoom(playerId);
+    std::string matchId = std::to_string(room->getId());
+    spdlog::info("Processing snapshot - Player: {}, match id: {}, Round: {}, Honor: {}", 
+                playerId, matchId, round, honorValue);
+
     // 验证玩家是否在房间中
     auto player = room->getPlayer(playerId);
     if (!player) {
@@ -277,22 +266,15 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     const auto& battleResult = pb_msg.battle_result_report();
 
     std::string playerId = pb_msg.player_id();
-    std::string matchId = battleResult.match_id();
     int32_t round = battleResult.round();
     int32_t honorValue = battleResult.honor_value();
-
-    spdlog::info("Processing battle result - Player: {}, Match: {}, Round: {}, Honor: {}", 
-                playerId, matchId, round, honorValue);
-
-    // 验证数据完整性
-    if (playerId.empty() || matchId.empty()) {
-        spdlog::error("Invalid snapshot data: player_id or match_id is empty");
-        return;
-    }
     
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
-    auto room = roomManager.getRoom(matchId);
+    auto room = roomManager.getPlayerRoom(playerId);
+    std::string matchId = std::to_string(room->getId());
+    spdlog::info("Processing battle result - Player: {}, Match: {}, Round: {}, Honor: {}", 
+                playerId, matchId, round, honorValue);
     
     if (!room) {
         spdlog::error("Room {} not found for snapshot", matchId);
