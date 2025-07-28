@@ -360,7 +360,7 @@ void Room::broadcastAllSnapshots() {
     
     AllSnapshotsMessage* all_snapshots = msg.mutable_all_snapshots();
     all_snapshots->set_match_id(std::to_string(room_id_));
-    all_snapshots->set_round(currentRound_);
+    all_snapshots->set_round(getCurrentRound());
     all_snapshots->set_seed(seed);
     
     // 添加所有玩家快照
@@ -416,7 +416,7 @@ void Room::onPlayerExit(const std::string& playerId, int32_t exit_round, int32_t
 // 广播退出消息
 void Room::broadcastExitMessage() {
     NetworkMessage msg;
-    msg.set_msg_id(MessageType::EXIT);
+    msg.set_msg_id(MessageType::DISCONNECTED);
     ExitBroadcastMessage* exit_msg = msg.mutable_exit_broadcast();
 
     for(const auto& exitPair : exitPlayers_) {
