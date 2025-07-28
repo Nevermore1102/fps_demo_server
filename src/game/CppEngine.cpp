@@ -290,7 +290,8 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
             room->clearRankings();  // 清理排名数据
 
             room->nextRound();  // 回合+1
-            room->startBattlePrepTimer();  // 启动备战倒计时
+            room->broadcastPrepareStart();  // 广播备战开始消息
+            room->startBattlePrepTimer();   // 启动备战倒计时
         }
         // 战斗结束，广播结算，清理房间
         else {
