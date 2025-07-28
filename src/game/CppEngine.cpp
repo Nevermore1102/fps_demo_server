@@ -1,4 +1,5 @@
 #include "CppEngine.h"
+#include <cstdint>
 #include <google/protobuf/message.h>
 #include <spdlog/spdlog.h>
 #include "proto/Message.h"
@@ -25,6 +26,9 @@ bool CppEngine::handleMessage(const std::shared_ptr<Connection>& conn, const Mes
             break;
         case MessageType::BATTLE_RESULT:
             onBattleResult(conn, msg);
+            break;
+        case MessageType::EXIT:
+            onExit(conn,msg);
             break;
         // case MessageType::PLAYER_UPDATE:
         //     onPlayerUpdate(conn, msg);
@@ -135,7 +139,7 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
         if (playerRoom) {
             spdlog::info("Player {} assigned to room {}, waiting for more players ({}/{})", 
                         playerId, playerRoom->getId(), 
-                        playerRoom->getPlayerCount(), MAX_PLAYERS);
+                        playerRoom->getAllPlayerCount(), MAX_PLAYERS);
         } else {
             spdlog::warn("Player {} not assigned to any room", playerId);
         }
@@ -200,21 +204,13 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
     
     spdlog::info("Successfully recorded snapshot for player {} in room {}", playerId, matchId);
     
-    // 检查是否所有玩家都已提交快照
-    if (room->allSnapshotsReceived()) {
+    // 检查是否所有游戏中玩家都已提交快照
+    if (room->allGamingSnapshotsReceived()) {
         spdlog::info("All snapshots received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
         room->broadcastAllSnapshots();
         
         // 清理快照为下一轮准备
         room->clearSnapshots();
-    } else {
-        size_t receivedCount = 0;
-        for (const auto& roomPlayer : room->getPlayers()) {
-            // 这里需要一个方法来检查特定玩家是否已提交快照
-            // 暂时用玩家数量和已收到的快照数量来判断
-        }
-        spdlog::info("Waiting for more snapshots in room {} (received: {}/{})", 
-                    matchId, receivedCount, room->getPlayerCount());
     }
     //test git1
     //test git1
@@ -222,6 +218,7 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
 
 }
 
+// 处理战斗结果消息 {type:战斗结果，对局id，playerid1，轮次，荣耀值}
 void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
     spdlog::info("Player Battle Result: {}", conn->getId());
     // // 解析消息获取玩家ID
@@ -235,6 +232,99 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     //test git1
     //test git1
 
+
+    // 解析消息获取玩家ID
+    NetworkMessage pb_msg;
+    if (!msg.getBodyAsProto(pb_msg)) {
+        spdlog::error("Failed to parse battle result message body");
+        return;
+    }
+
+    if( !pb_msg.has_battle_result_report()) {
+        spdlog::error("Message does not contain battle result data");
+        return;
+    }
+
+    const auto& battleResult = pb_msg.battle_result_report();
+
+    std::string playerId = pb_msg.player_id();
+    std::string matchId = battleResult.match_id();
+    int32_t round = battleResult.round();
+    int32_t honorValue = battleResult.honor_value();
+
+    spdlog::info("Processing battle result - Player: {}, Match: {}, Round: {}, Honor: {}", 
+                playerId, matchId, round, honorValue);
+
+    // 验证数据完整性
+    if (playerId.empty() || matchId.empty()) {
+        spdlog::error("Invalid snapshot data: player_id or match_id is empty");
+        return;
+    }
+    
+    // 获取房间管理器并找到对应房间
+    auto& roomManager = RoomManager::getInstance();
+    auto room = roomManager.getRoom(matchId);
+    
+    if (!room) {
+        spdlog::error("Room {} not found for snapshot", matchId);
+        return;
+    }
+    
+    // 验证玩家是否在房间中
+    auto player = room->getPlayer(playerId);
+    if (!player) {
+        spdlog::error("Player {} not found in room {}", playerId, matchId);
+        return;
+    }
+    
+    // 记录战斗结果
+    if (!room->insertRanking(playerId, honorValue)) {
+        spdlog::error("Failed to record snapshot for player {} in room {}", playerId, matchId);
+        return;
+    }
+    
+    spdlog::info("Successfully recorded snapshot for player {} in room {}", playerId, matchId);
+    
+    // 检查是否所有游戏中玩家都已提交战斗结果
+    if (room->allGamingRankingsReceived()) {
+        spdlog::info("All gaming rankings received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
+        room->BroadcastResults();
+    }
+}
+
+void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& msg) {
+    spdlog::info("Player Exit: {}", conn->getId());
+
+    // 解析消息获取玩家ID
+    NetworkMessage pb_msg;
+    if (!msg.getBodyAsProto(pb_msg)) {
+        spdlog::error("Failed to parse exit message body");
+        return;
+    }
+
+    auto exit_msg = pb_msg.exit();
+    std::string exit_player_id = exit_msg.exit_info().exit_player_id();
+    int32_t exit_round = exit_msg.exit_info().exit_round();
+    int32_t exit_honor_value = exit_msg.exit_info().exit_honor_value();
+    if (exit_player_id.empty()) {
+        spdlog::error("Player ID is empty in exit message");
+        return;
+    }
+
+    // 获取房间管理器并找到对应房间
+    auto& roomManager = RoomManager::getInstance();
+    auto room = roomManager.getPlayerRoom(exit_player_id);
+    
+    if (!room) {
+        spdlog::error("Room not found for player {}", exit_player_id);
+        return;
+    }
+
+    // 房间处理玩家退出并广播消息
+    room->onPlayerExit(exit_player_id, exit_round, exit_honor_value);
+    room->broadcastExitMessage();
+    
+    spdlog::info("Player {} has exited the game and removed from room {}", exit_player_id, room->getId());
 }
 
 // void CppEngine::onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg) {

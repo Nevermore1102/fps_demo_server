@@ -2,8 +2,33 @@
 #include "game/Player/Player.h"
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
+#include <cstddef>
 #include <spdlog/spdlog.h>
 #include <string>
+
+size_t Room::getAllPlayerCount() const{
+    return players_.size();
+}
+
+size_t Room::getExitPlayerCount() const{
+    size_t count = 0;
+    for(const auto& p:players_){
+        if(p && p->getState()==PlayerState::DISCONNECTED){
+            count++;
+        }
+    }
+    return count;
+}
+
+size_t Room::getGamingPlayerCount() const{
+    size_t count = 0;
+    for(const auto& p:players_){
+        if(p && p->getState()==PlayerState::GAMING){
+            count++;
+        }
+    }
+    return count;
+}
 
 // 添加玩家到房间
 bool Room::addPlayer(std::shared_ptr<Player> player) {
@@ -31,7 +56,7 @@ void Room::startCountdownTimer(int32_t seconds) {
 
     // 创建倒计时线程
     countdown_thread_ = std::thread([this]() {
-        while (countdown_running_ && countdown_remaining_seconds_ > 0) {
+        while (countdown_running_ && countdown_remaining_seconds_ >= 0) {
             std::this_thread::sleep_for(std::chrono::seconds(BROADCAST_INTERVAL));
             if (!countdown_running_)
             {
@@ -183,21 +208,60 @@ void Room::BroadcastResults() {
     broadcastMessage(msg);
 }
 
+// 插入在线玩家荣耀值
+bool Room::insertRanking(const std::string& playerId, int32_t honorValue) {
+    // 插入或更新排名
+    auto player = getPlayer(playerId);
+    if (!player || player->getState() != PlayerState::GAMING) {
+        spdlog::error("Player {} not found or not in gaming state", playerId);
+        return false;
+    }
+
+    allHonorValue_[playerId] = honorValue;
+
+    spdlog::info("Inserted ranking for player {} with honor value {}, allHonorValue_ size ", playerId, honorValue, allHonorValue_.size());
+    return true;
+}
+
+// 插入退出玩家荣耀值
+bool Room::insertExitRanking(const std::string& playerId, int32_t honorValue) {
+    // 插入或更新退出玩家的荣耀值
+    auto player = getPlayer(playerId);
+    if (!player || player->getState() != PlayerState::DISCONNECTED) {
+        spdlog::error("Player {} not found or not in disconnected state", playerId);
+        return false;
+    }
+    
+    allHonorValue_[playerId] = honorValue;
+
+    spdlog::info("Inserted exit ranking for player {} with honor value {}", playerId, honorValue);
+    return true;
+}
+
 // 根据荣耀值计算房间内玩家的排名
 std::vector<std::shared_ptr<RankingEntry>> Room::getRankings() {
+    if(allHonorValue_.size() != getAllPlayerCount()) {
+        spdlog::warn("Not all players have submitted their rankings, cannot generate complete rankings, allHonorValue_ size:", allHonorValue_.size());
+        return {};
+    }
+
     std::vector<std::shared_ptr<RankingEntry>> rankings;
-    rankings.reserve(players_.size());
+    rankings.reserve(getAllPlayerCount());
 
     // 收集所有玩家的排名信息
-    for (const auto& player : players_) {
-        if (player) {  // 确保玩家指针有效
-            auto rankInfo = std::make_shared<RankingEntry>();
-            rankInfo->set_player_id(player->GetPlayerId());
-            rankInfo->set_honor_value(player->GetHonorValue());
-            rankInfo->set_rank(0);  // 初始排名为0
-
-            rankings.push_back(rankInfo);
+    for (const auto&[p,h]: allHonorValue_) {
+        auto player = getPlayer(p);
+        if (!player) {
+            spdlog::warn("Player {} not found in room {}", p, room_id_);
+            continue;
         }
+
+        auto rankInfo = std::make_shared<RankingEntry>();
+        rankInfo->set_player_id(player->GetPlayerId());
+        rankInfo->set_honor_value(player->GetHonorValue());
+        rankInfo->set_rank(0);  // 初始排名为0
+
+        rankings.push_back(rankInfo);
     }
 
     // 根据荣耀值降序排序
@@ -251,8 +315,8 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
 }
 
 // 检查是否所有玩家的快照都已收到
-bool Room::allSnapshotsReceived() const {
-    if (currentSnapshots_.size() != players_.size()) {
+bool Room::allGamingSnapshotsReceived() const {
+    if (currentSnapshots_.size() != getGamingPlayerCount()) {
         return false;
     }
     
@@ -268,7 +332,7 @@ bool Room::allSnapshotsReceived() const {
 
 // 广播所有快照
 void Room::broadcastAllSnapshots() {
-    if (!allSnapshotsReceived()) {
+    if (!allGamingSnapshotsReceived()) {
         spdlog::warn("Cannot broadcast snapshots, not all players have submitted");
         return;
     }
@@ -302,4 +366,54 @@ void Room::broadcastAllSnapshots() {
 void Room::clearSnapshots() {
     currentSnapshots_.clear();
     spdlog::info("Cleared snapshots for room {}", room_id_);
+}
+
+// 玩家退出处理
+void Room::onPlayerExit(const std::string& playerId, int32_t exit_round, int32_t honorValue) {
+    spdlog::info("Player {} has exited the room {}", playerId, room_id_);
+    // 检查玩家是否在房间中
+    auto player = getPlayer(playerId);
+    if (!player) {
+        spdlog::warn("Player {} not found in room {}", playerId, room_id_);
+        return;
+    }
+
+    // 更新玩家状态
+    player->setState(PlayerState::DISCONNECTED);
+
+    // 放入退出玩家信息
+    ExitPlayerInfo exitInfo;
+    exitInfo.set_exit_player_id(playerId);
+    exitInfo.set_exit_round(exit_round);
+    exitInfo.set_exit_honor_value(honorValue);
+    exitPlayers_[playerId] = exitInfo;
+    spdlog::info("Player {} info inserted into exitPlayers_ with round {} and honor value {}", 
+                playerId, exit_round, honorValue);
+
+    // 插入退出玩家的荣耀值
+    if (!insertExitRanking(playerId, honorValue)) {
+        spdlog::error("Failed to insert exit ranking for player {}", playerId);
+        return;
+    }
+
+    spdlog::info("Player {} marked as disconnected in room {}", playerId, room_id_);
+}
+
+// 广播退出消息
+void Room::broadcastExitMessage() {
+    NetworkMessage msg;
+    msg.set_msg_id(MessageType::EXIT);
+    ExitBroadcastMessage* exit_msg = msg.mutable_exit_broadcast();
+
+    for(const auto& exitPair : exitPlayers_) {
+        const ExitPlayerInfo& exitInfo = exitPair.second;
+        ExitPlayerInfo* info = exit_msg->add_exit_players_info();
+        info->set_exit_player_id(exitInfo.exit_player_id());
+        info->set_exit_round(exitInfo.exit_round());
+        info->set_exit_honor_value(exitInfo.exit_honor_value());
+    }
+
+    // 广播消息
+    broadcastMessage(msg);
+    spdlog::info("Broadcasted exit message for room {}", room_id_);
 }

@@ -1,8 +1,11 @@
 #pragma once
+#include <cstdint>
 #include <string>
 #include "game/Player/Player.h"
+#include "proto/NetworkMessage.pb.h"
 #include <thread>
 #include <atomic>
+#include <unordered_map>
 
 #define MAX_PLAYERS 2           // 房间最大玩家数
 #define PREPARE_TIME 30         // 准备时间（秒）
@@ -27,7 +30,11 @@ public:
     void setState(RoomState state) { state_ = state; }
     bool isFull() const { return players_.size() >= max_players_; }
     bool isEmpty() const { return players_.empty(); }
-    size_t getPlayerCount() const { return players_.size(); }
+
+    // 房间内玩家数量
+    size_t getAllPlayerCount() const;       // 所有玩家数量
+    size_t getExitPlayerCount() const;      // 退出的的玩家数量
+    size_t getGamingPlayerCount() const;    // 游戏中的玩家数量
     
     // 玩家管理
     bool addPlayer(std::shared_ptr<Player> player);
@@ -42,9 +49,19 @@ public:
     
     // 快照管理
     bool recordPlayerSnapshot(const std::string& playerId, const std::string& formationData, int32_t honorValue, int32_t round);
-    bool allSnapshotsReceived() const;
+    bool allGamingSnapshotsReceived() const;
     void broadcastAllSnapshots();
     void clearSnapshots();
+
+    // 战斗结果管理
+    bool insertRanking(const std::string& playerId, int32_t honorValue); // 插入游戏中玩家荣耀值
+    bool insertExitRanking(const std::string& playerId, int32_t honorValue); // 插入退出玩家荣耀值
+    bool allGamingRankingsReceived() const; // 检查是否所有游戏中玩家都已提交排名
+    void BroadcastResults();    // 广播游戏结果
+
+    // 玩家断线或退出
+    void onPlayerExit(const std::string& playerId, int32_t exit_round, int32_t honorValue);
+    void broadcastExitMessage();
 
 private:
     // 基础信息
@@ -53,10 +70,13 @@ private:
     int32_t max_players_;
     int32_t currentRound_;
 
-    // 玩家相关数据：房间内玩家信息、玩家ID映射表、玩家快照
+    // 玩家相关数据：房间内所有玩家信息、玩家ID映射表、玩家快照、结算数据、退出的玩家数据
+    // 注：当玩家退出，不会删除玩家，只是将Player状态设置为DISCONNECTED
     std::vector<std::shared_ptr<Player>> players_;
     std::unordered_map<std::string, std::shared_ptr<Player>> playerMap_;
     std::unordered_map<std::string, PlayerSnapshot> currentSnapshots_;
+    std::unordered_map<std::string, int32_t> allHonorValue_;
+    std::unordered_map<std::string, ExitPlayerInfo> exitPlayers_;
 
     // 定时器相关：剩余倒计时秒数，定时器线程
     int32_t countdown_remaining_seconds_;
@@ -72,7 +92,6 @@ private:
     void startBattlePrepTimer();                // 启动备战倒计时
     void onCountdownTick();                     // 定时器回调：每秒调用一次，处理倒计时逻辑
     void onCountdownFinished();                 // 定时器回调：备战倒计时结束时调用
-    void BroadcastResults();                    // 广播游戏结果
-    std::vector<std::shared_ptr<RankingEntry>> getRankings();    // 获取排名
+    std::vector<std::shared_ptr<RankingEntry>> getRankings();    // 获取总排名
     void cleanupRoom();                         // 清理房间
 };
