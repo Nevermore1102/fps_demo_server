@@ -48,7 +48,7 @@ struct TableStruct_src_2fproto_2fNetworkMessage_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[15]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[16]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -61,6 +61,9 @@ extern AllSnapshotsMessageDefaultTypeInternal _AllSnapshotsMessage_default_insta
 class BattlePrepSnapshotMessage;
 class BattlePrepSnapshotMessageDefaultTypeInternal;
 extern BattlePrepSnapshotMessageDefaultTypeInternal _BattlePrepSnapshotMessage_default_instance_;
+class BattlePrepStartMessage;
+class BattlePrepStartMessageDefaultTypeInternal;
+extern BattlePrepStartMessageDefaultTypeInternal _BattlePrepStartMessage_default_instance_;
 class BattlePrepTimerMessage;
 class BattlePrepTimerMessageDefaultTypeInternal;
 extern BattlePrepTimerMessageDefaultTypeInternal _BattlePrepTimerMessage_default_instance_;
@@ -103,6 +106,7 @@ extern SettlementMessageDefaultTypeInternal _SettlementMessage_default_instance_
 PROTOBUF_NAMESPACE_OPEN
 template<> ::AllSnapshotsMessage* Arena::CreateMaybeMessage<::AllSnapshotsMessage>(Arena*);
 template<> ::BattlePrepSnapshotMessage* Arena::CreateMaybeMessage<::BattlePrepSnapshotMessage>(Arena*);
+template<> ::BattlePrepStartMessage* Arena::CreateMaybeMessage<::BattlePrepStartMessage>(Arena*);
 template<> ::BattlePrepTimerMessage* Arena::CreateMaybeMessage<::BattlePrepTimerMessage>(Arena*);
 template<> ::BattleResultReportMessage* Arena::CreateMaybeMessage<::BattleResultReportMessage>(Arena*);
 template<> ::ConnectRequestMessage* Arena::CreateMaybeMessage<::ConnectRequestMessage>(Arena*);
@@ -123,13 +127,14 @@ enum MessageType : int {
   CONNECT = 1,
   START_MATCH = 2,
   GAME_START = 3,
-  BATTLE_PREP_TIMER = 4,
-  BATTLE_PREP_SNAPSHOT = 5,
-  ALL_SNAPSHOTS = 6,
-  BATTLE_RESULT = 7,
-  SETTLEMENT = 8,
-  EXIT = 9,
-  DISCONNECTED = 10,
+  PREPARE_START = 4,
+  BATTLE_PREP_TIMER = 5,
+  BATTLE_PREP_SNAPSHOT = 6,
+  ALL_SNAPSHOTS = 7,
+  BATTLE_RESULT = 8,
+  SETTLEMENT = 9,
+  EXIT = 10,
+  DISCONNECTED = 11,
   MessageType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   MessageType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
@@ -766,6 +771,143 @@ class GameStartMessage PROTOBUF_FINAL :
 };
 // -------------------------------------------------------------------
 
+class BattlePrepStartMessage PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:BattlePrepStartMessage) */ {
+ public:
+  inline BattlePrepStartMessage() : BattlePrepStartMessage(nullptr) {};
+  virtual ~BattlePrepStartMessage();
+
+  BattlePrepStartMessage(const BattlePrepStartMessage& from);
+  BattlePrepStartMessage(BattlePrepStartMessage&& from) noexcept
+    : BattlePrepStartMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline BattlePrepStartMessage& operator=(const BattlePrepStartMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BattlePrepStartMessage& operator=(BattlePrepStartMessage&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const BattlePrepStartMessage& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const BattlePrepStartMessage* internal_default_instance() {
+    return reinterpret_cast<const BattlePrepStartMessage*>(
+               &_BattlePrepStartMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(BattlePrepStartMessage& a, BattlePrepStartMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(BattlePrepStartMessage* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BattlePrepStartMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline BattlePrepStartMessage* New() const final {
+    return CreateMaybeMessage<BattlePrepStartMessage>(nullptr);
+  }
+
+  BattlePrepStartMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<BattlePrepStartMessage>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const BattlePrepStartMessage& from);
+  void MergeFrom(const BattlePrepStartMessage& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(BattlePrepStartMessage* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "BattlePrepStartMessage";
+  }
+  protected:
+  explicit BattlePrepStartMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_src_2fproto_2fNetworkMessage_2eproto);
+    return ::descriptor_table_src_2fproto_2fNetworkMessage_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPrepareTimeSecondsFieldNumber = 1,
+  };
+  // int32 prepare_time_seconds = 1;
+  void clear_prepare_time_seconds();
+  ::PROTOBUF_NAMESPACE_ID::int32 prepare_time_seconds() const;
+  void set_prepare_time_seconds(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_prepare_time_seconds() const;
+  void _internal_set_prepare_time_seconds(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:BattlePrepStartMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::int32 prepare_time_seconds_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
+};
+// -------------------------------------------------------------------
+
 class BattlePrepTimerMessage PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:BattlePrepTimerMessage) */ {
  public:
@@ -808,7 +950,7 @@ class BattlePrepTimerMessage PROTOBUF_FINAL :
                &_BattlePrepTimerMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(BattlePrepTimerMessage& a, BattlePrepTimerMessage& b) {
     a.Swap(&b);
@@ -983,7 +1125,7 @@ class BattlePrepSnapshotMessage PROTOBUF_FINAL :
                &_BattlePrepSnapshotMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(BattlePrepSnapshotMessage& a, BattlePrepSnapshotMessage& b) {
     a.Swap(&b);
@@ -1185,7 +1327,7 @@ class PlayerSnapshot PROTOBUF_FINAL :
                &_PlayerSnapshot_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(PlayerSnapshot& a, PlayerSnapshot& b) {
     a.Swap(&b);
@@ -1414,7 +1556,7 @@ class AllSnapshotsMessage PROTOBUF_FINAL :
                &_AllSnapshotsMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(AllSnapshotsMessage& a, AllSnapshotsMessage& b) {
     a.Swap(&b);
@@ -1609,7 +1751,7 @@ class BattleResultReportMessage PROTOBUF_FINAL :
                &_BattleResultReportMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(BattleResultReportMessage& a, BattleResultReportMessage& b) {
     a.Swap(&b);
@@ -1784,7 +1926,7 @@ class RankingEntry PROTOBUF_FINAL :
                &_RankingEntry_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(RankingEntry& a, RankingEntry& b) {
     a.Swap(&b);
@@ -1959,7 +2101,7 @@ class SettlementMessage PROTOBUF_FINAL :
                &_SettlementMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(SettlementMessage& a, SettlementMessage& b) {
     a.Swap(&b);
@@ -2132,7 +2274,7 @@ class ExitPlayerInfo PROTOBUF_FINAL :
                &_ExitPlayerInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(ExitPlayerInfo& a, ExitPlayerInfo& b) {
     a.Swap(&b);
@@ -2307,7 +2449,7 @@ class ExitMessage PROTOBUF_FINAL :
                &_ExitMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(ExitMessage& a, ExitMessage& b) {
     a.Swap(&b);
@@ -2453,7 +2595,7 @@ class ExitBroadcastMessage PROTOBUF_FINAL :
                &_ExitBroadcastMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(ExitBroadcastMessage& a, ExitBroadcastMessage& b) {
     a.Swap(&b);
@@ -2597,13 +2739,14 @@ class NetworkMessage PROTOBUF_FINAL :
     kHeartbeat = 5,
     kConnectRequest = 6,
     kGameStart = 7,
-    kBattlePrepTimer = 8,
-    kBattlePrepSnapshot = 9,
-    kAllSnapshots = 10,
-    kBattleResultReport = 11,
-    kSettlement = 12,
-    kExit = 13,
-    kExitBroadcast = 14,
+    kBattlePrepStart = 8,
+    kBattlePrepTimer = 9,
+    kBattlePrepSnapshot = 10,
+    kAllSnapshots = 11,
+    kBattleResultReport = 12,
+    kSettlement = 13,
+    kExit = 14,
+    kExitBroadcast = 15,
     DATA_NOT_SET = 0,
   };
 
@@ -2613,7 +2756,7 @@ class NetworkMessage PROTOBUF_FINAL :
                &_NetworkMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    15;
 
   friend void swap(NetworkMessage& a, NetworkMessage& b) {
     a.Swap(&b);
@@ -2689,13 +2832,14 @@ class NetworkMessage PROTOBUF_FINAL :
     kHeartbeatFieldNumber = 5,
     kConnectRequestFieldNumber = 6,
     kGameStartFieldNumber = 7,
-    kBattlePrepTimerFieldNumber = 8,
-    kBattlePrepSnapshotFieldNumber = 9,
-    kAllSnapshotsFieldNumber = 10,
-    kBattleResultReportFieldNumber = 11,
-    kSettlementFieldNumber = 12,
-    kExitFieldNumber = 13,
-    kExitBroadcastFieldNumber = 14,
+    kBattlePrepStartFieldNumber = 8,
+    kBattlePrepTimerFieldNumber = 9,
+    kBattlePrepSnapshotFieldNumber = 10,
+    kAllSnapshotsFieldNumber = 11,
+    kBattleResultReportFieldNumber = 12,
+    kSettlementFieldNumber = 13,
+    kExitFieldNumber = 14,
+    kExitBroadcastFieldNumber = 15,
   };
   // string player_id = 2;
   void clear_player_id();
@@ -2785,7 +2929,25 @@ class NetworkMessage PROTOBUF_FINAL :
       ::GameStartMessage* game_start);
   ::GameStartMessage* unsafe_arena_release_game_start();
 
-  // .BattlePrepTimerMessage battle_prep_timer = 8;
+  // .BattlePrepStartMessage battle_prep_start = 8;
+  bool has_battle_prep_start() const;
+  private:
+  bool _internal_has_battle_prep_start() const;
+  public:
+  void clear_battle_prep_start();
+  const ::BattlePrepStartMessage& battle_prep_start() const;
+  ::BattlePrepStartMessage* release_battle_prep_start();
+  ::BattlePrepStartMessage* mutable_battle_prep_start();
+  void set_allocated_battle_prep_start(::BattlePrepStartMessage* battle_prep_start);
+  private:
+  const ::BattlePrepStartMessage& _internal_battle_prep_start() const;
+  ::BattlePrepStartMessage* _internal_mutable_battle_prep_start();
+  public:
+  void unsafe_arena_set_allocated_battle_prep_start(
+      ::BattlePrepStartMessage* battle_prep_start);
+  ::BattlePrepStartMessage* unsafe_arena_release_battle_prep_start();
+
+  // .BattlePrepTimerMessage battle_prep_timer = 9;
   bool has_battle_prep_timer() const;
   private:
   bool _internal_has_battle_prep_timer() const;
@@ -2803,7 +2965,7 @@ class NetworkMessage PROTOBUF_FINAL :
       ::BattlePrepTimerMessage* battle_prep_timer);
   ::BattlePrepTimerMessage* unsafe_arena_release_battle_prep_timer();
 
-  // .BattlePrepSnapshotMessage battle_prep_snapshot = 9;
+  // .BattlePrepSnapshotMessage battle_prep_snapshot = 10;
   bool has_battle_prep_snapshot() const;
   private:
   bool _internal_has_battle_prep_snapshot() const;
@@ -2821,7 +2983,7 @@ class NetworkMessage PROTOBUF_FINAL :
       ::BattlePrepSnapshotMessage* battle_prep_snapshot);
   ::BattlePrepSnapshotMessage* unsafe_arena_release_battle_prep_snapshot();
 
-  // .AllSnapshotsMessage all_snapshots = 10;
+  // .AllSnapshotsMessage all_snapshots = 11;
   bool has_all_snapshots() const;
   private:
   bool _internal_has_all_snapshots() const;
@@ -2839,7 +3001,7 @@ class NetworkMessage PROTOBUF_FINAL :
       ::AllSnapshotsMessage* all_snapshots);
   ::AllSnapshotsMessage* unsafe_arena_release_all_snapshots();
 
-  // .BattleResultReportMessage battle_result_report = 11;
+  // .BattleResultReportMessage battle_result_report = 12;
   bool has_battle_result_report() const;
   private:
   bool _internal_has_battle_result_report() const;
@@ -2857,7 +3019,7 @@ class NetworkMessage PROTOBUF_FINAL :
       ::BattleResultReportMessage* battle_result_report);
   ::BattleResultReportMessage* unsafe_arena_release_battle_result_report();
 
-  // .SettlementMessage settlement = 12;
+  // .SettlementMessage settlement = 13;
   bool has_settlement() const;
   private:
   bool _internal_has_settlement() const;
@@ -2875,7 +3037,7 @@ class NetworkMessage PROTOBUF_FINAL :
       ::SettlementMessage* settlement);
   ::SettlementMessage* unsafe_arena_release_settlement();
 
-  // .ExitMessage exit = 13;
+  // .ExitMessage exit = 14;
   bool has_exit() const;
   private:
   bool _internal_has_exit() const;
@@ -2893,7 +3055,7 @@ class NetworkMessage PROTOBUF_FINAL :
       ::ExitMessage* exit);
   ::ExitMessage* unsafe_arena_release_exit();
 
-  // .ExitBroadcastMessage exit_broadcast = 14;
+  // .ExitBroadcastMessage exit_broadcast = 15;
   bool has_exit_broadcast() const;
   private:
   bool _internal_has_exit_broadcast() const;
@@ -2919,6 +3081,7 @@ class NetworkMessage PROTOBUF_FINAL :
   void set_has_heartbeat();
   void set_has_connect_request();
   void set_has_game_start();
+  void set_has_battle_prep_start();
   void set_has_battle_prep_timer();
   void set_has_battle_prep_snapshot();
   void set_has_all_snapshots();
@@ -2940,6 +3103,7 @@ class NetworkMessage PROTOBUF_FINAL :
     ::HeartbeatMessage* heartbeat_;
     ::ConnectRequestMessage* connect_request_;
     ::GameStartMessage* game_start_;
+    ::BattlePrepStartMessage* battle_prep_start_;
     ::BattlePrepTimerMessage* battle_prep_timer_;
     ::BattlePrepSnapshotMessage* battle_prep_snapshot_;
     ::AllSnapshotsMessage* all_snapshots_;
@@ -3276,6 +3440,30 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::PlayerBasicInfo >&
 GameStartMessage::players_info() const {
   // @@protoc_insertion_point(field_list:GameStartMessage.players_info)
   return players_info_;
+}
+
+// -------------------------------------------------------------------
+
+// BattlePrepStartMessage
+
+// int32 prepare_time_seconds = 1;
+inline void BattlePrepStartMessage::clear_prepare_time_seconds() {
+  prepare_time_seconds_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepStartMessage::_internal_prepare_time_seconds() const {
+  return prepare_time_seconds_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattlePrepStartMessage::prepare_time_seconds() const {
+  // @@protoc_insertion_point(field_get:BattlePrepStartMessage.prepare_time_seconds)
+  return _internal_prepare_time_seconds();
+}
+inline void BattlePrepStartMessage::_internal_set_prepare_time_seconds(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  prepare_time_seconds_ = value;
+}
+inline void BattlePrepStartMessage::set_prepare_time_seconds(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_prepare_time_seconds(value);
+  // @@protoc_insertion_point(field_set:BattlePrepStartMessage.prepare_time_seconds)
 }
 
 // -------------------------------------------------------------------
@@ -5011,7 +5199,80 @@ inline ::GameStartMessage* NetworkMessage::mutable_game_start() {
   return _internal_mutable_game_start();
 }
 
-// .BattlePrepTimerMessage battle_prep_timer = 8;
+// .BattlePrepStartMessage battle_prep_start = 8;
+inline bool NetworkMessage::_internal_has_battle_prep_start() const {
+  return data_case() == kBattlePrepStart;
+}
+inline bool NetworkMessage::has_battle_prep_start() const {
+  return _internal_has_battle_prep_start();
+}
+inline void NetworkMessage::set_has_battle_prep_start() {
+  _oneof_case_[0] = kBattlePrepStart;
+}
+inline void NetworkMessage::clear_battle_prep_start() {
+  if (_internal_has_battle_prep_start()) {
+    if (GetArena() == nullptr) {
+      delete data_.battle_prep_start_;
+    }
+    clear_has_data();
+  }
+}
+inline ::BattlePrepStartMessage* NetworkMessage::release_battle_prep_start() {
+  // @@protoc_insertion_point(field_release:NetworkMessage.battle_prep_start)
+  if (_internal_has_battle_prep_start()) {
+    clear_has_data();
+      ::BattlePrepStartMessage* temp = data_.battle_prep_start_;
+    if (GetArena() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    data_.battle_prep_start_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::BattlePrepStartMessage& NetworkMessage::_internal_battle_prep_start() const {
+  return _internal_has_battle_prep_start()
+      ? *data_.battle_prep_start_
+      : *reinterpret_cast< ::BattlePrepStartMessage*>(&::_BattlePrepStartMessage_default_instance_);
+}
+inline const ::BattlePrepStartMessage& NetworkMessage::battle_prep_start() const {
+  // @@protoc_insertion_point(field_get:NetworkMessage.battle_prep_start)
+  return _internal_battle_prep_start();
+}
+inline ::BattlePrepStartMessage* NetworkMessage::unsafe_arena_release_battle_prep_start() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:NetworkMessage.battle_prep_start)
+  if (_internal_has_battle_prep_start()) {
+    clear_has_data();
+    ::BattlePrepStartMessage* temp = data_.battle_prep_start_;
+    data_.battle_prep_start_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void NetworkMessage::unsafe_arena_set_allocated_battle_prep_start(::BattlePrepStartMessage* battle_prep_start) {
+  clear_data();
+  if (battle_prep_start) {
+    set_has_battle_prep_start();
+    data_.battle_prep_start_ = battle_prep_start;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:NetworkMessage.battle_prep_start)
+}
+inline ::BattlePrepStartMessage* NetworkMessage::_internal_mutable_battle_prep_start() {
+  if (!_internal_has_battle_prep_start()) {
+    clear_data();
+    set_has_battle_prep_start();
+    data_.battle_prep_start_ = CreateMaybeMessage< ::BattlePrepStartMessage >(GetArena());
+  }
+  return data_.battle_prep_start_;
+}
+inline ::BattlePrepStartMessage* NetworkMessage::mutable_battle_prep_start() {
+  // @@protoc_insertion_point(field_mutable:NetworkMessage.battle_prep_start)
+  return _internal_mutable_battle_prep_start();
+}
+
+// .BattlePrepTimerMessage battle_prep_timer = 9;
 inline bool NetworkMessage::_internal_has_battle_prep_timer() const {
   return data_case() == kBattlePrepTimer;
 }
@@ -5084,7 +5345,7 @@ inline ::BattlePrepTimerMessage* NetworkMessage::mutable_battle_prep_timer() {
   return _internal_mutable_battle_prep_timer();
 }
 
-// .BattlePrepSnapshotMessage battle_prep_snapshot = 9;
+// .BattlePrepSnapshotMessage battle_prep_snapshot = 10;
 inline bool NetworkMessage::_internal_has_battle_prep_snapshot() const {
   return data_case() == kBattlePrepSnapshot;
 }
@@ -5157,7 +5418,7 @@ inline ::BattlePrepSnapshotMessage* NetworkMessage::mutable_battle_prep_snapshot
   return _internal_mutable_battle_prep_snapshot();
 }
 
-// .AllSnapshotsMessage all_snapshots = 10;
+// .AllSnapshotsMessage all_snapshots = 11;
 inline bool NetworkMessage::_internal_has_all_snapshots() const {
   return data_case() == kAllSnapshots;
 }
@@ -5230,7 +5491,7 @@ inline ::AllSnapshotsMessage* NetworkMessage::mutable_all_snapshots() {
   return _internal_mutable_all_snapshots();
 }
 
-// .BattleResultReportMessage battle_result_report = 11;
+// .BattleResultReportMessage battle_result_report = 12;
 inline bool NetworkMessage::_internal_has_battle_result_report() const {
   return data_case() == kBattleResultReport;
 }
@@ -5303,7 +5564,7 @@ inline ::BattleResultReportMessage* NetworkMessage::mutable_battle_result_report
   return _internal_mutable_battle_result_report();
 }
 
-// .SettlementMessage settlement = 12;
+// .SettlementMessage settlement = 13;
 inline bool NetworkMessage::_internal_has_settlement() const {
   return data_case() == kSettlement;
 }
@@ -5376,7 +5637,7 @@ inline ::SettlementMessage* NetworkMessage::mutable_settlement() {
   return _internal_mutable_settlement();
 }
 
-// .ExitMessage exit = 13;
+// .ExitMessage exit = 14;
 inline bool NetworkMessage::_internal_has_exit() const {
   return data_case() == kExit;
 }
@@ -5449,7 +5710,7 @@ inline ::ExitMessage* NetworkMessage::mutable_exit() {
   return _internal_mutable_exit();
 }
 
-// .ExitBroadcastMessage exit_broadcast = 14;
+// .ExitBroadcastMessage exit_broadcast = 15;
 inline bool NetworkMessage::_internal_has_exit_broadcast() const {
   return data_case() == kExitBroadcast;
 }
@@ -5534,6 +5795,8 @@ inline NetworkMessage::DataCase NetworkMessage::data_case() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

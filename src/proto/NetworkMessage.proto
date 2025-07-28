@@ -6,13 +6,14 @@ enum MessageType {
     CONNECT = 1;                // 连接
     START_MATCH = 2;            // 匹配请求
     GAME_START = 3;             // 对局开始
-    BATTLE_PREP_TIMER = 4;      // 备战倒计时
-    BATTLE_PREP_SNAPSHOT = 5;   // 备战快照
-    ALL_SNAPSHOTS = 6;          // 所有玩家快照
-    BATTLE_RESULT = 7;          // 战斗结果上报
-    SETTLEMENT = 8;             // 结算信息
-    EXIT = 9;                   // 玩家退出房间
-    DISCONNECTED = 10;          // 玩家断线
+    PREPARE_START = 4;          // 备战开始
+    BATTLE_PREP_TIMER = 5;      // 备战倒计时
+    BATTLE_PREP_SNAPSHOT = 6;   // 备战快照
+    ALL_SNAPSHOTS = 7;          // 所有玩家快照
+    BATTLE_RESULT = 8;          // 战斗结果上报
+    SETTLEMENT = 9;             // 结算信息
+    EXIT = 10;                   // 玩家退出房间
+    DISCONNECTED = 11;          // 玩家断线
 }
 
 // 心跳消息
@@ -34,6 +35,12 @@ message PlayerBasicInfo {
 message GameStartMessage {
     string match_id = 1;
     repeated PlayerBasicInfo players_info = 2;
+}
+
+// 20250728updated
+// 备战开始消息（服务器→所有客户端）
+message BattlePrepStartMessage {
+    int32 prepare_time_seconds = 1; // 备战时间（秒）
 }
 
 // 备战倒计时广播（服务器→客户端）
@@ -115,12 +122,13 @@ message NetworkMessage {
         HeartbeatMessage heartbeat = 5;
         ConnectRequestMessage connect_request = 6;
         GameStartMessage game_start = 7;
-        BattlePrepTimerMessage battle_prep_timer = 8;
-        BattlePrepSnapshotMessage battle_prep_snapshot = 9;
-        AllSnapshotsMessage all_snapshots = 10;
-        BattleResultReportMessage battle_result_report = 11;
-        SettlementMessage settlement = 12;
-        ExitMessage exit = 13;
-        ExitBroadcastMessage exit_broadcast = 14;
+        BattlePrepStartMessage battle_prep_start = 8;
+        BattlePrepTimerMessage battle_prep_timer = 9;
+        BattlePrepSnapshotMessage battle_prep_snapshot = 10;
+        AllSnapshotsMessage all_snapshots = 11;
+        BattleResultReportMessage battle_result_report = 12;
+        SettlementMessage settlement = 13;
+        ExitMessage exit = 14;
+        ExitBroadcastMessage exit_broadcast = 15;
     }
 }
