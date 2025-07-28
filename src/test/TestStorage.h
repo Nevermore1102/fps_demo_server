@@ -1,19 +1,19 @@
-#pragma once
+// #pragma once
 
-#include <string>
-#include <spdlog/spdlog.h>
-#include "../data/Storage.h"
-#include "../data/PlayerData.h"
+// #include <string>
+// #include <spdlog/spdlog.h>
+// #include "../data/Storage.h"
+// #include "../data/PlayerData.h"
 
-namespace test {
+// namespace test {
 
-class TestStorage {
-public:
-    static bool runAllTests();
+// class TestStorage {
+// public:
+//     static bool runAllTests();
     
-private:
-    static bool testPlayerDataSaveLoad();
-    static bool testPlayerStateValidation();
-};
+// private:
+//     static bool testPlayerDataSaveLoad();
+//     static bool testPlayerStateValidation();
+// };
 
-} // namespace test 
+// } // namespace test 

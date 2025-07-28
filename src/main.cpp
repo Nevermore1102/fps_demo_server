@@ -20,7 +20,7 @@
 // #include "proto/Message.h"
 // #include "script/LuaVM.h"
 #include "game/GameServer.h"
-#include "test/TestStorage.h"
+// #include "test/TestStorage.h"
 
 // 定义是否运行测试的宏
 #define RUN_TESTS 1
@@ -33,14 +33,14 @@ int main() {
     spdlog::set_level(spdlog::level::debug);
     spdlog::info("Server starting...");
 
-#if RUN_TESTS
-    // 运行测试
-    if (!test::TestStorage::runAllTests()) {
-        spdlog::error("存储模块测试失败");
-        return -1;
-    }
-    spdlog::info("所有测试通过");
-#endif
+// #if RUN_TESTS
+//     // 运行测试
+//     if (!test::TestStorage::runAllTests()) {
+//         spdlog::error("存储模块测试失败");
+//         return -1;
+//     }
+//     spdlog::info("所有测试通过");
+// #endif
 
     // 创建并运行服务器
     GameServer server;

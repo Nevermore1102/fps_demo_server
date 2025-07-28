@@ -6,6 +6,19 @@
 #include <spdlog/spdlog.h>
 #include <string>
 
+// 析构函数
+Room::~Room() {
+    spdlog::info("Destroying room {}", room_id_);
+    
+    // 确保定时器线程正确停止
+    stopCountdownTimer();
+    
+    // 清理所有资源
+    cleanupRoom();
+    
+    spdlog::info("Room {} destroyed successfully", room_id_);
+}
+
 size_t Room::getAllPlayerCount() const{
     return players_.size();
 }
@@ -71,12 +84,20 @@ void Room::startCountdownTimer(int32_t seconds) {
 
 // 停止倒计时
 void Room::stopCountdownTimer() {
+    spdlog::debug("Stopping countdown timer for room {}", room_id_);
+    
+    // 设置停止标志
     countdown_running_ = false;
+    
     // 等待定时器线程结束
     if (countdown_thread_.joinable()) {
+        spdlog::debug("Waiting for countdown thread to join for room {}", room_id_);
         countdown_thread_.join();
+        spdlog::debug("Countdown thread joined successfully for room {}", room_id_);
     }
+    
     countdown_remaining_seconds_ = 0;
+    spdlog::debug("Countdown timer stopped for room {}", room_id_);
 }
 
 // 获取当前剩余时间
@@ -115,7 +136,7 @@ void Room::startGame() {
     }
 }
 
-// 广播消息给房间所有玩家
+// 广播消息给房间所有Gaming状态玩家
 void Room::broadcastMessage(const NetworkMessage& msg) {
     // 将NetworkMessage转换为Message
     Message body;
@@ -123,7 +144,7 @@ void Room::broadcastMessage(const NetworkMessage& msg) {
 
     // 遍历所有玩家并发送消息
     for (const auto& player : players_) {
-        if (player){
+        if (player && player->getState() == PlayerState::GAMING) {
             auto conn = player->GetConnection();
             if (conn) {
                 bool success = conn->sendMessage(body);
@@ -144,7 +165,7 @@ void Room::broadcastToOthers(const std::string& excludePlayerId, const NetworkMe
     body.setBodyFromProto(msg);
 
     for (const auto& player : players_) {
-        if (player && player->GetPlayerId() != excludePlayerId) {
+        if (player && player->getState() == PlayerState::GAMING && player->GetPlayerId() != excludePlayerId) {
             auto conn = player->GetConnection();
             if(conn)
             {
@@ -291,15 +312,25 @@ std::vector<std::shared_ptr<RankingEntry>> Room::getRankings() {
 
 // 房间清理
 void Room::cleanupRoom() {
+    spdlog::info("Cleaning up room {}", room_id_);
+    
+    // 先停止定时器
+    stopCountdownTimer();
+    
+    // 清理所有容器
     players_.clear();
     playerMap_.clear();
     currentSnapshots_.clear();
     allHonorValue_.clear();
     exitPlayers_.clear();
-    setState(RoomState::FINISHED);
+    
+    // 设置状态为已结束
+    state_ = RoomState::FINISHED;
+    
+    spdlog::info("Room {} cleanup completed", room_id_);
 }
 
-// 记录玩家快照
+// 记录玩家快照，并更新到Player的最新快照中
 bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& formationData, int32_t honorValue, int32_t round) {
     // 检查玩家是否在房间中
     auto player = getPlayer(playerId);
@@ -308,10 +339,6 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
         return false;
     }
     
-    // 更新玩家数据
-    player->SetFormationData(formationData);
-    player->SetHonorValue(honorValue);
-    
     // 创建快照
     PlayerSnapshot snapshot;
     snapshot.set_player_id(playerId);
@@ -319,6 +346,9 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
     snapshot.set_round(round);
     snapshot.set_formation_data(formationData);
     snapshot.set_honor_value(honorValue);
+
+    // 更新最新的玩家快照
+    player->SetLatestSnapshot(std::make_shared<PlayerSnapshot>(snapshot));
     
     // 存储快照
     currentSnapshots_[playerId] = snapshot;
@@ -331,12 +361,14 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
 // 检查是否所有玩家的快照都已收到
 bool Room::allGamingSnapshotsReceived() const {
     if (currentSnapshots_.size() != getGamingPlayerCount()) {
+        spdlog::warn("Not all gaming players have submitted their snapshots, current size: {}, gaming player: ", currentSnapshots_.size(), getGamingPlayerCount());
         return false;
     }
     
     // 确保所有玩家都有快照
     for (const auto& player : players_) {
-        if (currentSnapshots_.find(player->GetPlayerId()) == currentSnapshots_.end()) {
+        if (player->getState() != PlayerState::GAMING && 
+            currentSnapshots_.find(player->GetPlayerId()) == currentSnapshots_.end()) {
             return false;
         }
     }
@@ -345,7 +377,7 @@ bool Room::allGamingSnapshotsReceived() const {
 }
 
 // 广播所有快照
-void Room::broadcastAllSnapshots() {
+void Room::broadcastAllGamingSnapshots() {
     if (!allGamingSnapshotsReceived()) {
         spdlog::warn("Cannot broadcast snapshots, not all players have submitted");
         return;

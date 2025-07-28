@@ -208,7 +208,7 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
     // 检查是否所有游戏中玩家都已提交快照
     if (room->allGamingSnapshotsReceived()) {
         spdlog::info("All snapshots received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
-        room->broadcastAllSnapshots();
+        room->broadcastAllGamingSnapshots();
         
         // 清理快照为下一轮准备
         room->clearSnapshots();

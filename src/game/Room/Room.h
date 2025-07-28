@@ -8,7 +8,7 @@
 #include <unordered_map>
 
 #define MAX_PLAYERS 2           // 房间最大玩家数
-#define PREPARE_TIME 30         // 准备时间（秒）
+#define PREPARE_TIME 15         // 准备时间（秒）
 #define BROADCAST_INTERVAL 5    // 广播间隔（秒）
 #define ROUND_NUM 7             // 游戏总轮次
 
@@ -24,7 +24,7 @@ public:
     Room(const int32_t room_id = 0):room_id_(room_id),
                                     max_players_(MAX_PLAYERS),
                                     currentRound_(0){}
-    ~Room() = default;
+    ~Room();
 
     // 基础信息
     const int32_t& getId() const { return room_id_; }
@@ -58,7 +58,7 @@ public:
     // 快照管理
     bool recordPlayerSnapshot(const std::string& playerId, const std::string& formationData, int32_t honorValue, int32_t round);
     bool allGamingSnapshotsReceived() const;
-    void broadcastAllSnapshots();
+    void broadcastAllGamingSnapshots();
     void clearSnapshots();
 
     // 战斗结果管理

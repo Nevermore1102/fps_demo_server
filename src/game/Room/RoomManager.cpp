@@ -515,19 +515,19 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
             if (room) {
                 spdlog::info("Notifying room {} about player {} disconnect", room->getId(), playerId);
                 
-                // 广播玩家退出消息给房间内其他玩家
-                
-                room->broadcastPlayerDisconnect(playerId);
+                // 房间处理玩家退出并广播消息
+                room->onPlayerExit(playerId, room->getCurrentRound(), player->GetHonorValue());
+                room->broadcastExitMessage();
                 
                 // 从房间中移除玩家
-                removePlayerFromRoom(playerId);
+                // removePlayerFromRoom(playerId);
                 
                 // 检查房间是否需要结束或继续游戏
-                if (room->isEmpty()) {
+                if (room->getGamingPlayerCount() == 0) {
                     spdlog::info("Room {} is empty after disconnect, marking as finished", room->getId());
                     room->setState(RoomState::FINISHED);
                 } else {
-                    spdlog::info("Room {} continues with {} players", room->getId(), room->getPlayerCount());
+                    spdlog::info("Room {} continues with {} players", room->getId(), room->getGamingPlayerCount());
                     // 可以在这里添加其他逻辑，比如暂停游戏等
                 }
             }
@@ -536,7 +536,7 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
         
         case PlayerState::FINISHED: {
             // 游戏已结束，只需要清理
-            removePlayerFromRoom(playerId);
+            // removePlayerFromRoom(playerId);
             spdlog::info("Player {} disconnected after game finished", playerId);
             break;
         }
