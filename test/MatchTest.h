@@ -47,7 +47,27 @@ public:
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
 
-        //发送N伦逻辑
+        if (!match_start_room_) {
+            std::cout << "匹配开始消息未收到" << std::endl;
+            return false;
+        }
+        std::cout << "匹配开始，房间ID：" << match_id_ << std::endl;
+
+        // 发送加载完成消息
+        sendDataLoaded() ;
+        // 等待备战开始 20250728updated
+
+        for (int i = 0; i < 500 && !f_PREPARE_START; ++i) {
+            client_.runOnce();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+
+        if (!f_PREPARE_START) {
+            std::cout << "匹配开始消息未收到" << std::endl;
+            return false;
+        }
+
+        // 发送N伦逻辑
 
         while (currTurn<=MaxTurn ) {
             //备战阶段。等待接收BATTLE_PREP_TIMER倒计时广播直至倒计时为0，发送快照消息
@@ -128,6 +148,17 @@ private:
         std::cout << "开始匹配消息消息，id：" <<net_msg.player_id()<< std::endl;
     }
 
+    void sendDataLoaded() {
+        NetworkMessage net_msg;
+        net_msg.set_msg_id(MessageType::DATA_LOADED);
+        DataLoadedMessage* cmsg = net_msg.mutable_data_loaded();
+        net_msg.set_player_id(g_playerName);
+        Message msg(MessageType::DATA_LOADED);
+        msg.setBodyFromProto(net_msg);
+        client_.sendMessage(msg);
+        std::cout << "发送加载完成消息" <<std::endl;
+    }
+
     void sendEndMatch() {
         NetworkMessage net_msg;
         net_msg.set_msg_id(MessageType::BATTLE_RESULT);
@@ -191,6 +222,10 @@ private:
                     test_->match_id_ = std::stoi(net_msg.mutable_game_start()->match_id());
                     std::cout << "收到游戏开局请求" << std::endl;
                     break;
+                case MessageType::PREPARE_START:
+                    test_->f_PREPARE_START = true;
+                    std::cout << "收到备战开始" << std::endl;
+                    break;
                 case MessageType::BATTLE_PREP_TIMER:
                     // test_->match_start_room_ = true;
                     test_->lastTimeMap_[net_msg.mutable_battle_prep_timer()->round()] = net_msg.mutable_battle_prep_timer()->remaining_time_seconds();
@@ -223,6 +258,8 @@ private:
     bool heartbeat_received_ = false;
     bool connect_ack_received_ = false;
     bool match_start_room_ = false;
+    bool f_PREPARE_START = false;
+
     friend class TestClient;
     int32_t currTurn = 1;
     const int32_t MaxTurn = 7; // 最大轮数
