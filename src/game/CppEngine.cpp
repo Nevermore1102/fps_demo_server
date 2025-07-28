@@ -216,6 +216,10 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
         spdlog::info("Waiting for more snapshots in room {} (received: {}/{})", 
                     matchId, receivedCount, room->getPlayerCount());
     }
+    //test git1
+    //test git1
+    //test git1
+
 }
 
 void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
@@ -225,6 +229,12 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     // if (!msg.getBodyAsProto(pb_msg)) {
     //     spdlog::error("Failed to parse battle result message body");
     //     return;
+    //test git1
+    //test git1
+    //test git1
+    //test git1
+    //test git1
+
 }
 
 // void CppEngine::onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg) {
