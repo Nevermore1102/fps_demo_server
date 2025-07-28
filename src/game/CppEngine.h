@@ -27,6 +27,7 @@ public:
 
     void onConnect(const std::shared_ptr<Connection>& conn, const Message& msg);
     void onStartMatch(const std::shared_ptr<Connection>& conn, const Message& msg);
+    void onDataLoaded(const std::shared_ptr<Connection>& conn, const Message& msg);
     void onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Message& msg);
     void onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg);
     void onExit(const std::shared_ptr<Connection>& conn, const Message& msg);

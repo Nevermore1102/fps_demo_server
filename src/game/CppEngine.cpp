@@ -23,6 +23,10 @@ bool CppEngine::handleMessage(const std::shared_ptr<Connection>& conn, const Mes
         case MessageType::START_MATCH:
             onStartMatch(conn, msg);
             break;
+        // 数据加载完成
+        case MessageType::DATA_LOADED:
+            onDataLoaded(conn, msg);
+            break;
         // 备战快照
         case MessageType::BATTLE_PREP_SNAPSHOT:
             onPrepSnapshot(conn, msg);
@@ -148,6 +152,40 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
         } else {
             spdlog::warn("Player {} not assigned to any room", playerId);
         }
+    }
+}
+
+// 处理数据加载完成消息
+void CppEngine::onDataLoaded(const std::shared_ptr<Connection>& conn, const Message& msg) {
+    spdlog::info("Player Data Loaded: {}", conn->getId());
+
+    // 解析消息获取玩家ID
+    NetworkMessage pb_msg;
+    if (!msg.getBodyAsProto(pb_msg)) {
+        spdlog::error("Failed to parse data loaded message body");
+        return;
+    }
+    std::string playerId = pb_msg.player_id();
+    if (playerId.empty()) {
+        spdlog::error("Player ID is empty in data loaded message");
+        return;
+    }
+    spdlog::info("Player {} data loaded", playerId);
+    // 获取房间管理器并找到对应房间
+    auto& roomManager = RoomManager::getInstance();
+    auto room = roomManager.getPlayerRoom(playerId);
+    if (!room) {
+        spdlog::error("Room not found for player {}", playerId);
+        return;
+    }
+    // 设置玩家数据加载状态
+    room->setDataLoadStatus(playerId, true);
+    spdlog::info("Player {} data load status set to true in room {}", playerId, room->getId());
+
+    // 检查是否所有玩家都已加载数据
+    if (room->isAllPlayerDataLoaded()) {
+        spdlog::info("All players in room {} have loaded data, starting game", room->getId());
+        room->startGame();
     }
 }
 

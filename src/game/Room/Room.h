@@ -15,6 +15,7 @@
 enum class RoomState {
     WAITING,    // 等待玩家
     FULL,       // 房间玩家已满，准备开始
+    LOADING,    // 加载中
     GAMING,     // 游戏中
     FINISHED    // 已结束
 };
@@ -32,6 +33,12 @@ public:
     void setState(RoomState state) { state_ = state; }
     bool isFull() const { return players_.size() >= max_players_; }
     bool isEmpty() const { return players_.empty(); }
+    void setReadyStatus(const std::string& playerId, bool ready);
+    bool isPlayerReady(const std::string& playerId) const;
+    bool isAllPlayerReady() const;
+    void setDataLoadStatus(const std::string& playerId, bool loaded);
+    bool isPlayerDataLoaded(const std::string& playerId) const;
+    bool isAllPlayerDataLoaded() const;
 
     // 房间内玩家数量
     size_t getAllPlayerCount() const;       // 所有玩家数量
@@ -44,6 +51,7 @@ public:
     const std::vector<std::shared_ptr<Player>>& getPlayers() const { return players_; }
 
     // 游戏开始
+    void broadcastPlayerInfo();
     void startGame();
 
     // 获取当前回合
@@ -87,6 +95,8 @@ private:
     // 玩家相关数据：房间内所有玩家信息、玩家ID映射表、玩家快照、结算数据、退出的玩家数据
     // 注：当玩家退出，不会删除玩家，只是将Player状态设置为DISCONNECTED
     std::vector<std::shared_ptr<Player>> players_;
+    std::unordered_map<std::string, bool> playerReadyStatus_;       // 玩家准备状态
+    std::unordered_map<std::string, bool> playerDataLoadStatus_;    // 玩家数据加载状态
     std::unordered_map<std::string, std::shared_ptr<Player>> playerMap_;
     std::unordered_map<std::string, PlayerSnapshot> currentSnapshots_;
     std::unordered_map<std::string, int32_t> allHonorValue_;

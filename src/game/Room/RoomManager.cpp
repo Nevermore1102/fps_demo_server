@@ -283,8 +283,9 @@ bool RoomManager::startGameInRoom(const std::string& roomId) {
         player->setState(PlayerState::GAMING);
     }
     
-    // 启动游戏
-    room->startGame();
+    // 启动游戏（先广播玩家信息，等待所有客户端渲染完毕信息后的消息再开始）
+    // room->startGame();
+    room->broadcastPlayerInfo();
     
     spdlog::info("Game started in room {}", roomId);
     return true;

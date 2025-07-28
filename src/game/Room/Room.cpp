@@ -19,6 +19,48 @@ Room::~Room() {
     spdlog::info("Room {} destroyed successfully", room_id_);
 }
 
+bool Room::isPlayerReady(const std::string& playerId) const{
+    auto it = playerReadyStatus_.find(playerId);
+    if (it != playerReadyStatus_.end()) {
+        return it->second;
+    }
+    return false;  // 默认未准备
+}
+
+void Room::setReadyStatus(const std::string& playerId, bool ready){
+    playerReadyStatus_[playerId] = ready;
+}
+
+bool Room::isAllPlayerReady() const{
+    for(const auto& p:players_){
+        if(p && !isPlayerReady(p->GetPlayerId())) {
+            return false;  // 只要有一个玩家未准备就返回false
+        }
+    }
+    return true;  // 所有玩家都已准备
+}
+
+void Room::setDataLoadStatus(const std::string& playerId, bool loaded){
+    playerDataLoadStatus_[playerId] = loaded;
+}
+
+bool Room::isPlayerDataLoaded(const std::string& playerId) const{
+    auto it = playerDataLoadStatus_.find(playerId);
+    if (it != playerDataLoadStatus_.end()) {
+        return it->second;
+    }
+    return false;  // 默认未加载
+}
+
+bool Room::isAllPlayerDataLoaded() const{
+    for(const auto& p:players_){
+        if(p && !isPlayerDataLoaded(p->GetPlayerId())) {
+            return false;  // 只要有一个玩家未加载就返回false
+        }
+    }
+    return true;  // 所有玩家都已加载
+}
+
 size_t Room::getAllPlayerCount() const{
     return players_.size();
 }
@@ -49,6 +91,8 @@ bool Room::addPlayer(std::shared_ptr<Player> player) {
 
     players_.push_back(player);
     playerMap_[player->GetPlayerId()] = player;
+    setReadyStatus(player->GetPlayerId(), false);
+    setDataLoadStatus(player->GetPlayerId(), false);
     return true;
 }
 
@@ -105,10 +149,10 @@ int32_t Room::getRemainingTime() const {
     return countdown_remaining_seconds_;
 }
 
-// 开始游戏主函数
-void Room::startGame() {
+// 对局开始，广播玩家信息
+void Room::broadcastPlayerInfo() {
     if (isFull()) {
-        setState(RoomState::GAMING);
+        setState(RoomState::LOADING);
 
         // 广播游戏开始消息 {type：对局开始，对局id，所有玩家信息}
         NetworkMessage msg;
@@ -126,6 +170,16 @@ void Room::startGame() {
             }
         }
         broadcastMessage(msg);
+        spdlog::info("Broadcasted player info for room {}", room_id_);
+    } else {
+        spdlog::warn("Cannot broadcast player inf, room {} is not full", room_id_);
+    }
+}
+
+// 开始游戏主函数
+void Room::startGame() {
+    if (isFull()) {
+        setState(RoomState::GAMING);
 
         nextRound();  // 回合+1
         broadcastPrepareStart();    // 广播备战开始消息
@@ -336,6 +390,8 @@ void Room::cleanupRoom() {
     
     // 清理所有容器
     players_.clear();
+    playerReadyStatus_.clear();
+    playerDataLoadStatus_.clear();
     playerMap_.clear();
     currentSnapshots_.clear();
     allHonorValue_.clear();
