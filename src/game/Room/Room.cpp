@@ -189,6 +189,15 @@ void Room::onCountdownFinished() {
     // 处理倒计时结束逻辑，如自动准备、结算等（待实现）
 }
 
+bool Room::allGamingRankingsReceived() const{
+    // 检查是否所有游戏中玩家都已提交排名
+    if (allHonorValue_.size() != getGamingPlayerCount()) {
+        spdlog::warn("Not all gaming players have submitted their rankings, current size: {}", allHonorValue_.size());
+        return false;
+    }
+    
+    return true;
+}
 // 广播结果给所有玩家
 void Room::BroadcastResults() {
     auto rankings = getRankings();
