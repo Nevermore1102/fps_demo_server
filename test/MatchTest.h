@@ -49,10 +49,10 @@ public:
 
         //发送N伦逻辑
 
-        while (currTurn<=MaxTurn && match_start_room_) {
+        while (currTurn<=MaxTurn ) {
             //备战阶段。等待接收BATTLE_PREP_TIMER倒计时广播直至倒计时为0，发送快照消息
             // int lastTime =30;
-            std::cout << "等待服务器岛倒计时为0..." << std::endl;
+            std::cout << "等待服务器岛倒计时为0...,currTurn: " <<currTurn<< std::endl;
 
             for (int i = 0; i < 500 && lastTimeMap_[currTurn]!=0; ++i) {
                 client_.runOnce();
@@ -80,9 +80,13 @@ public:
                 return false;
             }
             currTurn++;
+            std::cout << "结束一个回合：currTurn: " <<currTurn<< std::endl;
+
         }
 
-        return match_start_room_;
+        std::cout << "所有轮次快照已发送完成" << std::endl;
+        return true;
+        // return match_start_room_;
     }
     void sendMessage(const Message& msg) override {
         client_.sendMessage(msg);
@@ -178,8 +182,8 @@ private:
                     break;
                 case MessageType::ALL_SNAPSHOTS:
                     // test_->match_start_room_ = true;
-                    test_->hasSnapshotMap_[net_msg.mutable_battle_prep_timer()->round()] = true;
-                    std::cout << "收到快照,round: " <<net_msg.mutable_battle_prep_timer()->round()<< std::endl;
+                    test_->hasSnapshotMap_[net_msg.all_snapshots().round()] = true;
+                    std::cout << "收到快照,round: " <<net_msg.all_snapshots().round()<< std::endl;
                     break;
                 default:
                     std::cout << "收到未知类型: " << static_cast<int>(net_msg.msg_id()) << std::endl;
@@ -204,7 +208,7 @@ private:
     bool connect_ack_received_ = false;
     bool match_start_room_ = false;
     friend class TestClient;
-    int32_t currTurn = 0;
+    int32_t currTurn = 1;
     const int32_t MaxTurn = 7; // 最大轮数
 public: 
     std::unordered_map<int, int> lastTimeMap_;
