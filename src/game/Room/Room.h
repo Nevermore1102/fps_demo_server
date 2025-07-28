@@ -9,7 +9,7 @@
 
 #define MAX_PLAYERS 2           // 房间最大玩家数
 #define PREPARE_TIME 15         // 准备时间（秒）
-#define BROADCAST_INTERVAL 5    // 广播间隔（秒）
+#define BROADCAST_INTERVAL 1    // 广播间隔（秒）
 #define ROUND_NUM 7             // 游戏总轮次
 
 enum class RoomState {
@@ -23,7 +23,7 @@ class Room{
 public:
     Room(const int32_t room_id = 0):room_id_(room_id),
                                     max_players_(MAX_PLAYERS),
-                                    currentRound_(1){}
+                                    currentRound_(0){}
     ~Room();
 
     // 基础信息
@@ -52,7 +52,8 @@ public:
     // 回合+1
     void nextRound() {++currentRound_; };
 
-    // 启动备战倒计时
+    // 备战倒计时管理
+    void broadcastPrepareStart();
     void startBattlePrepTimer();
     
     // 快照管理

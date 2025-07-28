@@ -128,7 +128,8 @@ void Room::startGame() {
         broadcastMessage(msg);
 
         nextRound();  // 回合+1
-        startBattlePrepTimer();  // 启动备战倒计时
+        broadcastPrepareStart();    // 广播备战开始消息
+        startBattlePrepTimer();     // 启动备战倒计时
 
         spdlog::info("Game started in room {}", room_id_);
     } else {
@@ -179,6 +180,17 @@ void Room::broadcastToOthers(const std::string& excludePlayerId, const NetworkMe
             }
         }
     }
+}
+
+// 广播开始准备的消息 {type：备战开始，备战时间}
+void Room::broadcastPrepareStart(){
+    NetworkMessage msg;
+    msg.set_msg_id(MessageType::PREPARE_START);
+
+    BattlePrepStartMessage* prep_msg = msg.mutable_battle_prep_start();
+    prep_msg->set_prepare_time_seconds(PREPARE_TIME);
+    
+    broadcastMessage(msg);
 }
 
 // 开启备战倒计时
