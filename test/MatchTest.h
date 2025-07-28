@@ -67,10 +67,10 @@ public:
             
             std::cout << "发送第" << currTurn << "轮快照消息..." << std::endl;
             // 模拟发送快照数据
-            sendSnapshot(g_playerName, 1, currTurn, "formation_data_test" + std::to_string(currTurn), 100 + currTurn);
+            sendSnapshot(g_playerName, match_id_, currTurn, "formation_data_test" + std::to_string(currTurn), 100 + currTurn);
             
             // 等待服务器处理快照
-            for (int i = 0; i < 50 && hasSnapshotMap_[currTurn]==false; ++i) {
+            for (int i = 0; i < 200 && hasSnapshotMap_[currTurn]==false; ++i) {
                 client_.runOnce();
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
@@ -168,6 +168,7 @@ private:
                     break;
                 case MessageType::GAME_START:
                     test_->match_start_room_ = true;
+                    test_->match_id_ = std::stoi(net_msg.mutable_game_start()->match_id());
                     std::cout << "收到游戏开局请求" << std::endl;
                     break;
                 case MessageType::BATTLE_PREP_TIMER:
@@ -208,5 +209,6 @@ private:
 public: 
     std::unordered_map<int, int> lastTimeMap_;
     std::unordered_map<int, bool> hasSnapshotMap_;
+    int match_id_ = 0; // 当前匹配ID，可能用于跟踪或调试
 
 }; 
