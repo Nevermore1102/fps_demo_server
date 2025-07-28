@@ -220,7 +220,11 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
 
 void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
     spdlog::info("Player Battle Result: {}", conn->getId());
-
+    // // 解析消息获取玩家ID
+    // NetworkMessage pb_msg;
+    // if (!msg.getBodyAsProto(pb_msg)) {
+    //     spdlog::error("Failed to parse battle result message body");
+    //     return;
 }
 
 // void CppEngine::onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg) {
