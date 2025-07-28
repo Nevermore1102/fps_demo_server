@@ -5,6 +5,8 @@
 #include "ServerShutdownTest.h"
 // #include "LuaMessageTest.h"
 #include "MatchStartTest.h"
+#include "MatchTest.h"
+
 
 
 // 添加全局变量
@@ -42,6 +44,14 @@ int main(int argc, char* argv[]) {
         std::function<std::unique_ptr<TestBase>(const std::string&, uint16_t)>(
             [](const std::string& host, uint16_t port) -> std::unique_ptr<TestBase> {
                 return std::make_unique<MatchStartTest>(host, port);
+            }
+        )
+    );
+
+    manager.registerTest("match_all", 
+        std::function<std::unique_ptr<TestBase>(const std::string&, uint16_t)>(
+            [](const std::string& host, uint16_t port) -> std::unique_ptr<TestBase> {
+                return std::make_unique<MatchTest>(host, port);
             }
         )
     );

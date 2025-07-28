@@ -114,7 +114,7 @@ void TestClientBase::readCallback(struct bufferevent* bev, void* ctx) {
     struct evbuffer* input = bufferevent_get_input(bev);
     size_t available = evbuffer_get_length(input);
     
-    std::cout << "接收到数据，可用字节数: " << available << std::endl;
+    // std::cout << "接收到数据，可用字节数: " << available << std::endl;
     
     if (available == 0) return;
 
@@ -129,7 +129,7 @@ void TestClientBase::readCallback(struct bufferevent* bev, void* ctx) {
         // 转换为主机字节序
         uint32_t body_len = ntohl(net_len);
         
-        std::cout << "消息体长度: " << body_len << std::endl;
+        // std::cout << "消息体长度: " << body_len << std::endl;
         
         // 检查消息大小限制
         if (body_len > 10 * 1024 * 1024) {  // 10MB限制
@@ -155,7 +155,7 @@ void TestClientBase::readCallback(struct bufferevent* bev, void* ctx) {
             return;
         }
 
-        std::cout << "成功读取完整消息，大小: " << total_msg_size << std::endl;
+        // std::cout << "成功读取完整消息，大小: " << total_msg_size << std::endl;
 
         // 反序列化消息
         Message msg;
