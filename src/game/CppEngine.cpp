@@ -3,6 +3,7 @@
 #include <google/protobuf/message.h>
 #include <spdlog/spdlog.h>
 #include <string>
+#include "game/Player/Player.h"
 #include "game/Room/Room.h"
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
@@ -335,8 +336,6 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
 
     auto exit_msg = pb_msg.exit();
     std::string exit_player_id = exit_msg.exit_info().exit_player_id();
-    int32_t exit_round = exit_msg.exit_info().exit_round();
-    int32_t exit_honor_value = exit_msg.exit_info().exit_honor_value();
     if (exit_player_id.empty()) {
         spdlog::error("Player ID is empty in exit message");
         return;
@@ -344,18 +343,27 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
 
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
-    auto room = roomManager.getPlayerRoom(exit_player_id);
-    
-    if (!room) {
-        spdlog::error("Room not found for player {}", exit_player_id);
-        return;
+
+    auto player = roomManager.getPlayerByConnection(conn);
+    if (player->getState() == PlayerState::CONNECTED) {
+        roomManager.removePlayerFromWaitQueue(player->GetPlayerId());
     }
 
-    // 房间处理玩家退出并广播消息
-    room->onPlayerExit(exit_player_id, exit_round, exit_honor_value);
-    room->broadcastExitMessage();
-    
-    spdlog::info("Player {} has exited the game and removed from room {}", exit_player_id, room->getId());
+    else if (player->getState() == PlayerState::GAMING) {
+        int32_t exit_round = exit_msg.exit_info().exit_round();
+        int32_t exit_honor_value = exit_msg.exit_info().exit_honor_value();
+        auto room = roomManager.getPlayerRoom(exit_player_id);
+        if (!room) {
+            spdlog::error("Room not found for player {}", exit_player_id);
+            return;
+        }
+
+        // 房间处理玩家退出并广播消息
+        room->onPlayerExit(exit_player_id, exit_round, exit_honor_value);
+        room->broadcastExitMessage();
+        
+        spdlog::info("Player {} has exited the game and removed from room {}", exit_player_id, room->getId());
+    }
 }
 
 // void CppEngine::onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg) {
