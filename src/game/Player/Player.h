@@ -14,7 +14,12 @@ enum class PlayerState {
 class Player {
 public:
     Player(const std::string& player_id, const std::shared_ptr<Connection>& conn)
-        : player_id_(player_id), connection_(conn) {}
+        : player_id_(player_id), connection_(conn) {
+            latest_snapshot_ = std::make_shared<PlayerSnapshot>();
+            latest_snapshot_->set_player_id(player_id);
+            latest_snapshot_->set_honor_value(0);  // 初始荣耀值为0
+            latest_snapshot_->set_round(0);  // 初始轮数为0
+         }
 
     ~Player() = default;
 
