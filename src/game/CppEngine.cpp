@@ -324,6 +324,7 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     }
 }
 
+// 玩家主动退出匹配或游戏
 void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& msg) {
     spdlog::info("Player Exit: {}", conn->getId());
 
@@ -340,15 +341,18 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
         spdlog::error("Player ID is empty in exit message");
         return;
     }
+    spdlog::info("Player {} is exiting", exit_player_id);
 
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
 
     auto player = roomManager.getPlayerByConnection(conn);
+
+    // 玩家主动退出匹配
     if (player->getState() == PlayerState::CONNECTED) {
+        spdlog::info("Player {} is exiting match queue", exit_player_id);
         roomManager.removePlayerFromWaitQueue(player->GetPlayerId());
     }
-
     else if (player->getState() == PlayerState::GAMING) {
         int32_t exit_round = exit_msg.exit_info().exit_round();
         int32_t exit_honor_value = exit_msg.exit_info().exit_honor_value();
