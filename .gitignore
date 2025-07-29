@@ -39,5 +39,11 @@ node/*
 !node/start.sh
 node_test/*
 !node_test/cps.sh
+autoNode/*
+!autoNode/*.sh
+!autoNode/*.md
+
+
+
 node/data/
 node/game_server 
