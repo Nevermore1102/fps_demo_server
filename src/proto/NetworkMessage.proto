@@ -77,8 +77,9 @@ message PlayerSnapshot {
 message AllSnapshotsMessage {
     string match_id = 1;
     int32 round = 2;
-    repeated PlayerSnapshot snapshots = 3;  // 所有玩家的快照
-    int32 seed = 4; // 随机数种子，C#客户端Random(seed)调用
+    string first_player_id = 3; // 首发玩家ID
+    repeated PlayerSnapshot snapshots = 4;  // 所有玩家的快照
+    int32 seed = 5; // 随机数种子，C#客户端Random(seed)调用
 }
 
 // 战斗结果上报（客户端→服务器）

@@ -466,6 +466,11 @@ void Room::broadcastAllGamingSnapshots() {
     AllSnapshotsMessage* all_snapshots = msg.mutable_all_snapshots();
     all_snapshots->set_match_id(std::to_string(room_id_));
     all_snapshots->set_round(getCurrentRound());
+    // 轮数奇数，先加入的玩家先手
+    if (getCurrentRound() % 2)
+        all_snapshots->set_first_player_id(players_.front()->GetPlayerId());
+    else
+        all_snapshots->set_first_player_id(players_.back()->GetPlayerId());
     all_snapshots->set_seed(seed);
     
     // 添加所有玩家快照

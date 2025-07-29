@@ -277,7 +277,7 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
                 playerId, matchId, round, honorValue);
     
     if (!room) {
-        spdlog::error("Room {} not found for snapshot", matchId);
+        spdlog::error("Room {} not found", matchId);
         return;
     }
     
@@ -295,15 +295,15 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     
     // 记录战斗结果
     if (!room->insertRanking(playerId, honorValue)) {
-        spdlog::error("Failed to record snapshot for player {} in room {}", playerId, matchId);
+        spdlog::error("Failed to record ranking for player {} in room {}", playerId, matchId);
         return;
     }
     
-    spdlog::info("Successfully recorded snapshot for player {} in room {}", playerId, matchId);
+    spdlog::info("Successfully recorded ranking for player {} in room {}", playerId, matchId);
     
     // 检查是否所有游戏中玩家都已提交战斗结果
     if (room->allGamingRankingsReceived()) {
-        spdlog::info("All gaming rankings received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
+        spdlog::info("All gaming rankings received for room {}, broadcasting rankings", matchId);
         
         // 继续下一轮战斗
         if(room->getCurrentRound() < ROUND_NUM){

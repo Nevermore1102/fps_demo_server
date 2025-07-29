@@ -1756,12 +1756,13 @@ class AllSnapshotsMessage PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kSnapshotsFieldNumber = 3,
+    kSnapshotsFieldNumber = 4,
     kMatchIdFieldNumber = 1,
+    kFirstPlayerIdFieldNumber = 3,
     kRoundFieldNumber = 2,
-    kSeedFieldNumber = 4,
+    kSeedFieldNumber = 5,
   };
-  // repeated .PlayerSnapshot snapshots = 3;
+  // repeated .PlayerSnapshot snapshots = 4;
   int snapshots_size() const;
   private:
   int _internal_snapshots_size() const;
@@ -1804,6 +1805,31 @@ class AllSnapshotsMessage PROTOBUF_FINAL :
   std::string* _internal_mutable_match_id();
   public:
 
+  // string first_player_id = 3;
+  void clear_first_player_id();
+  const std::string& first_player_id() const;
+  void set_first_player_id(const std::string& value);
+  void set_first_player_id(std::string&& value);
+  void set_first_player_id(const char* value);
+  void set_first_player_id(const char* value, size_t size);
+  std::string* mutable_first_player_id();
+  std::string* release_first_player_id();
+  void set_allocated_first_player_id(std::string* first_player_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_first_player_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_first_player_id(
+      std::string* first_player_id);
+  private:
+  const std::string& _internal_first_player_id() const;
+  void _internal_set_first_player_id(const std::string& value);
+  std::string* _internal_mutable_first_player_id();
+  public:
+
   // int32 round = 2;
   void clear_round();
   ::PROTOBUF_NAMESPACE_ID::int32 round() const;
@@ -1813,7 +1839,7 @@ class AllSnapshotsMessage PROTOBUF_FINAL :
   void _internal_set_round(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
-  // int32 seed = 4;
+  // int32 seed = 5;
   void clear_seed();
   ::PROTOBUF_NAMESPACE_ID::int32 seed() const;
   void set_seed(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -1831,6 +1857,7 @@ class AllSnapshotsMessage PROTOBUF_FINAL :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::PlayerSnapshot > snapshots_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr first_player_id_;
   ::PROTOBUF_NAMESPACE_ID::int32 round_;
   ::PROTOBUF_NAMESPACE_ID::int32 seed_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -4344,7 +4371,88 @@ inline void AllSnapshotsMessage::set_round(::PROTOBUF_NAMESPACE_ID::int32 value)
   // @@protoc_insertion_point(field_set:AllSnapshotsMessage.round)
 }
 
-// repeated .PlayerSnapshot snapshots = 3;
+// string first_player_id = 3;
+inline void AllSnapshotsMessage::clear_first_player_id() {
+  first_player_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& AllSnapshotsMessage::first_player_id() const {
+  // @@protoc_insertion_point(field_get:AllSnapshotsMessage.first_player_id)
+  return _internal_first_player_id();
+}
+inline void AllSnapshotsMessage::set_first_player_id(const std::string& value) {
+  _internal_set_first_player_id(value);
+  // @@protoc_insertion_point(field_set:AllSnapshotsMessage.first_player_id)
+}
+inline std::string* AllSnapshotsMessage::mutable_first_player_id() {
+  // @@protoc_insertion_point(field_mutable:AllSnapshotsMessage.first_player_id)
+  return _internal_mutable_first_player_id();
+}
+inline const std::string& AllSnapshotsMessage::_internal_first_player_id() const {
+  return first_player_id_.Get();
+}
+inline void AllSnapshotsMessage::_internal_set_first_player_id(const std::string& value) {
+  
+  first_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void AllSnapshotsMessage::set_first_player_id(std::string&& value) {
+  
+  first_player_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:AllSnapshotsMessage.first_player_id)
+}
+inline void AllSnapshotsMessage::set_first_player_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  first_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:AllSnapshotsMessage.first_player_id)
+}
+inline void AllSnapshotsMessage::set_first_player_id(const char* value,
+    size_t size) {
+  
+  first_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:AllSnapshotsMessage.first_player_id)
+}
+inline std::string* AllSnapshotsMessage::_internal_mutable_first_player_id() {
+  
+  return first_player_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* AllSnapshotsMessage::release_first_player_id() {
+  // @@protoc_insertion_point(field_release:AllSnapshotsMessage.first_player_id)
+  return first_player_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void AllSnapshotsMessage::set_allocated_first_player_id(std::string* first_player_id) {
+  if (first_player_id != nullptr) {
+    
+  } else {
+    
+  }
+  first_player_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), first_player_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:AllSnapshotsMessage.first_player_id)
+}
+inline std::string* AllSnapshotsMessage::unsafe_arena_release_first_player_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:AllSnapshotsMessage.first_player_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return first_player_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void AllSnapshotsMessage::unsafe_arena_set_allocated_first_player_id(
+    std::string* first_player_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (first_player_id != nullptr) {
+    
+  } else {
+    
+  }
+  first_player_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      first_player_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AllSnapshotsMessage.first_player_id)
+}
+
+// repeated .PlayerSnapshot snapshots = 4;
 inline int AllSnapshotsMessage::_internal_snapshots_size() const {
   return snapshots_.size();
 }
@@ -4383,7 +4491,7 @@ AllSnapshotsMessage::snapshots() const {
   return snapshots_;
 }
 
-// int32 seed = 4;
+// int32 seed = 5;
 inline void AllSnapshotsMessage::clear_seed() {
   seed_ = 0;
 }
