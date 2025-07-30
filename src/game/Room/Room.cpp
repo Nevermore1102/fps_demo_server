@@ -149,16 +149,16 @@ int32_t Room::getRemainingTime() const {
     return countdown_remaining_seconds_;
 }
 
-// 对局开始，广播玩家信息
+// 对局开始，广播 {type：对局开始，对局id，总回合数，所有<玩家id，玩家name，头像id>}
 void Room::broadcastPlayerInfo() {
     if (isFull()) {
         setState(RoomState::LOADING);
 
-        // 广播游戏开始消息 {type：对局开始，对局id，所有玩家信息}
         NetworkMessage msg;
         msg.set_msg_id(MessageType::GAME_START);
         GameStartMessage* start_msg = msg.mutable_game_start();
         start_msg->set_match_id(std::to_string(room_id_));
+        start_msg->set_total_rounds(ROUND_NUM);
 
         for(const auto& player : players_) {
             if (player) {

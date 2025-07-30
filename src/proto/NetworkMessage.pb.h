@@ -716,10 +716,11 @@ class GameStartMessage PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPlayersInfoFieldNumber = 2,
+    kPlayersInfoFieldNumber = 3,
     kMatchIdFieldNumber = 1,
+    kTotalRoundsFieldNumber = 2,
   };
-  // repeated .PlayerBasicInfo players_info = 2;
+  // repeated .PlayerBasicInfo players_info = 3;
   int players_info_size() const;
   private:
   int _internal_players_info_size() const;
@@ -762,6 +763,15 @@ class GameStartMessage PROTOBUF_FINAL :
   std::string* _internal_mutable_match_id();
   public:
 
+  // int32 total_rounds = 2;
+  void clear_total_rounds();
+  ::PROTOBUF_NAMESPACE_ID::int32 total_rounds() const;
+  void set_total_rounds(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_total_rounds() const;
+  void _internal_set_total_rounds(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:GameStartMessage)
  private:
   class _Internal;
@@ -771,6 +781,7 @@ class GameStartMessage PROTOBUF_FINAL :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::PlayerBasicInfo > players_info_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 total_rounds_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
 };
@@ -3581,7 +3592,27 @@ inline void GameStartMessage::unsafe_arena_set_allocated_match_id(
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:GameStartMessage.match_id)
 }
 
-// repeated .PlayerBasicInfo players_info = 2;
+// int32 total_rounds = 2;
+inline void GameStartMessage::clear_total_rounds() {
+  total_rounds_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 GameStartMessage::_internal_total_rounds() const {
+  return total_rounds_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 GameStartMessage::total_rounds() const {
+  // @@protoc_insertion_point(field_get:GameStartMessage.total_rounds)
+  return _internal_total_rounds();
+}
+inline void GameStartMessage::_internal_set_total_rounds(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  total_rounds_ = value;
+}
+inline void GameStartMessage::set_total_rounds(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_total_rounds(value);
+  // @@protoc_insertion_point(field_set:GameStartMessage.total_rounds)
+}
+
+// repeated .PlayerBasicInfo players_info = 3;
 inline int GameStartMessage::_internal_players_info_size() const {
   return players_info_.size();
 }

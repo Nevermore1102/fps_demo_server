@@ -394,6 +394,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_src_2fproto_2fNetworkMessage_2
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::GameStartMessage, match_id_),
+  PROTOBUF_FIELD_OFFSET(::GameStartMessage, total_rounds_),
   PROTOBUF_FIELD_OFFSET(::GameStartMessage, players_info_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::DataLoadedMessage, _internal_metadata_),
@@ -512,19 +513,19 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 5, -1, sizeof(::ConnectRequestMessage)},
   { 10, -1, sizeof(::PlayerBasicInfo)},
   { 18, -1, sizeof(::GameStartMessage)},
-  { 25, -1, sizeof(::DataLoadedMessage)},
-  { 30, -1, sizeof(::BattlePrepStartMessage)},
-  { 36, -1, sizeof(::BattlePrepTimerMessage)},
-  { 44, -1, sizeof(::BattlePrepSnapshotMessage)},
-  { 53, -1, sizeof(::PlayerSnapshot)},
-  { 63, -1, sizeof(::AllSnapshotsMessage)},
-  { 73, -1, sizeof(::BattleResultReportMessage)},
-  { 81, -1, sizeof(::RankingEntry)},
-  { 89, -1, sizeof(::SettlementMessage)},
-  { 96, -1, sizeof(::ExitPlayerInfo)},
-  { 104, -1, sizeof(::ExitMessage)},
-  { 110, -1, sizeof(::ExitBroadcastMessage)},
-  { 116, -1, sizeof(::NetworkMessage)},
+  { 26, -1, sizeof(::DataLoadedMessage)},
+  { 31, -1, sizeof(::BattlePrepStartMessage)},
+  { 37, -1, sizeof(::BattlePrepTimerMessage)},
+  { 45, -1, sizeof(::BattlePrepSnapshotMessage)},
+  { 54, -1, sizeof(::PlayerSnapshot)},
+  { 64, -1, sizeof(::AllSnapshotsMessage)},
+  { 74, -1, sizeof(::BattleResultReportMessage)},
+  { 82, -1, sizeof(::RankingEntry)},
+  { 90, -1, sizeof(::SettlementMessage)},
+  { 97, -1, sizeof(::ExitPlayerInfo)},
+  { 105, -1, sizeof(::ExitMessage)},
+  { 111, -1, sizeof(::ExitBroadcastMessage)},
+  { 117, -1, sizeof(::NetworkMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -551,56 +552,56 @@ const char descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto[] PROT
   "\n\036src/proto/NetworkMessage.proto\"\022\n\020Hear"
   "tbeatMessage\"\027\n\025ConnectRequestMessage\"J\n"
   "\017PlayerBasicInfo\022\021\n\tplayer_id\030\001 \001(\t\022\023\n\013p"
-  "layer_name\030\002 \001(\t\022\017\n\007icon_id\030\003 \001(\005\"L\n\020Gam"
-  "eStartMessage\022\020\n\010match_id\030\001 \001(\t\022&\n\014playe"
-  "rs_info\030\002 \003(\0132\020.PlayerBasicInfo\"\023\n\021DataL"
-  "oadedMessage\"6\n\026BattlePrepStartMessage\022\034"
-  "\n\024prepare_time_seconds\030\001 \001(\005\"Y\n\026BattlePr"
-  "epTimerMessage\022\020\n\010match_id\030\001 \001(\t\022\r\n\005roun"
-  "d\030\002 \001(\005\022\036\n\026remaining_time_seconds\030\003 \001(\005\""
-  "i\n\031BattlePrepSnapshotMessage\022\020\n\010match_id"
-  "\030\001 \001(\t\022\r\n\005round\030\002 \001(\005\022\026\n\016formation_data\030"
-  "\003 \001(\t\022\023\n\013honor_value\030\004 \001(\005\"q\n\016PlayerSnap"
-  "shot\022\021\n\tplayer_id\030\001 \001(\t\022\020\n\010match_id\030\002 \001("
-  "\t\022\r\n\005round\030\003 \001(\005\022\026\n\016formation_data\030\004 \001(\t"
-  "\022\023\n\013honor_value\030\005 \001(\005\"\201\001\n\023AllSnapshotsMe"
-  "ssage\022\020\n\010match_id\030\001 \001(\t\022\r\n\005round\030\002 \001(\005\022\027"
-  "\n\017first_player_id\030\003 \001(\t\022\"\n\tsnapshots\030\004 \003"
-  "(\0132\017.PlayerSnapshot\022\014\n\004seed\030\005 \001(\005\"Q\n\031Bat"
-  "tleResultReportMessage\022\020\n\010match_id\030\001 \001(\t"
-  "\022\r\n\005round\030\002 \001(\005\022\023\n\013honor_value\030\003 \001(\005\"D\n\014"
-  "RankingEntry\022\021\n\tplayer_id\030\001 \001(\t\022\023\n\013honor"
-  "_value\030\002 \001(\005\022\014\n\004rank\030\003 \001(\005\"F\n\021Settlement"
-  "Message\022\020\n\010match_id\030\001 \001(\t\022\037\n\010rankings\030\002 "
-  "\003(\0132\r.RankingEntry\"V\n\016ExitPlayerInfo\022\026\n\016"
-  "exit_player_id\030\001 \001(\t\022\022\n\nexit_round\030\002 \001(\005"
-  "\022\030\n\020exit_honor_value\030\003 \001(\005\"1\n\013ExitMessag"
-  "e\022\"\n\texit_info\030\001 \001(\0132\017.ExitPlayerInfo\"B\n"
-  "\024ExitBroadcastMessage\022*\n\021exit_players_in"
-  "fo\030\001 \003(\0132\017.ExitPlayerInfo\"\204\005\n\016NetworkMes"
-  "sage\022\034\n\006msg_id\030\001 \001(\0162\014.MessageType\022\021\n\tpl"
-  "ayer_id\030\002 \001(\t\022&\n\theartbeat\030\005 \001(\0132\021.Heart"
-  "beatMessageH\000\0221\n\017connect_request\030\006 \001(\0132\026"
-  ".ConnectRequestMessageH\000\022\'\n\ngame_start\030\007"
-  " \001(\0132\021.GameStartMessageH\000\022)\n\013data_loaded"
-  "\030\010 \001(\0132\022.DataLoadedMessageH\000\0224\n\021battle_p"
-  "rep_start\030\t \001(\0132\027.BattlePrepStartMessage"
-  "H\000\0224\n\021battle_prep_timer\030\n \001(\0132\027.BattlePr"
-  "epTimerMessageH\000\022:\n\024battle_prep_snapshot"
-  "\030\013 \001(\0132\032.BattlePrepSnapshotMessageH\000\022-\n\r"
-  "all_snapshots\030\014 \001(\0132\024.AllSnapshotsMessag"
-  "eH\000\022:\n\024battle_result_report\030\r \001(\0132\032.Batt"
-  "leResultReportMessageH\000\022(\n\nsettlement\030\016 "
-  "\001(\0132\022.SettlementMessageH\000\022\034\n\004exit\030\017 \001(\0132"
-  "\014.ExitMessageH\000\022/\n\016exit_broadcast\030\020 \001(\0132"
-  "\025.ExitBroadcastMessageH\000B\006\n\004data*\361\001\n\013Mes"
-  "sageType\022\r\n\tHEARTBEAT\020\000\022\013\n\007CONNECT\020\001\022\017\n\013"
-  "START_MATCH\020\002\022\016\n\nGAME_START\020\003\022\017\n\013DATA_LO"
-  "ADED\020\004\022\021\n\rPREPARE_START\020\005\022\025\n\021BATTLE_PREP"
-  "_TIMER\020\006\022\030\n\024BATTLE_PREP_SNAPSHOT\020\007\022\021\n\rAL"
-  "L_SNAPSHOTS\020\010\022\021\n\rBATTLE_RESULT\020\t\022\016\n\nSETT"
-  "LEMENT\020\n\022\010\n\004EXIT\020\013\022\020\n\014DISCONNECTED\020\014b\006pr"
-  "oto3"
+  "layer_name\030\002 \001(\t\022\017\n\007icon_id\030\003 \001(\005\"b\n\020Gam"
+  "eStartMessage\022\020\n\010match_id\030\001 \001(\t\022\024\n\014total"
+  "_rounds\030\002 \001(\005\022&\n\014players_info\030\003 \003(\0132\020.Pl"
+  "ayerBasicInfo\"\023\n\021DataLoadedMessage\"6\n\026Ba"
+  "ttlePrepStartMessage\022\034\n\024prepare_time_sec"
+  "onds\030\001 \001(\005\"Y\n\026BattlePrepTimerMessage\022\020\n\010"
+  "match_id\030\001 \001(\t\022\r\n\005round\030\002 \001(\005\022\036\n\026remaini"
+  "ng_time_seconds\030\003 \001(\005\"i\n\031BattlePrepSnaps"
+  "hotMessage\022\020\n\010match_id\030\001 \001(\t\022\r\n\005round\030\002 "
+  "\001(\005\022\026\n\016formation_data\030\003 \001(\t\022\023\n\013honor_val"
+  "ue\030\004 \001(\005\"q\n\016PlayerSnapshot\022\021\n\tplayer_id\030"
+  "\001 \001(\t\022\020\n\010match_id\030\002 \001(\t\022\r\n\005round\030\003 \001(\005\022\026"
+  "\n\016formation_data\030\004 \001(\t\022\023\n\013honor_value\030\005 "
+  "\001(\005\"\201\001\n\023AllSnapshotsMessage\022\020\n\010match_id\030"
+  "\001 \001(\t\022\r\n\005round\030\002 \001(\005\022\027\n\017first_player_id\030"
+  "\003 \001(\t\022\"\n\tsnapshots\030\004 \003(\0132\017.PlayerSnapsho"
+  "t\022\014\n\004seed\030\005 \001(\005\"Q\n\031BattleResultReportMes"
+  "sage\022\020\n\010match_id\030\001 \001(\t\022\r\n\005round\030\002 \001(\005\022\023\n"
+  "\013honor_value\030\003 \001(\005\"D\n\014RankingEntry\022\021\n\tpl"
+  "ayer_id\030\001 \001(\t\022\023\n\013honor_value\030\002 \001(\005\022\014\n\004ra"
+  "nk\030\003 \001(\005\"F\n\021SettlementMessage\022\020\n\010match_i"
+  "d\030\001 \001(\t\022\037\n\010rankings\030\002 \003(\0132\r.RankingEntry"
+  "\"V\n\016ExitPlayerInfo\022\026\n\016exit_player_id\030\001 \001"
+  "(\t\022\022\n\nexit_round\030\002 \001(\005\022\030\n\020exit_honor_val"
+  "ue\030\003 \001(\005\"1\n\013ExitMessage\022\"\n\texit_info\030\001 \001"
+  "(\0132\017.ExitPlayerInfo\"B\n\024ExitBroadcastMess"
+  "age\022*\n\021exit_players_info\030\001 \003(\0132\017.ExitPla"
+  "yerInfo\"\204\005\n\016NetworkMessage\022\034\n\006msg_id\030\001 \001"
+  "(\0162\014.MessageType\022\021\n\tplayer_id\030\002 \001(\t\022&\n\th"
+  "eartbeat\030\005 \001(\0132\021.HeartbeatMessageH\000\0221\n\017c"
+  "onnect_request\030\006 \001(\0132\026.ConnectRequestMes"
+  "sageH\000\022\'\n\ngame_start\030\007 \001(\0132\021.GameStartMe"
+  "ssageH\000\022)\n\013data_loaded\030\010 \001(\0132\022.DataLoade"
+  "dMessageH\000\0224\n\021battle_prep_start\030\t \001(\0132\027."
+  "BattlePrepStartMessageH\000\0224\n\021battle_prep_"
+  "timer\030\n \001(\0132\027.BattlePrepTimerMessageH\000\022:"
+  "\n\024battle_prep_snapshot\030\013 \001(\0132\032.BattlePre"
+  "pSnapshotMessageH\000\022-\n\rall_snapshots\030\014 \001("
+  "\0132\024.AllSnapshotsMessageH\000\022:\n\024battle_resu"
+  "lt_report\030\r \001(\0132\032.BattleResultReportMess"
+  "ageH\000\022(\n\nsettlement\030\016 \001(\0132\022.SettlementMe"
+  "ssageH\000\022\034\n\004exit\030\017 \001(\0132\014.ExitMessageH\000\022/\n"
+  "\016exit_broadcast\030\020 \001(\0132\025.ExitBroadcastMes"
+  "sageH\000B\006\n\004data*\361\001\n\013MessageType\022\r\n\tHEARTB"
+  "EAT\020\000\022\013\n\007CONNECT\020\001\022\017\n\013START_MATCH\020\002\022\016\n\nG"
+  "AME_START\020\003\022\017\n\013DATA_LOADED\020\004\022\021\n\rPREPARE_"
+  "START\020\005\022\025\n\021BATTLE_PREP_TIMER\020\006\022\030\n\024BATTLE"
+  "_PREP_SNAPSHOT\020\007\022\021\n\rALL_SNAPSHOTS\020\010\022\021\n\rB"
+  "ATTLE_RESULT\020\t\022\016\n\nSETTLEMENT\020\n\022\010\n\004EXIT\020\013"
+  "\022\020\n\014DISCONNECTED\020\014b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_src_2fproto_2fNetworkMessage_2eproto_deps[1] = {
 };
@@ -625,7 +626,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_src
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_src_2fproto_2fNetworkMessage_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_src_2fproto_2fNetworkMessage_2eproto = {
-  false, false, descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto, "src/proto/NetworkMessage.proto", 2084,
+  false, false, descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto, "src/proto/NetworkMessage.proto", 2106,
   &descriptor_table_src_2fproto_2fNetworkMessage_2eproto_once, descriptor_table_src_2fproto_2fNetworkMessage_2eproto_sccs, descriptor_table_src_2fproto_2fNetworkMessage_2eproto_deps, 17, 0,
   schemas, file_default_instances, TableStruct_src_2fproto_2fNetworkMessage_2eproto::offsets,
   file_level_metadata_src_2fproto_2fNetworkMessage_2eproto, 17, file_level_enum_descriptors_src_2fproto_2fNetworkMessage_2eproto, file_level_service_descriptors_src_2fproto_2fNetworkMessage_2eproto,
@@ -1287,12 +1288,14 @@ GameStartMessage::GameStartMessage(const GameStartMessage& from)
     match_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from._internal_match_id(),
       GetArena());
   }
+  total_rounds_ = from.total_rounds_;
   // @@protoc_insertion_point(copy_constructor:GameStartMessage)
 }
 
 void GameStartMessage::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_GameStartMessage_src_2fproto_2fNetworkMessage_2eproto.base);
   match_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  total_rounds_ = 0;
 }
 
 GameStartMessage::~GameStartMessage() {
@@ -1329,6 +1332,7 @@ void GameStartMessage::Clear() {
 
   players_info_.Clear();
   match_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  total_rounds_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1349,16 +1353,23 @@ const char* GameStartMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // repeated .PlayerBasicInfo players_info = 2;
+      // int32 total_rounds = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          total_rounds_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // repeated .PlayerBasicInfo players_info = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           ptr -= 1;
           do {
             ptr += 1;
             ptr = ctx->ParseMessage(_internal_add_players_info(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -1399,12 +1410,18 @@ failure:
         1, this->_internal_match_id(), target);
   }
 
-  // repeated .PlayerBasicInfo players_info = 2;
+  // int32 total_rounds = 2;
+  if (this->total_rounds() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_total_rounds(), target);
+  }
+
+  // repeated .PlayerBasicInfo players_info = 3;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_players_info_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, this->_internal_players_info(i), target, stream);
+      InternalWriteMessage(3, this->_internal_players_info(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1423,7 +1440,7 @@ size_t GameStartMessage::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .PlayerBasicInfo players_info = 2;
+  // repeated .PlayerBasicInfo players_info = 3;
   total_size += 1UL * this->_internal_players_info_size();
   for (const auto& msg : this->players_info_) {
     total_size +=
@@ -1435,6 +1452,13 @@ size_t GameStartMessage::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_match_id());
+  }
+
+  // int32 total_rounds = 2;
+  if (this->total_rounds() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_total_rounds());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1472,6 +1496,9 @@ void GameStartMessage::MergeFrom(const GameStartMessage& from) {
   if (from.match_id().size() > 0) {
     _internal_set_match_id(from._internal_match_id());
   }
+  if (from.total_rounds() != 0) {
+    _internal_set_total_rounds(from._internal_total_rounds());
+  }
 }
 
 void GameStartMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -1497,6 +1524,7 @@ void GameStartMessage::InternalSwap(GameStartMessage* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   players_info_.InternalSwap(&other->players_info_);
   match_id_.Swap(&other->match_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  swap(total_rounds_, other->total_rounds_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata GameStartMessage::GetMetadata() const {
