@@ -376,11 +376,16 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
             spdlog::error("Room not found for player {}", exit_player_id);
             return;
         }
-
+        
         // 房间处理玩家退出并广播消息
+        roomManager.removePlayerConnection(conn);
         room->onPlayerExit(exit_player_id, exit_round, exit_honor_value);
         room->broadcastExitMessage();
-        
+
+        if (room->getGamingPlayerCount() == 0) {
+            spdlog::info("All players have exited the game and removed from room {}", room->getId());
+            roomManager.removeRoom(std::to_string(room->getId()));
+        }
         spdlog::info("Player {} has exited the game and removed from room {}", exit_player_id, room->getId());
     }
 }
