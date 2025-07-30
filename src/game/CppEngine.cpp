@@ -111,11 +111,19 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
     // 解析消息获取玩家ID
     NetworkMessage pb_msg;
     if (!msg.getBodyAsProto(pb_msg)) {
-        spdlog::error("Failed to parse start match message body");
+        spdlog::error("1 Failed to parse start match message body");
+        return;
+    }
+
+    if (pb_msg.msg_id() != MessageType::START_MATCH || !pb_msg.has_start_match()) {
+        spdlog::error("2 Failed to parse start match message body");
         return;
     }
     
-    std::string playerId = pb_msg.player_id();
+    std::string playerId = pb_msg.start_match().player_info().player_id();
+    std::string player_name = pb_msg.start_match().player_info().player_name();
+    int32_t icon_id = pb_msg.start_match().player_info().icon_id();
+
     if (playerId.empty()) {
         // 如果消息中没有玩家ID，使用连接ID作为玩家ID
         // playerId = conn->getId();
@@ -128,6 +136,8 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
     // 创建新的Player对象
     auto player = std::make_shared<Player>(playerId, conn);
     player->setState(PlayerState::CONNECTED);
+    player->SetPlayerName(player_name);
+    player->SetIconId(icon_id);
     
     // 获取RoomManager实例并加入匹配队列
     auto& roomManager = RoomManager::getInstance();

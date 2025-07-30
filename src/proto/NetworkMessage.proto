@@ -40,6 +40,12 @@ message PlayerBasicInfo {
     int32 icon_id = 3;
 }
 
+// 20250730updated
+// 发起匹配消息（客户端→服务器）
+message StartMatchMessage {
+    PlayerBasicInfo player_info = 1; // 发起匹配的玩家信息
+}
+
 // 对局开始广播（服务器→所有客户端）
 message GameStartMessage {
     string match_id = 1;
@@ -137,16 +143,17 @@ message NetworkMessage {
     oneof data{
         HeartbeatMessage heartbeat = 5;
         ConnectRequestMessage connect_request = 6;
-        WaitingPlayerMessage waiting_player = 7;
-        GameStartMessage game_start = 8;
-        DataLoadedMessage data_loaded = 9;
-        BattlePrepStartMessage battle_prep_start = 10;
-        BattlePrepTimerMessage battle_prep_timer = 11;
-        BattlePrepSnapshotMessage battle_prep_snapshot = 12;
-        AllSnapshotsMessage all_snapshots = 13;
-        BattleResultReportMessage battle_result_report = 14;
-        SettlementMessage settlement = 15;
-        ExitMessage exit = 16;
-        ExitBroadcastMessage exit_broadcast = 17;
+        StartMatchMessage start_match = 7;
+        WaitingPlayerMessage waiting_player = 8;
+        GameStartMessage game_start = 9;
+        DataLoadedMessage data_loaded = 10;
+        BattlePrepStartMessage battle_prep_start = 11;
+        BattlePrepTimerMessage battle_prep_timer = 12;
+        BattlePrepSnapshotMessage battle_prep_snapshot = 13;
+        AllSnapshotsMessage all_snapshots = 14;
+        BattleResultReportMessage battle_result_report = 15;
+        SettlementMessage settlement = 16;
+        ExitMessage exit = 17;
+        ExitBroadcastMessage exit_broadcast = 18;
     }
 }
