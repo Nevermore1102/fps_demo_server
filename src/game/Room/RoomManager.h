@@ -8,6 +8,7 @@
 #include "Room.h"
 #include "game/Player/Player.h"
 #include "net/Connection.h"
+#include "proto/NetworkMessage.pb.h"
 
 class RoomManager {
 public:
@@ -19,6 +20,7 @@ public:
     // 房间管理
     std::shared_ptr<Room> getRoom(const std::string& roomId);
     void removeRoom(const std::string& roomId);
+    void broadcastwaitRoom(const NetworkMessage& msg);
     
     // 玩家房间查询
     std::shared_ptr<Room> getPlayerRoom(const std::string& playerId);

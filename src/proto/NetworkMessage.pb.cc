@@ -407,6 +407,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_src_2fproto_2fNetworkMessage_2
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::WaitingPlayerMessage, waiting_player_count_),
+  PROTOBUF_FIELD_OFFSET(::WaitingPlayerMessage, room_capacity_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::PlayerBasicInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -540,21 +541,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 0, -1, sizeof(::HeartbeatMessage)},
   { 5, -1, sizeof(::ConnectRequestMessage)},
   { 10, -1, sizeof(::WaitingPlayerMessage)},
-  { 16, -1, sizeof(::PlayerBasicInfo)},
-  { 24, -1, sizeof(::GameStartMessage)},
-  { 32, -1, sizeof(::DataLoadedMessage)},
-  { 37, -1, sizeof(::BattlePrepStartMessage)},
-  { 43, -1, sizeof(::BattlePrepTimerMessage)},
-  { 51, -1, sizeof(::BattlePrepSnapshotMessage)},
-  { 60, -1, sizeof(::PlayerSnapshot)},
-  { 70, -1, sizeof(::AllSnapshotsMessage)},
-  { 80, -1, sizeof(::BattleResultReportMessage)},
-  { 88, -1, sizeof(::RankingEntry)},
-  { 96, -1, sizeof(::SettlementMessage)},
-  { 103, -1, sizeof(::ExitPlayerInfo)},
-  { 111, -1, sizeof(::ExitMessage)},
-  { 117, -1, sizeof(::ExitBroadcastMessage)},
-  { 123, -1, sizeof(::NetworkMessage)},
+  { 17, -1, sizeof(::PlayerBasicInfo)},
+  { 25, -1, sizeof(::GameStartMessage)},
+  { 33, -1, sizeof(::DataLoadedMessage)},
+  { 38, -1, sizeof(::BattlePrepStartMessage)},
+  { 44, -1, sizeof(::BattlePrepTimerMessage)},
+  { 52, -1, sizeof(::BattlePrepSnapshotMessage)},
+  { 61, -1, sizeof(::PlayerSnapshot)},
+  { 71, -1, sizeof(::AllSnapshotsMessage)},
+  { 81, -1, sizeof(::BattleResultReportMessage)},
+  { 89, -1, sizeof(::RankingEntry)},
+  { 97, -1, sizeof(::SettlementMessage)},
+  { 104, -1, sizeof(::ExitPlayerInfo)},
+  { 112, -1, sizeof(::ExitMessage)},
+  { 118, -1, sizeof(::ExitBroadcastMessage)},
+  { 124, -1, sizeof(::NetworkMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -580,61 +581,62 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\036src/proto/NetworkMessage.proto\"\022\n\020Hear"
-  "tbeatMessage\"\027\n\025ConnectRequestMessage\"4\n"
+  "tbeatMessage\"\027\n\025ConnectRequestMessage\"K\n"
   "\024WaitingPlayerMessage\022\034\n\024waiting_player_"
-  "count\030\001 \001(\005\"J\n\017PlayerBasicInfo\022\021\n\tplayer"
-  "_id\030\001 \001(\t\022\023\n\013player_name\030\002 \001(\t\022\017\n\007icon_i"
-  "d\030\003 \001(\005\"b\n\020GameStartMessage\022\020\n\010match_id\030"
-  "\001 \001(\t\022\024\n\014total_rounds\030\002 \001(\005\022&\n\014players_i"
-  "nfo\030\003 \003(\0132\020.PlayerBasicInfo\"\023\n\021DataLoade"
-  "dMessage\"6\n\026BattlePrepStartMessage\022\034\n\024pr"
-  "epare_time_seconds\030\001 \001(\005\"Y\n\026BattlePrepTi"
-  "merMessage\022\020\n\010match_id\030\001 \001(\t\022\r\n\005round\030\002 "
-  "\001(\005\022\036\n\026remaining_time_seconds\030\003 \001(\005\"i\n\031B"
-  "attlePrepSnapshotMessage\022\020\n\010match_id\030\001 \001"
-  "(\t\022\r\n\005round\030\002 \001(\005\022\026\n\016formation_data\030\003 \001("
-  "\t\022\023\n\013honor_value\030\004 \001(\005\"q\n\016PlayerSnapshot"
-  "\022\021\n\tplayer_id\030\001 \001(\t\022\020\n\010match_id\030\002 \001(\t\022\r\n"
-  "\005round\030\003 \001(\005\022\026\n\016formation_data\030\004 \001(\t\022\023\n\013"
-  "honor_value\030\005 \001(\005\"\201\001\n\023AllSnapshotsMessag"
-  "e\022\020\n\010match_id\030\001 \001(\t\022\r\n\005round\030\002 \001(\005\022\027\n\017fi"
-  "rst_player_id\030\003 \001(\t\022\"\n\tsnapshots\030\004 \003(\0132\017"
-  ".PlayerSnapshot\022\014\n\004seed\030\005 \001(\005\"Q\n\031BattleR"
-  "esultReportMessage\022\020\n\010match_id\030\001 \001(\t\022\r\n\005"
-  "round\030\002 \001(\005\022\023\n\013honor_value\030\003 \001(\005\"D\n\014Rank"
-  "ingEntry\022\021\n\tplayer_id\030\001 \001(\t\022\023\n\013honor_val"
-  "ue\030\002 \001(\005\022\014\n\004rank\030\003 \001(\005\"F\n\021SettlementMess"
-  "age\022\020\n\010match_id\030\001 \001(\t\022\037\n\010rankings\030\002 \003(\0132"
-  "\r.RankingEntry\"V\n\016ExitPlayerInfo\022\026\n\016exit"
-  "_player_id\030\001 \001(\t\022\022\n\nexit_round\030\002 \001(\005\022\030\n\020"
-  "exit_honor_value\030\003 \001(\005\"1\n\013ExitMessage\022\"\n"
-  "\texit_info\030\001 \001(\0132\017.ExitPlayerInfo\"B\n\024Exi"
-  "tBroadcastMessage\022*\n\021exit_players_info\030\001"
-  " \003(\0132\017.ExitPlayerInfo\"\265\005\n\016NetworkMessage"
-  "\022\034\n\006msg_id\030\001 \001(\0162\014.MessageType\022\021\n\tplayer"
-  "_id\030\002 \001(\t\022&\n\theartbeat\030\005 \001(\0132\021.Heartbeat"
-  "MessageH\000\0221\n\017connect_request\030\006 \001(\0132\026.Con"
-  "nectRequestMessageH\000\022/\n\016waiting_player\030\007"
-  " \001(\0132\025.WaitingPlayerMessageH\000\022\'\n\ngame_st"
-  "art\030\010 \001(\0132\021.GameStartMessageH\000\022)\n\013data_l"
-  "oaded\030\t \001(\0132\022.DataLoadedMessageH\000\0224\n\021bat"
-  "tle_prep_start\030\n \001(\0132\027.BattlePrepStartMe"
-  "ssageH\000\0224\n\021battle_prep_timer\030\013 \001(\0132\027.Bat"
-  "tlePrepTimerMessageH\000\022:\n\024battle_prep_sna"
-  "pshot\030\014 \001(\0132\032.BattlePrepSnapshotMessageH"
-  "\000\022-\n\rall_snapshots\030\r \001(\0132\024.AllSnapshotsM"
-  "essageH\000\022:\n\024battle_result_report\030\016 \001(\0132\032"
-  ".BattleResultReportMessageH\000\022(\n\nsettleme"
-  "nt\030\017 \001(\0132\022.SettlementMessageH\000\022\034\n\004exit\030\020"
-  " \001(\0132\014.ExitMessageH\000\022/\n\016exit_broadcast\030\021"
-  " \001(\0132\025.ExitBroadcastMessageH\000B\006\n\004data*\205\002"
-  "\n\013MessageType\022\r\n\tHEARTBEAT\020\000\022\013\n\007CONNECT\020"
-  "\001\022\017\n\013START_MATCH\020\002\022\016\n\nGAME_START\020\003\022\022\n\016WA"
-  "ITING_PLAYER\020\004\022\017\n\013DATA_LOADED\020\005\022\021\n\rPREPA"
-  "RE_START\020\006\022\025\n\021BATTLE_PREP_TIMER\020\007\022\030\n\024BAT"
-  "TLE_PREP_SNAPSHOT\020\010\022\021\n\rALL_SNAPSHOTS\020\t\022\021"
-  "\n\rBATTLE_RESULT\020\n\022\016\n\nSETTLEMENT\020\013\022\010\n\004EXI"
-  "T\020\014\022\020\n\014DISCONNECTED\020\rb\006proto3"
+  "count\030\001 \001(\005\022\025\n\rroom_capacity\030\002 \001(\005\"J\n\017Pl"
+  "ayerBasicInfo\022\021\n\tplayer_id\030\001 \001(\t\022\023\n\013play"
+  "er_name\030\002 \001(\t\022\017\n\007icon_id\030\003 \001(\005\"b\n\020GameSt"
+  "artMessage\022\020\n\010match_id\030\001 \001(\t\022\024\n\014total_ro"
+  "unds\030\002 \001(\005\022&\n\014players_info\030\003 \003(\0132\020.Playe"
+  "rBasicInfo\"\023\n\021DataLoadedMessage\"6\n\026Battl"
+  "ePrepStartMessage\022\034\n\024prepare_time_second"
+  "s\030\001 \001(\005\"Y\n\026BattlePrepTimerMessage\022\020\n\010mat"
+  "ch_id\030\001 \001(\t\022\r\n\005round\030\002 \001(\005\022\036\n\026remaining_"
+  "time_seconds\030\003 \001(\005\"i\n\031BattlePrepSnapshot"
+  "Message\022\020\n\010match_id\030\001 \001(\t\022\r\n\005round\030\002 \001(\005"
+  "\022\026\n\016formation_data\030\003 \001(\t\022\023\n\013honor_value\030"
+  "\004 \001(\005\"q\n\016PlayerSnapshot\022\021\n\tplayer_id\030\001 \001"
+  "(\t\022\020\n\010match_id\030\002 \001(\t\022\r\n\005round\030\003 \001(\005\022\026\n\016f"
+  "ormation_data\030\004 \001(\t\022\023\n\013honor_value\030\005 \001(\005"
+  "\"\201\001\n\023AllSnapshotsMessage\022\020\n\010match_id\030\001 \001"
+  "(\t\022\r\n\005round\030\002 \001(\005\022\027\n\017first_player_id\030\003 \001"
+  "(\t\022\"\n\tsnapshots\030\004 \003(\0132\017.PlayerSnapshot\022\014"
+  "\n\004seed\030\005 \001(\005\"Q\n\031BattleResultReportMessag"
+  "e\022\020\n\010match_id\030\001 \001(\t\022\r\n\005round\030\002 \001(\005\022\023\n\013ho"
+  "nor_value\030\003 \001(\005\"D\n\014RankingEntry\022\021\n\tplaye"
+  "r_id\030\001 \001(\t\022\023\n\013honor_value\030\002 \001(\005\022\014\n\004rank\030"
+  "\003 \001(\005\"F\n\021SettlementMessage\022\020\n\010match_id\030\001"
+  " \001(\t\022\037\n\010rankings\030\002 \003(\0132\r.RankingEntry\"V\n"
+  "\016ExitPlayerInfo\022\026\n\016exit_player_id\030\001 \001(\t\022"
+  "\022\n\nexit_round\030\002 \001(\005\022\030\n\020exit_honor_value\030"
+  "\003 \001(\005\"1\n\013ExitMessage\022\"\n\texit_info\030\001 \001(\0132"
+  "\017.ExitPlayerInfo\"B\n\024ExitBroadcastMessage"
+  "\022*\n\021exit_players_info\030\001 \003(\0132\017.ExitPlayer"
+  "Info\"\265\005\n\016NetworkMessage\022\034\n\006msg_id\030\001 \001(\0162"
+  "\014.MessageType\022\021\n\tplayer_id\030\002 \001(\t\022&\n\thear"
+  "tbeat\030\005 \001(\0132\021.HeartbeatMessageH\000\0221\n\017conn"
+  "ect_request\030\006 \001(\0132\026.ConnectRequestMessag"
+  "eH\000\022/\n\016waiting_player\030\007 \001(\0132\025.WaitingPla"
+  "yerMessageH\000\022\'\n\ngame_start\030\010 \001(\0132\021.GameS"
+  "tartMessageH\000\022)\n\013data_loaded\030\t \001(\0132\022.Dat"
+  "aLoadedMessageH\000\0224\n\021battle_prep_start\030\n "
+  "\001(\0132\027.BattlePrepStartMessageH\000\0224\n\021battle"
+  "_prep_timer\030\013 \001(\0132\027.BattlePrepTimerMessa"
+  "geH\000\022:\n\024battle_prep_snapshot\030\014 \001(\0132\032.Bat"
+  "tlePrepSnapshotMessageH\000\022-\n\rall_snapshot"
+  "s\030\r \001(\0132\024.AllSnapshotsMessageH\000\022:\n\024battl"
+  "e_result_report\030\016 \001(\0132\032.BattleResultRepo"
+  "rtMessageH\000\022(\n\nsettlement\030\017 \001(\0132\022.Settle"
+  "mentMessageH\000\022\034\n\004exit\030\020 \001(\0132\014.ExitMessag"
+  "eH\000\022/\n\016exit_broadcast\030\021 \001(\0132\025.ExitBroadc"
+  "astMessageH\000B\006\n\004data*\205\002\n\013MessageType\022\r\n\t"
+  "HEARTBEAT\020\000\022\013\n\007CONNECT\020\001\022\017\n\013START_MATCH\020"
+  "\002\022\016\n\nGAME_START\020\003\022\022\n\016WAITING_PLAYER\020\004\022\017\n"
+  "\013DATA_LOADED\020\005\022\021\n\rPREPARE_START\020\006\022\025\n\021BAT"
+  "TLE_PREP_TIMER\020\007\022\030\n\024BATTLE_PREP_SNAPSHOT"
+  "\020\010\022\021\n\rALL_SNAPSHOTS\020\t\022\021\n\rBATTLE_RESULT\020\n"
+  "\022\016\n\nSETTLEMENT\020\013\022\010\n\004EXIT\020\014\022\020\n\014DISCONNECT"
+  "ED\020\rb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_src_2fproto_2fNetworkMessage_2eproto_deps[1] = {
 };
@@ -660,7 +662,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_src
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_src_2fproto_2fNetworkMessage_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_src_2fproto_2fNetworkMessage_2eproto = {
-  false, false, descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto, "src/proto/NetworkMessage.proto", 2229,
+  false, false, descriptor_table_protodef_src_2fproto_2fNetworkMessage_2eproto, "src/proto/NetworkMessage.proto", 2252,
   &descriptor_table_src_2fproto_2fNetworkMessage_2eproto_once, descriptor_table_src_2fproto_2fNetworkMessage_2eproto_sccs, descriptor_table_src_2fproto_2fNetworkMessage_2eproto_deps, 18, 0,
   schemas, file_default_instances, TableStruct_src_2fproto_2fNetworkMessage_2eproto::offsets,
   file_level_metadata_src_2fproto_2fNetworkMessage_2eproto, 18, file_level_enum_descriptors_src_2fproto_2fNetworkMessage_2eproto, file_level_service_descriptors_src_2fproto_2fNetworkMessage_2eproto,
@@ -1042,12 +1044,16 @@ WaitingPlayerMessage::WaitingPlayerMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena
 WaitingPlayerMessage::WaitingPlayerMessage(const WaitingPlayerMessage& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  waiting_player_count_ = from.waiting_player_count_;
+  ::memcpy(&waiting_player_count_, &from.waiting_player_count_,
+    static_cast<size_t>(reinterpret_cast<char*>(&room_capacity_) -
+    reinterpret_cast<char*>(&waiting_player_count_)) + sizeof(room_capacity_));
   // @@protoc_insertion_point(copy_constructor:WaitingPlayerMessage)
 }
 
 void WaitingPlayerMessage::SharedCtor() {
-  waiting_player_count_ = 0;
+  ::memset(&waiting_player_count_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&room_capacity_) -
+      reinterpret_cast<char*>(&waiting_player_count_)) + sizeof(room_capacity_));
 }
 
 WaitingPlayerMessage::~WaitingPlayerMessage() {
@@ -1081,7 +1087,9 @@ void WaitingPlayerMessage::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  waiting_player_count_ = 0;
+  ::memset(&waiting_player_count_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&room_capacity_) -
+      reinterpret_cast<char*>(&waiting_player_count_)) + sizeof(room_capacity_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1097,6 +1105,13 @@ const char* WaitingPlayerMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAM
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           waiting_player_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 room_capacity = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          room_capacity_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1134,6 +1149,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_waiting_player_count(), target);
   }
 
+  // int32 room_capacity = 2;
+  if (this->room_capacity() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_room_capacity(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1155,6 +1176,13 @@ size_t WaitingPlayerMessage::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_waiting_player_count());
+  }
+
+  // int32 room_capacity = 2;
+  if (this->room_capacity() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_room_capacity());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1191,6 +1219,9 @@ void WaitingPlayerMessage::MergeFrom(const WaitingPlayerMessage& from) {
   if (from.waiting_player_count() != 0) {
     _internal_set_waiting_player_count(from._internal_waiting_player_count());
   }
+  if (from.room_capacity() != 0) {
+    _internal_set_room_capacity(from._internal_room_capacity());
+  }
 }
 
 void WaitingPlayerMessage::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -1214,7 +1245,12 @@ bool WaitingPlayerMessage::IsInitialized() const {
 void WaitingPlayerMessage::InternalSwap(WaitingPlayerMessage* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  swap(waiting_player_count_, other->waiting_player_count_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(WaitingPlayerMessage, room_capacity_)
+      + sizeof(WaitingPlayerMessage::room_capacity_)
+      - PROTOBUF_FIELD_OFFSET(WaitingPlayerMessage, waiting_player_count_)>(
+          reinterpret_cast<char*>(&waiting_player_count_),
+          reinterpret_cast<char*>(&other->waiting_player_count_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata WaitingPlayerMessage::GetMetadata() const {

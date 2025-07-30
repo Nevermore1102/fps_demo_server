@@ -30,6 +30,7 @@ message ConnectRequestMessage {
 // 等待队列消息（服务器→所有在等待队列的客户端）
 message WaitingPlayerMessage {
     int32 waiting_player_count = 1;
+    int32 room_capacity = 2;
 }
 
 // 自定义数据类型：玩家基础信息

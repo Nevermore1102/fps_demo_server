@@ -531,6 +531,7 @@ class WaitingPlayerMessage PROTOBUF_FINAL :
 
   enum : int {
     kWaitingPlayerCountFieldNumber = 1,
+    kRoomCapacityFieldNumber = 2,
   };
   // int32 waiting_player_count = 1;
   void clear_waiting_player_count();
@@ -541,6 +542,15 @@ class WaitingPlayerMessage PROTOBUF_FINAL :
   void _internal_set_waiting_player_count(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 room_capacity = 2;
+  void clear_room_capacity();
+  ::PROTOBUF_NAMESPACE_ID::int32 room_capacity() const;
+  void set_room_capacity(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_room_capacity() const;
+  void _internal_set_room_capacity(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:WaitingPlayerMessage)
  private:
   class _Internal;
@@ -549,6 +559,7 @@ class WaitingPlayerMessage PROTOBUF_FINAL :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::int32 waiting_player_count_;
+  ::PROTOBUF_NAMESPACE_ID::int32 room_capacity_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
 };
@@ -3507,6 +3518,26 @@ inline void WaitingPlayerMessage::_internal_set_waiting_player_count(::PROTOBUF_
 inline void WaitingPlayerMessage::set_waiting_player_count(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_waiting_player_count(value);
   // @@protoc_insertion_point(field_set:WaitingPlayerMessage.waiting_player_count)
+}
+
+// int32 room_capacity = 2;
+inline void WaitingPlayerMessage::clear_room_capacity() {
+  room_capacity_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 WaitingPlayerMessage::_internal_room_capacity() const {
+  return room_capacity_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 WaitingPlayerMessage::room_capacity() const {
+  // @@protoc_insertion_point(field_get:WaitingPlayerMessage.room_capacity)
+  return _internal_room_capacity();
+}
+inline void WaitingPlayerMessage::_internal_set_room_capacity(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  room_capacity_ = value;
+}
+inline void WaitingPlayerMessage::set_room_capacity(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_room_capacity(value);
+  // @@protoc_insertion_point(field_set:WaitingPlayerMessage.room_capacity)
 }
 
 // -------------------------------------------------------------------

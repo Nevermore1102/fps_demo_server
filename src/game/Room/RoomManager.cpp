@@ -1,4 +1,6 @@
 #include "RoomManager.h"
+#include "proto/Message.h"
+#include "proto/NetworkMessage.pb.h"
 #include <spdlog/spdlog.h>
 #include <algorithm>
 
@@ -6,6 +8,24 @@
 RoomManager& RoomManager::getInstance() {
     static RoomManager instance;
     return instance;
+}
+
+void RoomManager::broadcastwaitRoom(const NetworkMessage& msg) {
+    Message body;
+    body.setBodyFromProto(msg);
+
+    for (auto playerx : wait_rooms_) {
+        auto conn = playerx->GetConnection();
+        if (conn) {
+            bool success = conn->sendMessage(body);
+            if (!success)
+                spdlog::error("Failed to send message to player: {}", playerx->GetPlayerId());
+            else{
+                spdlog::info("Message sent to player: {}", playerx->GetPlayerId());
+                // body.logMessage();  // 打印消息详情
+            }
+        }
+    }
 }
 
 // 玩家加入等待队列
@@ -25,6 +45,15 @@ void RoomManager::joinWaitRoom(const std::shared_ptr<Player>& player) {
     
     // 添加到等待队列
     wait_rooms_.push_back(player);
+
+    NetworkMessage msg;
+    msg.set_msg_id(MessageType::WAITING_PLAYER);
+
+    WaitingPlayerMessage* msg_waiting = msg.mutable_waiting_player();
+    msg_waiting->set_waiting_player_count(wait_rooms_.size());
+    msg_waiting->set_room_capacity(MAX_PLAYERS_PER_ROOM);
+
+    broadcastwaitRoom(msg);
     
     // 触发匹配处理
     processMatching();
@@ -188,6 +217,13 @@ bool RoomManager::removePlayerFromWaitQueue(const std::string& playerId) {
         }
         
         wait_rooms_.erase(it);
+        
+        NetworkMessage msg;
+        msg.set_msg_id(MessageType::WAITING_PLAYER);
+    
+        WaitingPlayerMessage* msg_waiting = msg.mutable_waiting_player();
+        msg_waiting->set_waiting_player_count(wait_rooms_.size());
+        msg_waiting->set_room_capacity(MAX_PLAYERS_PER_ROOM);
         spdlog::info("Player {} removed from wait queue", playerId);
         return true;
     }
