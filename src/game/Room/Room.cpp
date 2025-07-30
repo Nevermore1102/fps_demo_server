@@ -302,7 +302,7 @@ void Room::BroadcastResults() {
     auto rankings = getRankings();
 
     NetworkMessage msg;
-    msg.set_msg_id(MessageType::BATTLE_RESULT);
+    msg.set_msg_id(MessageType::SETTLEMENT);
     SettlementMessage* settlement_msg = msg.mutable_settlement();
     settlement_msg->set_match_id(std::to_string(room_id_));
     

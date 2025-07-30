@@ -19,6 +19,10 @@ public:
             latest_snapshot_->set_player_id(player_id);
             latest_snapshot_->set_honor_value(0);  // 初始荣耀值为0
             latest_snapshot_->set_round(0);  // 初始轮数为0
+            state_ = PlayerState::CONNECTED;
+            player_name_ = "Unknown";  // 默认玩家名
+            icon_id_ = 0;  // 默认图标ID
+            room_id_ = "";  // 初始房间ID为空
          }
 
     ~Player() = default;

@@ -494,8 +494,21 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
         return;
     }
     
+    // 使用 use_count 检查 shared_ptr 是否有效
+    if (player.use_count() == 0) {
+        spdlog::error("Player object has been destroyed");
+        return;
+    }
+
     std::string playerId = player->GetPlayerId();
-    PlayerState currentState = player->getState();
+    // PlayerState currentState = player->getState();
+    PlayerState currentState;
+    try {
+        currentState = player->getState();
+    } catch (const std::exception& e) {
+        spdlog::error("Failed to get player state: {}", e.what());
+        return;
+    }
     
     spdlog::info("Player {} (state: {}) disconnected", playerId, static_cast<int>(currentState));
     
