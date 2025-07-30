@@ -6,15 +6,16 @@ enum MessageType {
     CONNECT = 1;                // 连接
     START_MATCH = 2;            // 匹配请求
     GAME_START = 3;             // 对局开始
-    DATA_LOADED = 4;            // 数据加载完成 20250728updated
-    PREPARE_START = 5;          // 备战开始 20250728updated
-    BATTLE_PREP_TIMER = 6;      // 备战倒计时
-    BATTLE_PREP_SNAPSHOT = 7;   // 备战快照
-    ALL_SNAPSHOTS = 8;          // 所有玩家快照
-    BATTLE_RESULT = 9;          // 战斗结果上报
-    SETTLEMENT = 10;            // 结算信息
-    EXIT = 11;                  // 玩家退出房间 20250728updated
-    DISCONNECTED = 12;          // 玩家断线 20250728updated
+    WAITING_PLAYER = 4;         // 等待的玩家数量 20250730updated
+    DATA_LOADED = 5;            // 数据加载完成 20250728updated
+    PREPARE_START = 6;          // 备战开始 20250728updated
+    BATTLE_PREP_TIMER = 7;      // 备战倒计时
+    BATTLE_PREP_SNAPSHOT = 8;   // 备战快照
+    ALL_SNAPSHOTS = 9;          // 所有玩家快照
+    BATTLE_RESULT = 10;          // 战斗结果上报
+    SETTLEMENT = 11;            // 结算信息
+    EXIT = 12;                  // 玩家退出房间 20250728updated
+    DISCONNECTED = 13;          // 玩家断线 20250728updated
 }
 
 // 心跳消息
@@ -23,6 +24,12 @@ message HeartbeatMessage {
 
 // 建立连接消息（客户端→服务器）
 message ConnectRequestMessage {
+}
+
+// 20250730updated
+// 等待队列消息（服务器→所有在等待队列的客户端）
+message WaitingPlayerMessage {
+    int32 waiting_player_count = 1;
 }
 
 // 自定义数据类型：玩家基础信息
@@ -129,15 +136,16 @@ message NetworkMessage {
     oneof data{
         HeartbeatMessage heartbeat = 5;
         ConnectRequestMessage connect_request = 6;
-        GameStartMessage game_start = 7;
-        DataLoadedMessage data_loaded = 8;
-        BattlePrepStartMessage battle_prep_start = 9;
-        BattlePrepTimerMessage battle_prep_timer = 10;
-        BattlePrepSnapshotMessage battle_prep_snapshot = 11;
-        AllSnapshotsMessage all_snapshots = 12;
-        BattleResultReportMessage battle_result_report = 13;
-        SettlementMessage settlement = 14;
-        ExitMessage exit = 15;
-        ExitBroadcastMessage exit_broadcast = 16;
+        WaitingPlayerMessage waiting_player = 7;
+        GameStartMessage game_start = 8;
+        DataLoadedMessage data_loaded = 9;
+        BattlePrepStartMessage battle_prep_start = 10;
+        BattlePrepTimerMessage battle_prep_timer = 11;
+        BattlePrepSnapshotMessage battle_prep_snapshot = 12;
+        AllSnapshotsMessage all_snapshots = 13;
+        BattleResultReportMessage battle_result_report = 14;
+        SettlementMessage settlement = 15;
+        ExitMessage exit = 16;
+        ExitBroadcastMessage exit_broadcast = 17;
     }
 }
