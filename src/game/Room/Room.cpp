@@ -167,8 +167,13 @@ void Room::broadcastPlayerInfo() {
                 info->set_player_id(player->GetPlayerId());
                 info->set_player_name(player->GetPlayerName());
                 info->set_icon_id(player->GetIconId());
+                spdlog::info("ttttt Broadcasting player info: {} in room {}", 
+                        player->GetPlayerId(), room_id_);
+            }else {
+                spdlog::warn("Player info is null in room {}", room_id_);
             }
         }
+        
         broadcastMessage(msg);
         spdlog::info("Broadcasted player info for room {}", room_id_);
     } else {
