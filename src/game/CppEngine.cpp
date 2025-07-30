@@ -348,6 +348,11 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
 
     auto player = roomManager.getPlayerByConnection(conn);
 
+    if (!player) {
+        spdlog::error("游戏已结束，房间已销毁");
+        return ;
+    }
+    
     // 玩家主动退出匹配
     if (player->getState() == PlayerState::CONNECTED) {
         spdlog::info("Player {} is exiting match queue", exit_player_id);
