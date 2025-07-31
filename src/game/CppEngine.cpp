@@ -233,13 +233,15 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
 
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
-    auto room = roomManager.getPlayerRoom(playerId);
+    // auto room = roomManager.getPlayerRoom(playerId);
+    auto player = roomManager.getPlayerByConnection(conn);
+    auto room = roomManager.getPlayerRoom(player);
     std::string matchId = std::to_string(room->getId());
     spdlog::info("Processing snapshot - Player: {}, match id: {}, Round: {}, Honor: {}", 
                 playerId, matchId, round, honorValue);
 
     // 验证玩家是否在房间中
-    auto player = room->getPlayer(playerId);
+    // auto player = room->getPlayer(playerId);
     if (!player) {
         spdlog::error("Player {} not found in room {}", playerId, matchId);
         return;
@@ -287,7 +289,9 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
-    auto room = roomManager.getPlayerRoom(playerId);
+    // auto room = roomManager.getPlayerRoom(playerId);
+    auto player = roomManager.getPlayerByConnection(conn);
+    auto room = roomManager.getPlayerRoom(player);
     std::string matchId = std::to_string(room->getId());
     spdlog::info("Processing battle result - Player: {}, Match: {}, Round: {}, Honor: {}", 
                 playerId, matchId, round, honorValue);
@@ -298,7 +302,7 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     }
     
     // 验证玩家是否在房间中
-    auto player = room->getPlayer(playerId);
+    // auto player = room->getPlayer(playerId);
     if (!player) {
         spdlog::error("Player {} not found in room {}", playerId, matchId);
         return;
@@ -376,7 +380,8 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
     else if (player->getState() == PlayerState::GAMING) {
         int32_t exit_round = exit_msg.exit_info().exit_round();
         int32_t exit_honor_value = exit_msg.exit_info().exit_honor_value();
-        auto room = roomManager.getPlayerRoom(exit_player_id);
+        // auto room = roomManager.getPlayerRoom(exit_player_id);
+        auto room = roomManager.getPlayerRoom(player);
         if (!room) {
             spdlog::error("Room not found for player {}", exit_player_id);
             return;
