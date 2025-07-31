@@ -104,6 +104,12 @@ public:
     // 房间清理
     void cleanupRoom();
 
+    // 定时器管理
+    void setCountdownRunning(bool running) { countdown_running_ = running; }
+    bool getCountdownRunning() const { return countdown_running_; }
+    bool isCountdownThreadRunning() const { return countdown_thread_.joinable(); }
+    void stopCountdownTimer();
+
 private:
     // 基础信息
     int32_t room_id_;
@@ -127,7 +133,6 @@ private:
 
     // 内部方法
     void startCountdownTimer(int32_t seconds);  // 启动倒计时，参数为总秒数
-    void stopCountdownTimer();                  // 停止倒计时
     int32_t getRemainingTime() const;           // 获取当前剩余时间（秒）
     void broadcastMessage(const NetworkMessage& msg);
     void broadcastToOthers(const std::string& excludePlayerId, const NetworkMessage& msg);

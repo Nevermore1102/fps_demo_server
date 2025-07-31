@@ -388,6 +388,9 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
             spdlog::error("Room not found for player {}", exit_player_id);
             return;
         }
+
+        // 关闭定时器
+        room->stopCountdownTimer();
         
         // 房间处理玩家退出并广播消息
         roomManager.removePlayerConnection(conn);

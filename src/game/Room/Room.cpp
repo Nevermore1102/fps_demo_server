@@ -140,7 +140,7 @@ void Room::stopCountdownTimer() {
         spdlog::debug("Countdown thread joined successfully for room {}", room_id_);
     }
     
-    countdown_remaining_seconds_ = 0;
+    countdown_remaining_seconds_ = PREPARE_TIME_SECONDS[0];
     spdlog::debug("Countdown timer stopped for room {}", room_id_);
 }
 
