@@ -8,10 +8,20 @@
 #include <unordered_map>
 
 #define MAX_PLAYERS 2           // 房间最大玩家数
-#define PREPARE_TIME 15         // 准备时间（秒）
 #define BROADCAST_INTERVAL 1    // 广播间隔（秒）
 #define ROUND_NUM 7             // 游戏总轮次
-
+// 备战时间（秒）常数组
+const int PREPARE_TIME_SECONDS[] = {
+    -1,  // 第0回合
+    30,  // 第一回合
+    25,  // 第二回合
+    30,  // 第三回合
+    30,  // 第四回合
+    35,  // 第五回合
+    35,  // 第六回合
+    40,  // 第七回合
+};
+ 
 enum class RoomState {
     WAITING,    // 等待玩家
     FULL,       // 房间玩家已满，准备开始

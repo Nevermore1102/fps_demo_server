@@ -247,14 +247,14 @@ void Room::broadcastPrepareStart(){
     msg.set_msg_id(MessageType::PREPARE_START);
 
     BattlePrepStartMessage* prep_msg = msg.mutable_battle_prep_start();
-    prep_msg->set_prepare_time_seconds(PREPARE_TIME);
+    prep_msg->set_prepare_time_seconds(PREPARE_TIME_SECONDS[getCurrentRound()]);
     
     broadcastMessage(msg);
 }
 
 // 开启备战倒计时
 void Room::startBattlePrepTimer() {
-    startCountdownTimer(PREPARE_TIME);
+    startCountdownTimer(PREPARE_TIME_SECONDS[getCurrentRound()]);
 }
 
 // 定时器回调：每x秒调用一次，处理倒计时逻辑
