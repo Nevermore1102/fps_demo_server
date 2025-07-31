@@ -23,7 +23,8 @@ public:
     void broadcastwaitRoom(const NetworkMessage& msg);
     
     // 玩家房间查询
-    std::shared_ptr<Room> getPlayerRoom(const std::string& playerId);
+    // std::shared_ptr<Room> getPlayerRoom(const std::string& playerId);
+    std::shared_ptr<Room> getPlayerRoom(const std::shared_ptr<Player>& player);
     
     // 玩家管理辅助方法
     bool removePlayerFromWaitQueue(const std::string& playerId);

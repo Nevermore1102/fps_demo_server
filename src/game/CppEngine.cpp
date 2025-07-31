@@ -146,7 +146,8 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
     spdlog::info("Player {} added to match queue", playerId);
     
     // 检查是否有房间可以开始游戏
-    auto playerRoom = roomManager.getPlayerRoom(playerId);
+    // auto playerRoom = roomManager.getPlayerRoom(playerId);
+    auto playerRoom = roomManager.getPlayerRoom(player);
     if (playerRoom && playerRoom->isFull()) {
         spdlog::info("Room {} is full, attempting to start game", playerRoom->getId());
         
@@ -185,7 +186,11 @@ void CppEngine::onDataLoaded(const std::shared_ptr<Connection>& conn, const Mess
     spdlog::info("Player {} data loaded", playerId);
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
-    auto room = roomManager.getPlayerRoom(playerId);
+    // auto room = roomManager.getPlayerRoom(playerId);
+
+    auto player = roomManager.getPlayerByConnection(conn);
+    auto room = roomManager.getPlayerRoom(player);
+
     if (!room) {
         spdlog::error("Room not found for player {}", playerId);
         return;

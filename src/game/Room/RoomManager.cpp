@@ -1,4 +1,5 @@
 #include "RoomManager.h"
+#include "game/Player/Player.h"
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
 #include <spdlog/spdlog.h>
@@ -109,14 +110,29 @@ void RoomManager::removeRoom(const std::string& roomId) {
 }
 
 // 获取玩家所在房间
-std::shared_ptr<Room> RoomManager::getPlayerRoom(const std::string& playerId) {
+// std::shared_ptr<Room> RoomManager::getPlayerRoom(const std::string& playerId) {
+//     std::lock_guard<std::mutex> lock(roomsMutex_);
+    
+//     // 遍历所有房间查找玩家
+//     for (const auto& roomPair : rooms_) {
+//         const auto& room = roomPair.second;
+//         auto player = room->getPlayer(playerId);
+//         if (player) {
+//             return room;
+//         }
+//     }
+    
+//     return nullptr;
+// }
+
+// 获取玩家所在房间
+std::shared_ptr<Room> RoomManager::getPlayerRoom(const std::shared_ptr<Player>& player) {
     std::lock_guard<std::mutex> lock(roomsMutex_);
     
     // 遍历所有房间查找玩家
     for (const auto& roomPair : rooms_) {
         const auto& room = roomPair.second;
-        auto player = room->getPlayer(playerId);
-        if (player) {
+        if (room->isPlayerInRoom(player)) {
             return room;
         }
     }
@@ -563,7 +579,8 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
         
         case PlayerState::GAMING: {
             // 玩家在游戏中，需要通知房间内其他玩家
-            auto room = getPlayerRoom(playerId);
+            // auto room = getPlayerRoom(playerId);
+            auto room = getPlayerRoom(player);
             if (room) {
                 spdlog::info("Notifying room {} about player {} disconnect", room->getId(), playerId);
                 

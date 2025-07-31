@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <memory>
 #include <string>
 #include "game/Player/Player.h"
 #include "proto/NetworkMessage.pb.h"
@@ -49,6 +50,14 @@ public:
     void setDataLoadStatus(const std::string& playerId, bool loaded);
     bool isPlayerDataLoaded(const std::string& playerId) const;
     bool isAllPlayerDataLoaded() const;
+    bool isPlayerInRoom(const std::shared_ptr<Player>& player) const{
+        for(const auto& p:players_){
+            if(p == player){
+                return true;
+            }
+        }
+        return false;
+    }
 
     // 房间内玩家数量
     size_t getAllPlayerCount() const;       // 所有玩家数量
