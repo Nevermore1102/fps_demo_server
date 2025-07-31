@@ -241,13 +241,19 @@ void Room::broadcastToOthers(const std::string& excludePlayerId, const NetworkMe
     }
 }
 
-// 广播开始准备的消息 {type：备战开始，备战时间}
+// 广播开始准备的消息 {type：备战开始，备战时间，先手玩家id}
 void Room::broadcastPrepareStart(){
     NetworkMessage msg;
     msg.set_msg_id(MessageType::PREPARE_START);
 
     BattlePrepStartMessage* prep_msg = msg.mutable_battle_prep_start();
     prep_msg->set_prepare_time_seconds(PREPARE_TIME_SECONDS[getCurrentRound()]);
+    
+    // 轮数奇数，先加入的玩家先手
+    if (getCurrentRound() % 2)
+        prep_msg->set_first_player_id(players_.front()->GetPlayerId());
+    else
+        prep_msg->set_first_player_id(players_.back()->GetPlayerId());
     
     broadcastMessage(msg);
 }
@@ -471,11 +477,6 @@ void Room::broadcastAllGamingSnapshots() {
     AllSnapshotsMessage* all_snapshots = msg.mutable_all_snapshots();
     all_snapshots->set_match_id(std::to_string(room_id_));
     all_snapshots->set_round(getCurrentRound());
-    // 轮数奇数，先加入的玩家先手
-    if (getCurrentRound() % 2)
-        all_snapshots->set_first_player_id(players_.front()->GetPlayerId());
-    else
-        all_snapshots->set_first_player_id(players_.back()->GetPlayerId());
     all_snapshots->set_seed(seed);
     
     // 添加所有玩家快照
