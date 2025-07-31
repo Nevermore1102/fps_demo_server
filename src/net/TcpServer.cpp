@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 
 TcpServer::TcpServer(const std::string& host, uint16_t port)
     : base_(nullptr)
@@ -95,6 +96,42 @@ void TcpServer::broadcast(const Message& msg) {
     for (const auto& conn : connections) {
         conn->sendMessage(msg);
     }
+}
+
+// 设置保活机制的函数
+int TcpServer::enable_keepalive(int socket_fd) {
+    int keepalive = 1;
+    int keepidle = 300;     // 5分钟后开始探测
+    int keepintvl = 60;     // 探测间隔60秒
+    int keepcnt = 3;        // 探测3次
+
+    // 启用保活
+    if (setsockopt(socket_fd, SOL_SOCKET, SO_KEEPALIVE, 
+                   &keepalive, sizeof(keepalive)) < 0) {
+        perror("setsockopt SO_KEEPALIVE");
+        return -1;
+    }
+
+    // 设置保活参数
+    if (setsockopt(socket_fd, IPPROTO_TCP, TCP_KEEPIDLE, 
+                   &keepidle, sizeof(keepidle)) < 0) {
+        perror("setsockopt TCP_KEEPIDLE");
+        return -1;
+    }
+
+    if (setsockopt(socket_fd, IPPROTO_TCP, TCP_KEEPINTVL, 
+                   &keepintvl, sizeof(keepintvl)) < 0) {
+        perror("setsockopt TCP_KEEPINTVL");
+        return -1;
+    }
+
+    if (setsockopt(socket_fd, IPPROTO_TCP, TCP_KEEPCNT, 
+                   &keepcnt, sizeof(keepcnt)) < 0) {
+        perror("setsockopt TCP_KEEPCNT");
+        return -1;
+    }
+
+    return 0;
 }
 
 void TcpServer::acceptCallback(struct evconnlistener* listener,

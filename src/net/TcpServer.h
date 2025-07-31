@@ -39,6 +39,9 @@ public:
     void setNewConnectionCallback(NewConnectionCallback cb) { new_conn_cb_ = cb; }
     void setCloseCallback(CloseConnectionCallback cb) { close_conn_cb_ = cb; }
 
+    // 设置保活机制的函数
+    int enable_keepalive(int socket_fd);
+
     // 广播消息给所有连接
     void broadcast(const Message& msg);
 
