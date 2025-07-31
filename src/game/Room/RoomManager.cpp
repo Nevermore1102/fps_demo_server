@@ -88,7 +88,7 @@ void RoomManager::removeRoom(const std::string& roomId) {
             
             // 清理房间内玩家的房间ID
             for (auto& player : room->getPlayers()) {
-                if (player) {
+                if (player && player->getState() != PlayerState::DISCONNECTED) {
                     player->SetRoomId("");
                     player->setState(PlayerState::DISCONNECTED);
                     auto conn = player->GetConnection();
@@ -595,6 +595,7 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
                 if (room->getGamingPlayerCount() == 0) {
                     spdlog::info("Room {} is empty after disconnect, marking as finished", room->getId());
                     room->setState(RoomState::FINISHED);
+                    removeRoom(std::to_string(room->getId()));
                 } else {
                     spdlog::info("Room {} continues with {} players", room->getId(), room->getGamingPlayerCount());
                     // 可以在这里添加其他逻辑，比如暂停游戏等

@@ -336,7 +336,9 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
         // 战斗结束，广播结算，清理房间
         else {
             room->BroadcastResults();
-
+            for (auto playerx : room->getPlayers()) {
+                playerx->setState(PlayerState::CONNECTED);
+            }
             roomManager.removeRoom(matchId);
             spdlog::info("Game finished in room {}, broadcasting battle results", matchId);
         }
