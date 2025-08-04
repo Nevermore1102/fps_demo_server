@@ -149,6 +149,12 @@ void TcpServer::acceptErrorCallback(struct evconnlistener* listener, void* ctx) 
 }
 
 void TcpServer::onAccept(evutil_socket_t fd, struct sockaddr* addr) {
+    // 为新连接启用保活机制
+    if (enable_keepalive(fd) < 0) {
+        fprintf(stderr, "Failed to enable keepalive for fd %d\n", fd);
+        evutil_closesocket(fd);
+        return;
+    }
     // 创建新的 bufferevent
     struct bufferevent* bev = bufferevent_socket_new(base_, fd, BEV_OPT_CLOSE_ON_FREE);
     if (!bev) {

@@ -88,9 +88,9 @@ void RoomManager::removeRoom(const std::string& roomId) {
             
             // 清理房间内玩家的房间ID
             for (auto& player : room->getPlayers()) {
-                if (player && player->getState() != PlayerState::DISCONNECTED) {
+                if (player && player->getState() == PlayerState::DISCONNECTED) {
                     player->SetRoomId("");
-                    player->setState(PlayerState::DISCONNECTED);
+                    // player->setState(PlayerState::DISCONNECTED);
                     auto conn = player->GetConnection();
                     Connections_player_.erase(conn);
                 }
@@ -584,6 +584,7 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
             if (room) {
                 spdlog::info("Notifying room {} about player {} disconnect", room->getId(), playerId);
                 
+                room->stopCountdownTimer();
                 // 房间处理玩家退出并广播消息
                 room->onPlayerExit(playerId, room->getCurrentRound(), player->GetHonorValue());
                 room->broadcastExitMessage();
