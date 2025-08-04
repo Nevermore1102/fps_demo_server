@@ -14,6 +14,9 @@
 // #include <iostream>
 #include <signal.h>
 #include <event2/event.h>
+
+// 
+
 #include <spdlog/spdlog.h>
 // #include "net/TcpServer.h"
 // #include "core/EventLoop.h"
@@ -23,15 +26,25 @@
 // #include "test/TestStorage.h"
 
 // 定义是否运行测试的宏
-#define RUN_TESTS 1
+// #define RUN_TESTS 1
+
+// 重定义为简短的宏名
+#define LOG_INFO(msg, ...) SPDLOG_INFO(msg, ##__VA_ARGS__)
+#define LOG_ERROR(msg, ...) SPDLOG_ERROR(msg, ##__VA_ARGS__)
+#define LOG_DEBUG(msg, ...) SPDLOG_DEBUG(msg, ##__VA_ARGS__)  
+#define LOG_WARM(msg, ...) SPDLOG_WARN(msg, ##__VA_ARGS__)
 
 int main() {
     // 忽略 SIGPIPE 信号
     signal(SIGPIPE, SIG_IGN);
 
     // 初始化日志
+
+    // spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [tid:%t] %v");  
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [tid:%t] [%s:%#] %v");
     spdlog::set_level(spdlog::level::debug);
-    spdlog::info("Server starting...");
+    // spdlog::info("Server starting...");
+    LOG_INFO("Server starting...");
 
 // #if RUN_TESTS
 //     // 运行测试
