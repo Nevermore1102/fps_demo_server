@@ -106,4 +106,8 @@ sudo journalctl -u game-server --since "10 minutes ago"
 
 # 查看最近重启次数
 sudo systemctl show game-server --property=NRestarts
+
+# 查看连接数
+netstat -an | grep :8888 | wc -l
+
 ```
