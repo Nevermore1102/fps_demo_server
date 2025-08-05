@@ -52,6 +52,14 @@ public:
     const std::shared_ptr<PlayerSnapshot>& GetLatestSnapshot() const { return latest_snapshot_; }
     bool isRobot() const { return state_ == PlayerState::ROBOT; }
 
+    // 服务器给玩家发送消息
+    bool sendMessage(const Message& msg) const {
+        if (connection_) {
+            return connection_->sendMessage(msg);
+        }
+        return false;  // 如果连接不存在，发送失败
+    }
+
 private:
     // 基础信息
     std::string player_id_;
