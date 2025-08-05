@@ -127,6 +127,8 @@ message BattleResultReportMessage {
     string match_id = 1;
     int32 round = 2;
     int32 honor_value = 3;
+    string enemy_player_id = 4;
+    int32 enemy_honor_value = 5;
 }
 
 // 结算信息广播（服务器→所有客户端）

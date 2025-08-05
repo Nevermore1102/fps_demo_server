@@ -2853,8 +2853,10 @@ class BattleResultReportMessage PROTOBUF_FINAL :
 
   enum : int {
     kMatchIdFieldNumber = 1,
+    kEnemyPlayerIdFieldNumber = 4,
     kRoundFieldNumber = 2,
     kHonorValueFieldNumber = 3,
+    kEnemyHonorValueFieldNumber = 5,
   };
   // string match_id = 1;
   void clear_match_id();
@@ -2881,6 +2883,31 @@ class BattleResultReportMessage PROTOBUF_FINAL :
   std::string* _internal_mutable_match_id();
   public:
 
+  // string enemy_player_id = 4;
+  void clear_enemy_player_id();
+  const std::string& enemy_player_id() const;
+  void set_enemy_player_id(const std::string& value);
+  void set_enemy_player_id(std::string&& value);
+  void set_enemy_player_id(const char* value);
+  void set_enemy_player_id(const char* value, size_t size);
+  std::string* mutable_enemy_player_id();
+  std::string* release_enemy_player_id();
+  void set_allocated_enemy_player_id(std::string* enemy_player_id);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_enemy_player_id();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_enemy_player_id(
+      std::string* enemy_player_id);
+  private:
+  const std::string& _internal_enemy_player_id() const;
+  void _internal_set_enemy_player_id(const std::string& value);
+  std::string* _internal_mutable_enemy_player_id();
+  public:
+
   // int32 round = 2;
   void clear_round();
   ::PROTOBUF_NAMESPACE_ID::int32 round() const;
@@ -2899,6 +2926,15 @@ class BattleResultReportMessage PROTOBUF_FINAL :
   void _internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 enemy_honor_value = 5;
+  void clear_enemy_honor_value();
+  ::PROTOBUF_NAMESPACE_ID::int32 enemy_honor_value() const;
+  void set_enemy_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_enemy_honor_value() const;
+  void _internal_set_enemy_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:BattleResultReportMessage)
  private:
   class _Internal;
@@ -2907,8 +2943,10 @@ class BattleResultReportMessage PROTOBUF_FINAL :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr match_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr enemy_player_id_;
   ::PROTOBUF_NAMESPACE_ID::int32 round_;
   ::PROTOBUF_NAMESPACE_ID::int32 honor_value_;
+  ::PROTOBUF_NAMESPACE_ID::int32 enemy_honor_value_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
 };
@@ -6025,6 +6063,107 @@ inline void BattleResultReportMessage::_internal_set_honor_value(::PROTOBUF_NAME
 inline void BattleResultReportMessage::set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_honor_value(value);
   // @@protoc_insertion_point(field_set:BattleResultReportMessage.honor_value)
+}
+
+// string enemy_player_id = 4;
+inline void BattleResultReportMessage::clear_enemy_player_id() {
+  enemy_player_id_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& BattleResultReportMessage::enemy_player_id() const {
+  // @@protoc_insertion_point(field_get:BattleResultReportMessage.enemy_player_id)
+  return _internal_enemy_player_id();
+}
+inline void BattleResultReportMessage::set_enemy_player_id(const std::string& value) {
+  _internal_set_enemy_player_id(value);
+  // @@protoc_insertion_point(field_set:BattleResultReportMessage.enemy_player_id)
+}
+inline std::string* BattleResultReportMessage::mutable_enemy_player_id() {
+  // @@protoc_insertion_point(field_mutable:BattleResultReportMessage.enemy_player_id)
+  return _internal_mutable_enemy_player_id();
+}
+inline const std::string& BattleResultReportMessage::_internal_enemy_player_id() const {
+  return enemy_player_id_.Get();
+}
+inline void BattleResultReportMessage::_internal_set_enemy_player_id(const std::string& value) {
+  
+  enemy_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void BattleResultReportMessage::set_enemy_player_id(std::string&& value) {
+  
+  enemy_player_id_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:BattleResultReportMessage.enemy_player_id)
+}
+inline void BattleResultReportMessage::set_enemy_player_id(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  enemy_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:BattleResultReportMessage.enemy_player_id)
+}
+inline void BattleResultReportMessage::set_enemy_player_id(const char* value,
+    size_t size) {
+  
+  enemy_player_id_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:BattleResultReportMessage.enemy_player_id)
+}
+inline std::string* BattleResultReportMessage::_internal_mutable_enemy_player_id() {
+  
+  return enemy_player_id_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* BattleResultReportMessage::release_enemy_player_id() {
+  // @@protoc_insertion_point(field_release:BattleResultReportMessage.enemy_player_id)
+  return enemy_player_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void BattleResultReportMessage::set_allocated_enemy_player_id(std::string* enemy_player_id) {
+  if (enemy_player_id != nullptr) {
+    
+  } else {
+    
+  }
+  enemy_player_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), enemy_player_id,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:BattleResultReportMessage.enemy_player_id)
+}
+inline std::string* BattleResultReportMessage::unsafe_arena_release_enemy_player_id() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:BattleResultReportMessage.enemy_player_id)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  
+  return enemy_player_id_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void BattleResultReportMessage::unsafe_arena_set_allocated_enemy_player_id(
+    std::string* enemy_player_id) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (enemy_player_id != nullptr) {
+    
+  } else {
+    
+  }
+  enemy_player_id_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      enemy_player_id, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:BattleResultReportMessage.enemy_player_id)
+}
+
+// int32 enemy_honor_value = 5;
+inline void BattleResultReportMessage::clear_enemy_honor_value() {
+  enemy_honor_value_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattleResultReportMessage::_internal_enemy_honor_value() const {
+  return enemy_honor_value_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 BattleResultReportMessage::enemy_honor_value() const {
+  // @@protoc_insertion_point(field_get:BattleResultReportMessage.enemy_honor_value)
+  return _internal_enemy_honor_value();
+}
+inline void BattleResultReportMessage::_internal_set_enemy_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  enemy_honor_value_ = value;
+}
+inline void BattleResultReportMessage::set_enemy_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_enemy_honor_value(value);
+  // @@protoc_insertion_point(field_set:BattleResultReportMessage.enemy_honor_value)
 }
 
 // -------------------------------------------------------------------
