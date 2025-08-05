@@ -3,6 +3,7 @@
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
 #include <cstddef>
+#include <memory>
 #include <numeric>
 #include <spdlog/spdlog.h>
 #include <string>
@@ -55,7 +56,8 @@ bool Room::isPlayerDataLoaded(const std::string& playerId) const{
 
 bool Room::isAllPlayerDataLoaded() const{
     for(const auto& p:players_){
-        if(p && !isPlayerDataLoaded(p->GetPlayerId())) {
+        if(p && p->getState()==PlayerState::GAMING 
+            && !isPlayerDataLoaded(p->GetPlayerId())) {
             return false;  // 只要有一个玩家未加载就返回false
         }
     }
@@ -188,6 +190,7 @@ void Room::startGame() {
         setState(RoomState::GAMING);
 
         nextRound();  // 回合+1
+        sendEnemyFormationToAll();       // 发送对手阵容
         broadcastPrepareStart();    // 广播备战开始消息
         startBattlePrepTimer();     // 启动备战倒计时
 
@@ -251,10 +254,10 @@ void Room::broadcastPrepareStart(){
     prep_msg->set_prepare_time_seconds(PREPARE_TIME_SECONDS[getCurrentRound()]);
     
     // 轮数奇数，先加入的玩家先手
-    if (getCurrentRound() % 2)
-        prep_msg->set_first_player_id(players_.front()->GetPlayerId());
-    else
-        prep_msg->set_first_player_id(players_.back()->GetPlayerId());
+    // if (getCurrentRound() % 2)
+    //     prep_msg->set_first_player_id(players_.front()->GetPlayerId());
+    // else
+    //     prep_msg->set_first_player_id(players_.back()->GetPlayerId());
     
     broadcastMessage(msg);
 }
@@ -596,11 +599,11 @@ void Room::broadcastExitMessage() {
 }
 
 
-std::string Room::getCurrentEnemyId(const std::string& playerId) {
+int Room::getCurrentEnemyIdx(const std::string& playerId) {
     int n = players_.size();
     if (n < 2 || n % 2 != 0) {
         SPDLOG_ERROR("Invalid player count: {}, must be even and at least 2", n);
-        return "";
+        return -1;  // 无法配对
     }
 
     // 查找玩家索引
@@ -609,7 +612,7 @@ std::string Room::getCurrentEnemyId(const std::string& playerId) {
     if (it == players_.end()) 
     {
         SPDLOG_ERROR("Player {} not found in room {}", playerId, room_id_);
-        return "";
+        return -1;
     }
     int idx = it - players_.begin();
 
@@ -626,7 +629,49 @@ std::string Room::getCurrentEnemyId(const std::string& playerId) {
         else if (pos[n - 1 - i] == idx) pairIdx = i;
         if (pairIdx != -1) break;
     }
-    if (pairIdx == -1) return "";
+    if (pairIdx == -1) return -1;
 
-    return players_[pos[pairIdx]]->GetPlayerId();
+    // return players_[pos[pairIdx]]->GetPlayerId();
+    return pos[pairIdx];  // 返回配对的玩家ID
+
+}
+
+// 发送对手阵容
+void Room::sendEnemyFormationToAll(){
+    for(const auto& player : players_){
+        if(player && player->getState() == PlayerState::GAMING)
+            sendEnemyFormationToPlayer(player);
+    }
+}
+
+// 给指定玩家发送当前回合的对手阵容信息 {type:对手信息，对手id，是否机器人，对手阵容，先手id}
+void Room::sendEnemyFormationToPlayer(const std::shared_ptr<Player>& player){
+    int enemy_idx = getCurrentEnemyIdx(player->GetPlayerId());
+    if(enemy_idx==-1){
+        SPDLOG_ERROR("Failed to get enemy formation for player {}", player->GetPlayerId());
+        return;
+    }
+    std::shared_ptr<Player> enemy_player = players_[enemy_idx];
+
+    NetworkMessage msg;
+    msg.set_msg_id(MessageType::ENEMY_INFO);
+    EnemyInfoMessage* enemy_info = msg.mutable_enemy_info();
+    enemy_info->set_enemy_player_id(enemy_player->GetPlayerId());
+    enemy_info->set_real_enemy(enemy_player->isRobot());
+    if(enemy_player->isRobot())
+        enemy_info->set_formation_data(std::stoi(enemy_player->GetFormationData()));
+
+    std::string first_player_id;
+    // 先后手规则：
+    if(getCurrentRound()%2==0)
+        first_player_id = player->GetPlayerId() > enemy_player->GetPlayerId() ? player->GetPlayerId() : enemy_player->GetPlayerId();
+    else
+        first_player_id = player->GetPlayerId() < enemy_player->GetPlayerId() ? player->GetPlayerId() : enemy_player->GetPlayerId();
+    
+    enemy_info->set_first_player(first_player_id);
+
+    if(player->sendMessage(msg))
+        SPDLOG_INFO("Sent enemy formation to player {}", player->GetPlayerId());
+    else
+        SPDLOG_ERROR("Failed to send enemy formation to player {}", player->GetPlayerId());
 }

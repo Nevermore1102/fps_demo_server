@@ -48,15 +48,18 @@ public:
     PlayerState getState() const { return state_; }
     std::shared_ptr<Connection> GetConnection() const { return connection_; }
     int32_t GetHonorValue() const { return latest_snapshot_->honor_value(); }
+    std::string GetFormationData() { return latest_snapshot_->formation_data(); }
     const std::string& GetPlayerName() const { return player_name_; }
     int32_t GetIconId() const { return icon_id_; }
     const std::shared_ptr<PlayerSnapshot>& GetLatestSnapshot() const { return latest_snapshot_; }
     bool isRobot() const { return state_ == PlayerState::ROBOT; }
 
     // 服务器给玩家发送消息
-    bool sendMessage(const Message& msg) const {
+    bool sendMessage(const NetworkMessage& msg) const {
+        Message body;
+        body.setBodyFromProto(msg);
         if (connection_) {
-            return connection_->sendMessage(msg);
+            return connection_->sendMessage(body);
         }
         return false;  // 如果连接不存在，发送失败
     }

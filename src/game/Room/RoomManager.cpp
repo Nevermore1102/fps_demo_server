@@ -748,12 +748,14 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
     spdlog::info("Player {} (state: {}) disconnected", playerId, static_cast<int>(currentState));
     
     // 设置玩家状态为断线
-    player->setState(PlayerState::DISCONNECTED);
+    // player->setState(PlayerState::DISCONNECTED);
     
     // 根据玩家当前状态进行不同处理
     switch (currentState) {
         case PlayerState::CONNECTED: {
             // 玩家在等待匹配状态，从等待队列中移除
+
+            player->setState(PlayerState::DISCONNECTED);
             if (removePlayerFromWaitQueue(playerId)) {
                 spdlog::info("Player {} removed from wait queue due to disconnect", playerId);
             }
@@ -763,11 +765,13 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
         case PlayerState::GAMING: {
             // 玩家在游戏中，需要通知房间内其他玩家
             // auto room = getPlayerRoom(playerId);
+            player->setState(PlayerState::ROBOT);
+            player->SetConnection(nullptr);
             auto room = getPlayerRoom(player);
             if (room) {
                 spdlog::info("Notifying room {} about player {} disconnect", room->getId(), playerId);
                 
-                room->stopCountdownTimer();
+                // room->stopCountdownTimer();
                 // 房间处理玩家退出并广播消息
                 room->onPlayerExit(playerId, room->getCurrentRound(), player->GetHonorValue());
                 room->broadcastExitMessage();

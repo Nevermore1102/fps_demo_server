@@ -8,7 +8,7 @@
 #include <atomic>
 #include <unordered_map>
 
-#define MAX_PLAYERS 2           // 房间最大玩家数
+#define MAX_PLAYERS 4           // 房间最大玩家数
 #define BROADCAST_INTERVAL 1    // 广播间隔（秒）
 #define ROUND_NUM 7             // 游戏总轮次
 // // 备战时间（秒）常数组
@@ -95,6 +95,10 @@ public:
     // 备战倒计时管理
     void broadcastPrepareStart();
     void startBattlePrepTimer();
+
+    // 发送对手阵容
+    void sendEnemyFormationToAll();
+    void sendEnemyFormationToPlayer(const std::shared_ptr<Player>& player);
     
     // 快照管理
     bool recordPlayerSnapshot(const std::string& playerId, const std::string& formationData, int32_t honorValue, int32_t round);
@@ -128,8 +132,9 @@ public:
 
     // 房间内回合匹配逻辑
     // 获取此轮敌人id
-    std::string getCurrentEnemyId(const std::string& playerId);
-    std::vector<std::pair<int, int>> generateRoundMatches(int playerCount, int round);
+    // 返回-1表示没有配对的敌人
+    int getCurrentEnemyIdx(const std::string& playerId);
+    // std::vector<std::pair<int, int>> generateRoundMatches(int playerCount, int round);
 private:
     // 基础信息
     int32_t room_id_;

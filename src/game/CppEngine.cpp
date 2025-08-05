@@ -123,6 +123,7 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
     std::string playerId = pb_msg.start_match().player_info().player_id();
     std::string player_name = pb_msg.start_match().player_info().player_name();
     int32_t icon_id = pb_msg.start_match().player_info().icon_id();
+    int32_t room_capacity = pb_msg.start_match().max_players_in_room();
 
     if (playerId.empty()) {
         // 如果消息中没有玩家ID，使用连接ID作为玩家ID
@@ -161,7 +162,7 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
         if (playerRoom) {
             spdlog::info("Player {} assigned to room {}, waiting for more players ({}/{})", 
                         playerId, playerRoom->getId(), 
-                        playerRoom->getAllPlayerCount(), MAX_PLAYERS);
+                        playerRoom->getAllPlayerCount(), room_capacity);
         } else {
             spdlog::warn("Player {} not assigned to any room", playerId);
         }
@@ -320,6 +321,9 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
         return;
     }
 
+    // 20250805updated: 服务器发给每个结算的客户端 {type:对手信息，对手id，是否机器人，机器人阵容，先手id}
+    room->sendEnemyFormationToPlayer(player);
+
     // 20250805updated: 广播排名
     // 每有玩家结算，服务器广播客户端 {type：现在排名信息，所有<玩家id，排名，荣耀值>}
     room->BroadcastCurrentRankings();
@@ -394,8 +398,9 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
         }
 
         // 关闭定时器
-        room->stopCountdownTimer();
-        
+        // room->stopCountdownTimer();
+        player->setState(PlayerState::ROBOT);
+        player->SetConnection(nullptr);
         // 房间处理玩家退出并广播消息
         roomManager.removePlayerConnection(conn);
         room->onPlayerExit(exit_player_id, exit_round, exit_honor_value);
