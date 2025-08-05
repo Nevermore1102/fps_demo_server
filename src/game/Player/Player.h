@@ -8,7 +8,8 @@ enum class PlayerState {
     CONNECTED,      // 已连接
     GAMING,         // 游戏中
     FINISHED,       // 游戏结束
-    DISCONNECTED    // 断线
+    DISCONNECTED,   // 断线
+    ROBOT           // 机器人
 };
 
 class Player {
@@ -49,6 +50,7 @@ public:
     const std::string& GetPlayerName() const { return player_name_; }
     int32_t GetIconId() const { return icon_id_; }
     const std::shared_ptr<PlayerSnapshot>& GetLatestSnapshot() const { return latest_snapshot_; }
+    bool isRobot() const { return state_ == PlayerState::ROBOT; }
 
 private:
     // 基础信息
