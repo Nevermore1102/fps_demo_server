@@ -235,17 +235,20 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
     auto& roomManager = RoomManager::getInstance();
     // auto room = roomManager.getPlayerRoom(playerId);
     auto player = roomManager.getPlayerByConnection(conn);
+        if (!player) {
+        spdlog::error("Player {} not found in room", playerId);
+        return;
+    }
+
     auto room = roomManager.getPlayerRoom(player);
+    if (!room) {
+        spdlog::error("Room not found for player {}", playerId);
+        return;
+    }
+
     std::string matchId = std::to_string(room->getId());
     spdlog::info("Processing snapshot - Player: {}, match id: {}, Round: {}, Honor: {}", 
                 playerId, matchId, round, honorValue);
-
-    // 验证玩家是否在房间中
-    // auto player = room->getPlayer(playerId);
-    if (!player) {
-        spdlog::error("Player {} not found in room {}", playerId, matchId);
-        return;
-    }
     
     // 记录玩家快照
     if (!room->recordPlayerSnapshot(playerId, formationData, honorValue, round)) {
@@ -291,35 +294,36 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     auto& roomManager = RoomManager::getInstance();
     // auto room = roomManager.getPlayerRoom(playerId);
     auto player = roomManager.getPlayerByConnection(conn);
+    if(!player) {
+        spdlog::error("Player not found for connection {}", conn->getId());
+        return;
+    }
+
     auto room = roomManager.getPlayerRoom(player);
+    if (!room) {
+        spdlog::error("Room not found");
+        return;
+    }
+
     std::string matchId = std::to_string(room->getId());
     spdlog::info("Processing battle result - Player: {}, Match: {}, Round: {}, Honor: {}", 
                 playerId, matchId, round, honorValue);
     
-    if (!room) {
-        spdlog::error("Room {} not found", matchId);
-        return;
-    }
-    
-    // 验证玩家是否在房间中
-    // auto player = room->getPlayer(playerId);
-    if (!player) {
-        spdlog::error("Player {} not found in room {}", playerId, matchId);
-        return;
-    }
-    // 更新玩家最新的荣耀值
-    else{
-        player->SetHonorValue(honorValue);
-        player->SetRound(round);
-    }
+
+    // 更新玩家最新的荣耀值（阵容不用更新，备战结束更新过）
+    player->SetHonorValue(honorValue);
+    player->SetRound(round);
     
     // 记录战斗结果
     if (!room->insertRanking(playerId, honorValue)) {
         spdlog::error("Failed to record ranking for player {} in room {}", playerId, matchId);
         return;
     }
-    
-    spdlog::info("Successfully recorded ranking for player {} in room {}", playerId, matchId);
+
+    // 20250805updated: 广播排名
+    // 每有玩家结算，服务器广播客户端 {type：现在排名信息，所有<玩家id，排名，荣耀值>}
+    room->BroadcastCurrentRankings();
+    spdlog::info("Successfully broadcast ranking for player in room {}", matchId);
     
     // 检查是否所有游戏中玩家都已提交战斗结果
     if (room->allGamingRankingsReceived()) {
@@ -327,7 +331,7 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
         
         // 继续下一轮战斗
         if(room->getCurrentRound() < ROUND_NUM){
-            room->clearRankings();  // 清理排名数据
+            room->resetSendResultState();  // 重置Gaming玩家的发送结果状态
 
             room->nextRound();  // 回合+1
             room->broadcastPrepareStart();  // 广播备战开始消息

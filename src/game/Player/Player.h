@@ -14,6 +14,7 @@ enum class PlayerState {
 
 class Player {
 public:
+    Player() = default;
     Player(const std::string& player_id, const std::shared_ptr<Connection>& conn)
         : player_id_(player_id), connection_(conn) {
             latest_snapshot_ = std::make_shared<PlayerSnapshot>();

@@ -103,11 +103,14 @@ public:
     void clearSnapshots();
 
     // 战斗结果管理
+    std::unordered_map<std::string, bool> isSendResult_;
+    void resetSendResultState();
     bool insertRanking(const std::string& playerId, int32_t honorValue); // 插入游戏中玩家荣耀值
     bool insertExitRanking(const std::string& playerId, int32_t honorValue); // 插入退出玩家荣耀值
     bool allGamingRankingsReceived() const; // 检查是否所有游戏中玩家都已提交排名
     void clearRankings();
-    void BroadcastResults();    // 广播游戏结果
+    void BroadcastCurrentRankings();    // 广播当前排名
+    void BroadcastResults();            // 广播游戏结果
 
     // 玩家断线或退出
     void onPlayerExit(const std::string& playerId, int32_t exit_round, int32_t honorValue);
@@ -141,7 +144,7 @@ private:
     std::unordered_map<std::string, bool> playerDataLoadStatus_;    // 玩家数据加载状态
     std::unordered_map<std::string, std::shared_ptr<Player>> playerMap_;
     std::unordered_map<std::string, PlayerSnapshot> currentSnapshots_;
-    std::unordered_map<std::string, int32_t> allHonorValue_;
+    std::unordered_map<std::string, int32_t> allHonorValue_;        // 存储所有玩家的荣耀值
 
     // 定时器相关：剩余倒计时秒数，定时器线程
     int32_t countdown_remaining_seconds_;

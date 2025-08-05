@@ -291,17 +291,49 @@ void Room::onCountdownFinished() {
 
 bool Room::allGamingRankingsReceived() const{
     // 检查是否所有游戏中玩家都已提交排名
-    if (allHonorValue_.size() != getGamingPlayerCount()) {
-        spdlog::warn("Not all gaming players have submitted their rankings, current size: {}", allHonorValue_.size());
+    // if (allHonorValue_.size() != getGamingPlayerCount()) {
+    //     spdlog::warn("Not all gaming players have submitted their rankings, current size: {}", allHonorValue_.size());
+    //     return false;
+    // }
+
+    // 检查所有玩家是否都已发送结果
+    if(isSendResult_.size() != getGamingPlayerCount()){
+        spdlog::warn("Not all gaming players have sent their results, current size: {}", isSendResult_.size());
         return false;
+    }
+
+    for(const auto& [pid,flag]:isSendResult_){
+        if(!flag){
+            spdlog::warn("Player {} has not sent their result", pid);
+            return false;
+        }
     }
     
     return true;
 }
 
+// 清理排名，真删除allHonorValue_，暂时不用
 void Room::clearRankings() {
     allHonorValue_.clear();
     spdlog::info("Cleared all rankings for room {}", room_id_);
+}
+
+// 广播排名给所有玩家
+void Room::BroadcastCurrentRankings() {
+    auto rankings = getRankings();
+
+    NetworkMessage msg;
+    msg.set_msg_id(MessageType::CURRENT_RANK_INFO);
+    CurrentRankInfoMessage* rank_msg = msg.mutable_current_rank_info();
+    
+    for(const auto& entry : rankings) {
+        // 使用add_rankings()添加新的排名条目
+        RankingEntry* new_entry = rank_msg->add_rankings();
+        new_entry->CopyFrom(*entry);  // 复制entry的内容到新条目
+    }
+
+    // 广播消息
+    broadcastMessage(msg);
 }
 
 // 广播结果给所有玩家
@@ -323,6 +355,19 @@ void Room::BroadcastResults() {
     broadcastMessage(msg);
 }
 
+// 重置Gaming玩家的发送结果状态
+void Room::resetSendResultState(){
+    for (auto&[pid,flag]: isSendResult_) {
+        auto player = getPlayer(pid);
+
+        // 重置玩家的发送结果状态
+        if (player && player->getState()==PlayerState::GAMING) {
+            flag = false;
+            spdlog::info("Reset send result state for player {}", pid);
+        }
+    }
+}
+
 // 插入在线玩家荣耀值
 bool Room::insertRanking(const std::string& playerId, int32_t honorValue) {
     // 插入或更新排名
@@ -332,6 +377,7 @@ bool Room::insertRanking(const std::string& playerId, int32_t honorValue) {
         return false;
     }
 
+    isSendResult_[playerId] = true;  // 标记该玩家已发送结果
     allHonorValue_[playerId] = honorValue;
 
     spdlog::info("Inserted ranking for player {} with honor value {}, allHonorValue_ size ", playerId, honorValue, allHonorValue_.size());
