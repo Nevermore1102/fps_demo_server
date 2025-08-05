@@ -123,6 +123,10 @@ public:
     bool isCountdownThreadRunning() const { return countdown_thread_.joinable(); }
     void stopCountdownTimer();
 
+    // 房间内回合匹配逻辑
+    // 获取此轮敌人id
+    std::string getCurrentEnemyId(const std::string& playerId);
+    std::vector<std::pair<int, int>> generateRoundMatches(int playerCount, int round);
 private:
     // 基础信息
     int32_t room_id_;

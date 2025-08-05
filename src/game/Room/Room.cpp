@@ -3,6 +3,7 @@
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
 #include <cstddef>
+#include <numeric>
 #include <spdlog/spdlog.h>
 #include <string>
 
@@ -546,4 +547,40 @@ void Room::broadcastExitMessage() {
     // 广播消息
     broadcastMessage(msg);
     spdlog::info("Broadcasted exit message for room {}", room_id_);
+}
+
+
+std::string Room::getCurrentEnemyId(const std::string& playerId) {
+    int n = players_.size();
+    if (n < 2 || n % 2 != 0) {
+        SPDLOG_ERROR("Invalid player count: {}, must be even and at least 2", n);
+        return "";
+    }
+
+    // 查找玩家索引
+    auto it = std::find_if(players_.begin(), players_.end(),
+                          [&](const auto& p){ return p->GetPlayerId() == playerId; });
+    if (it == players_.end()) 
+    {
+        SPDLOG_ERROR("Player {} not found in room {}", playerId, room_id_);
+        return "";
+    }
+    int idx = it - players_.begin();
+
+    // 计算本轮配对方案
+    int round = (currentRound_ - 1) % (n - 1);
+    std::vector<int> pos(n);
+    std::iota(pos.begin(), pos.end(), 0);
+    if (round > 0) std::rotate(pos.begin() + 1, pos.begin() + 1 + round, pos.end());
+
+    int half = n / 2;
+    int pairIdx = -1; // 本玩家在左还是右？
+    for (int i = 0; i < half; ++i) {
+        if (pos[i] == idx) pairIdx = n - 1 - i;
+        else if (pos[n - 1 - i] == idx) pairIdx = i;
+        if (pairIdx != -1) break;
+    }
+    if (pairIdx == -1) return "";
+
+    return players_[pos[pairIdx]]->GetPlayerId();
 }
