@@ -66,7 +66,7 @@ message DataLoadedMessage {
 message EnemyInfoMessage {
     string enemy_player_id = 1;
     bool real_enemy = 2;
-    string formation_data = 3;
+    int32 formation_data = 3;
     string first_player = 4;
 }
 

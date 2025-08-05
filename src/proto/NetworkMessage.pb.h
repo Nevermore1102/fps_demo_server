@@ -1349,9 +1349,9 @@ class EnemyInfoMessage PROTOBUF_FINAL :
 
   enum : int {
     kEnemyPlayerIdFieldNumber = 1,
-    kFormationDataFieldNumber = 3,
     kFirstPlayerFieldNumber = 4,
     kRealEnemyFieldNumber = 2,
+    kFormationDataFieldNumber = 3,
   };
   // string enemy_player_id = 1;
   void clear_enemy_player_id();
@@ -1376,31 +1376,6 @@ class EnemyInfoMessage PROTOBUF_FINAL :
   const std::string& _internal_enemy_player_id() const;
   void _internal_set_enemy_player_id(const std::string& value);
   std::string* _internal_mutable_enemy_player_id();
-  public:
-
-  // string formation_data = 3;
-  void clear_formation_data();
-  const std::string& formation_data() const;
-  void set_formation_data(const std::string& value);
-  void set_formation_data(std::string&& value);
-  void set_formation_data(const char* value);
-  void set_formation_data(const char* value, size_t size);
-  std::string* mutable_formation_data();
-  std::string* release_formation_data();
-  void set_allocated_formation_data(std::string* formation_data);
-  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
-  "    string fields are deprecated and will be removed in a"
-  "    future release.")
-  std::string* unsafe_arena_release_formation_data();
-  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
-  "    string fields are deprecated and will be removed in a"
-  "    future release.")
-  void unsafe_arena_set_allocated_formation_data(
-      std::string* formation_data);
-  private:
-  const std::string& _internal_formation_data() const;
-  void _internal_set_formation_data(const std::string& value);
-  std::string* _internal_mutable_formation_data();
   public:
 
   // string first_player = 4;
@@ -1437,6 +1412,15 @@ class EnemyInfoMessage PROTOBUF_FINAL :
   void _internal_set_real_enemy(bool value);
   public:
 
+  // int32 formation_data = 3;
+  void clear_formation_data();
+  ::PROTOBUF_NAMESPACE_ID::int32 formation_data() const;
+  void set_formation_data(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_formation_data() const;
+  void _internal_set_formation_data(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:EnemyInfoMessage)
  private:
   class _Internal;
@@ -1445,9 +1429,9 @@ class EnemyInfoMessage PROTOBUF_FINAL :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr enemy_player_id_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr formation_data_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr first_player_;
   bool real_enemy_;
+  ::PROTOBUF_NAMESPACE_ID::int32 formation_data_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
 };
@@ -4723,85 +4707,24 @@ inline void EnemyInfoMessage::set_real_enemy(bool value) {
   // @@protoc_insertion_point(field_set:EnemyInfoMessage.real_enemy)
 }
 
-// string formation_data = 3;
+// int32 formation_data = 3;
 inline void EnemyInfoMessage::clear_formation_data() {
-  formation_data_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  formation_data_ = 0;
 }
-inline const std::string& EnemyInfoMessage::formation_data() const {
+inline ::PROTOBUF_NAMESPACE_ID::int32 EnemyInfoMessage::_internal_formation_data() const {
+  return formation_data_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 EnemyInfoMessage::formation_data() const {
   // @@protoc_insertion_point(field_get:EnemyInfoMessage.formation_data)
   return _internal_formation_data();
 }
-inline void EnemyInfoMessage::set_formation_data(const std::string& value) {
+inline void EnemyInfoMessage::_internal_set_formation_data(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  formation_data_ = value;
+}
+inline void EnemyInfoMessage::set_formation_data(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_formation_data(value);
   // @@protoc_insertion_point(field_set:EnemyInfoMessage.formation_data)
-}
-inline std::string* EnemyInfoMessage::mutable_formation_data() {
-  // @@protoc_insertion_point(field_mutable:EnemyInfoMessage.formation_data)
-  return _internal_mutable_formation_data();
-}
-inline const std::string& EnemyInfoMessage::_internal_formation_data() const {
-  return formation_data_.Get();
-}
-inline void EnemyInfoMessage::_internal_set_formation_data(const std::string& value) {
-  
-  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
-}
-inline void EnemyInfoMessage::set_formation_data(std::string&& value) {
-  
-  formation_data_.Set(
-    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
-  // @@protoc_insertion_point(field_set_rvalue:EnemyInfoMessage.formation_data)
-}
-inline void EnemyInfoMessage::set_formation_data(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  
-  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
-              GetArena());
-  // @@protoc_insertion_point(field_set_char:EnemyInfoMessage.formation_data)
-}
-inline void EnemyInfoMessage::set_formation_data(const char* value,
-    size_t size) {
-  
-  formation_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArena());
-  // @@protoc_insertion_point(field_set_pointer:EnemyInfoMessage.formation_data)
-}
-inline std::string* EnemyInfoMessage::_internal_mutable_formation_data() {
-  
-  return formation_data_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-}
-inline std::string* EnemyInfoMessage::release_formation_data() {
-  // @@protoc_insertion_point(field_release:EnemyInfoMessage.formation_data)
-  return formation_data_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-}
-inline void EnemyInfoMessage::set_allocated_formation_data(std::string* formation_data) {
-  if (formation_data != nullptr) {
-    
-  } else {
-    
-  }
-  formation_data_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), formation_data,
-      GetArena());
-  // @@protoc_insertion_point(field_set_allocated:EnemyInfoMessage.formation_data)
-}
-inline std::string* EnemyInfoMessage::unsafe_arena_release_formation_data() {
-  // @@protoc_insertion_point(field_unsafe_arena_release:EnemyInfoMessage.formation_data)
-  GOOGLE_DCHECK(GetArena() != nullptr);
-  
-  return formation_data_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      GetArena());
-}
-inline void EnemyInfoMessage::unsafe_arena_set_allocated_formation_data(
-    std::string* formation_data) {
-  GOOGLE_DCHECK(GetArena() != nullptr);
-  if (formation_data != nullptr) {
-    
-  } else {
-    
-  }
-  formation_data_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      formation_data, GetArena());
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:EnemyInfoMessage.formation_data)
 }
 
 // string first_player = 4;
