@@ -11,6 +11,11 @@ RoomManager& RoomManager::getInstance() {
     return instance;
 }
 
+// 析构函数确保线程安全退出
+RoomManager::~RoomManager() {
+    stopMatchingCountdown();
+}
+
 void RoomManager::broadcastwaitRoom(const NetworkMessage& msg) {
     Message body;
     body.setBodyFromProto(msg);
@@ -44,8 +49,17 @@ void RoomManager::joinWaitRoom(const std::shared_ptr<Player>& player) {
         addPlayerConnection(conn, player);
     }
     
+    // 检查是否是第一个玩家加入
+    bool was_empty = wait_rooms_.empty();
+    
     // 添加到等待队列
     wait_rooms_.push_back(player);
+
+    // 如果是第一个玩家，启动匹配倒计时
+    if (was_empty) {
+        spdlog::info("First player joined, starting matching countdown");
+        startMatchingCountdown();
+    }
 
     NetworkMessage msg;
     msg.set_msg_id(MessageType::WAITING_PLAYER);
@@ -56,8 +70,12 @@ void RoomManager::joinWaitRoom(const std::shared_ptr<Player>& player) {
 
     broadcastwaitRoom(msg);
     
-    // 触发匹配处理
-    processMatching();
+    // 检查是否达到满员条件
+    if (wait_rooms_.size() >= MAX_PLAYERS_PER_ROOM) {
+        spdlog::info("Room capacity reached, stopping countdown and creating room immediately");
+        stopMatchingCountdown();
+        processMatching();
+    }
 }
 
 // 获取房间
@@ -156,9 +174,9 @@ size_t RoomManager::getTotalRooms() const {
 void RoomManager::processMatching() {
     // 注意：调用此函数时已经持有 matchingMutex_ 锁
     
-    // 如果等待队列中玩家数量足够创建房间
+    // 如果等待队列中玩家数量足够创建满员房间，立即创建
     while (wait_rooms_.size() >= MAX_PLAYERS_PER_ROOM) {
-        spdlog::info("Processing matching with {} waiting players", wait_rooms_.size());
+        spdlog::info("Processing matching with {} waiting players (capacity reached)", wait_rooms_.size());
         
         // 创建新房间
         auto room = createRoom();
@@ -167,7 +185,7 @@ void RoomManager::processMatching() {
             break;
         }
         
-        // 将玩家分配到房间
+        // 将满员数量的玩家分配到房间
         for (int i = 0; i < MAX_PLAYERS_PER_ROOM && !wait_rooms_.empty(); ++i) {
             auto player = wait_rooms_.front();
             wait_rooms_.erase(wait_rooms_.begin());
@@ -185,13 +203,25 @@ void RoomManager::processMatching() {
             }
         }
         
-        // 检查房间是否满员，如果满员则设置为 FULL 状态
-        if (room->isFull()) {
-            room->setState(RoomState::FULL);
-            spdlog::info("Room {} is full with {} players", 
-                        room->getId(), room->getAllPlayerCount());
-        }
+        // 满员房间设置为FULL状态
+        room->setState(RoomState::FULL);
+        spdlog::info("Room {} is full with {} players", 
+                    room->getId(), room->getAllPlayerCount());
+        
+        // 更新等待队列广播
+        // NetworkMessage msg;
+        // msg.set_msg_id(MessageType::WAITING_PLAYER);
+        // WaitingPlayerMessage* msg_waiting = msg.mutable_waiting_player();
+        // msg_waiting->set_waiting_player_count(wait_rooms_.size());
+        // msg_waiting->set_room_capacity(MAX_PLAYERS_PER_ROOM);
+        // broadcastwaitRoom(msg);
     }
+    
+    // 处理剩余玩家：如果还有玩家但不足满员，检查是否需要重新启动倒计时
+    // if (!wait_rooms_.empty() && !has_first_player_joined_) {
+    //     spdlog::info("Remaining {} players in queue, restarting countdown", wait_rooms_.size());
+    //     startMatchingCountdown();
+    // }
 }
 
 // 创建房间
@@ -234,13 +264,22 @@ bool RoomManager::removePlayerFromWaitQueue(const std::string& playerId) {
         
         wait_rooms_.erase(it);
         
+        // 如果队列变空，停止倒计时
+        if (wait_rooms_.empty()) {
+            spdlog::info("Wait queue is empty, stopping matching countdown");
+            stopMatchingCountdown();
+            return true;
+        }
+        
         NetworkMessage msg;
         msg.set_msg_id(MessageType::WAITING_PLAYER);
     
         WaitingPlayerMessage* msg_waiting = msg.mutable_waiting_player();
         msg_waiting->set_waiting_player_count(wait_rooms_.size());
         msg_waiting->set_room_capacity(MAX_PLAYERS_PER_ROOM);
-        spdlog::info("Player {} removed from wait queue", playerId);
+        broadcastwaitRoom(msg);
+        
+        spdlog::info("Player {} removed from wait queue, remaining: {}", playerId, wait_rooms_.size());
         return true;
     }
     
@@ -407,6 +446,150 @@ void RoomManager::cleanupDisconnectedPlayers() {
             ++it;
         }
     }
+}
+
+// 启动匹配倒计时
+void RoomManager::startMatchingCountdown() {
+    // 停止之前的倒计时（如果有）
+    stopMatchingCountdown();
+    
+    matching_timer_running_ = true;
+    stop_signal_ = std::promise<void>();
+    auto future = stop_signal_.get_future();
+    first_player_join_time_ = std::chrono::steady_clock::now();
+    has_first_player_joined_ = true;
+    
+    matching_timer_thread_ = std::thread([this, future = std::move(future)]() {
+        spdlog::info("Matching countdown started - waiting {} seconds", MATCHING_COUNTDOWN_SECONDS);
+        
+        // 等待超时或停止信号
+        if (future.wait_for(std::chrono::seconds(MATCHING_COUNTDOWN_SECONDS)) 
+            == std::future_status::timeout) {
+            // 超时，正常结束
+            if (matching_timer_running_) {
+                spdlog::info("Matching countdown finished, creating room with current players");
+                onMatchingCountdownFinished();
+            }
+        } else {
+            // 收到停止信号
+            spdlog::info("Matching countdown was stopped");
+        }
+    });
+}
+
+// 停止匹配倒计时
+void RoomManager::stopMatchingCountdown() {
+    if (matching_timer_running_) {
+        matching_timer_running_ = false;
+        stop_signal_.set_value();  // 立即唤醒
+        has_first_player_joined_ = false;
+        
+        spdlog::info("Matching countdown stopped");
+    }
+    if (matching_timer_thread_.joinable()) {
+        matching_timer_thread_.join();
+    }
+}
+
+// 匹配倒计时结束处理
+void RoomManager::onMatchingCountdownFinished() {
+    std::lock_guard<std::mutex> lock(matchingMutex_);
+    
+    if (!matching_timer_running_) {
+        // 倒计时已被取消
+        return;
+    }
+    
+    matching_timer_running_ = false;
+    has_first_player_joined_ = false;
+    
+    if (!wait_rooms_.empty()) {
+        spdlog::info("Countdown finished - creating room with {} players (capacity: {})", 
+                    wait_rooms_.size(), MAX_PLAYERS_PER_ROOM);
+        
+        // 不管人数多少，直接创建房间
+        createRoomWithCurrentPlayers();
+    } else {
+        spdlog::info("No players in queue when countdown finished");
+    }
+}
+
+// 用当前队列中的玩家创建房间
+void RoomManager::createRoomWithCurrentPlayers() {
+    if (wait_rooms_.empty()) {
+        spdlog::warn("Cannot create room - no players in queue");
+        return;
+    }
+    
+    // 创建新房间
+    auto room = createRoom();
+    if (!room) {
+        spdlog::error("Failed to create room");
+        return;
+    }
+    
+    // 更新等待队列广播
+    NetworkMessage msg;
+    msg.set_msg_id(MessageType::WAITING_PLAYER);
+    WaitingPlayerMessage* msg_waiting = msg.mutable_waiting_player();
+    msg_waiting->set_waiting_player_count(MAX_PLAYERS_PER_ROOM); // 队列已清空
+    msg_waiting->set_room_capacity(MAX_PLAYERS_PER_ROOM);
+    broadcastwaitRoom(msg);
+
+    // 将等待队列中的所有玩家分配到房间
+    int players_added = 0;
+    while (!wait_rooms_.empty()) {
+        auto player = wait_rooms_.front();
+        wait_rooms_.erase(wait_rooms_.begin());
+        
+        // 设置玩家房间ID
+        player->SetRoomId(std::to_string(room->getId()));
+        
+        // 添加到房间
+        if (room->addPlayer(player)) {
+            players_added++;
+            spdlog::info("Player {} assigned to room {} (forced by countdown)", 
+                        player->GetPlayerId(), room->getId());
+        } else {
+            spdlog::error("Failed to add player {} to room {}", 
+                         player->GetPlayerId(), room->getId());
+        }
+    }
+
+    // 检查是否需要添加机器人
+    int robot_nums = MAX_PLAYERS_PER_ROOM - players_added;
+    while (robot_nums--) {
+        auto robot = std::make_shared<Player>();
+        robot->SetPlayerId("robot" + std::to_string(robot_nums));
+        robot->SetRoomId(std::to_string(room->getId()));
+        robot->setState(PlayerState::ROBOT);
+        robot->SetIconId(robot_nums);
+        robot->SetPlayerName(robot_names_[robot_nums]);
+        room->addPlayer(robot);
+    }
+    
+    // 设置房间状态
+    if (room->isFull()) {
+        room->setState(RoomState::FULL);
+        spdlog::info("Room {} is full with {} players", room->getId(), players_added);
+    } else {
+        room->setState(RoomState::WAITING);
+        spdlog::info("Room {} created with {} players (not full)", room->getId(), players_added);
+    }
+    
+    spdlog::info("Room {} created by countdown with {} players", room->getId(), players_added);
+
+    // 尝试开始游戏
+    if (room) {
+        spdlog::info("Room {} is full, attempting to start game", room->getId());
+        
+        // 尝试开始游戏
+        if (startGameInRoom(std::to_string(room->getId()))) {
+            spdlog::info("Game successfully started in room {}", room->getId());
+        } else {
+            spdlog::warn("Failed to start game in room {}", room->getId());
+        }
+    } 
 }
 
 // 添加连接-玩家映射
@@ -616,6 +799,9 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
             // 已经是断线状态，只需要清理
             spdlog::info("Player {} was already disconnected", playerId);
             break;
+        }
+        case ::PlayerState::ROBOT: {  
+            break;  
         }
     }
     

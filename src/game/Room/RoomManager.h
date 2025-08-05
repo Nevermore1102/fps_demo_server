@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <mutex>
 #include <atomic>
+#include <future>
 #include "Room.h"
 #include "game/Player/Player.h"
 #include "net/Connection.h"
@@ -58,10 +59,10 @@ public:
     void cleanupFinishedRooms();
     void safeRemoveRoom(const std::string& roomId);  // 安全删除房间
     
-
+    
 private:
     RoomManager() : roomIdCounter_(1) {}
-    ~RoomManager() = default;
+    ~RoomManager();
     
     // 禁用拷贝
     RoomManager(const RoomManager&) = delete;
@@ -70,10 +71,16 @@ private:
     // 匹配逻辑
     void processMatching();
     std::shared_ptr<Room> createRoom();
+    void createRoomWithCurrentPlayers(); // 用当前队列创建房间
     // std::string generateRoomId();
     
     // 清理逻辑
     void cleanupDisconnectedPlayers();
+    
+    // 匹配倒计时相关方法
+    void startMatchingCountdown();
+    void stopMatchingCountdown();
+    void onMatchingCountdownFinished();
     
     // 数据成员
     std::vector<std::shared_ptr<Player>> wait_rooms_; // 等待匹配的玩家队列
@@ -90,4 +97,14 @@ private:
     
     // 房间ID生成
     std::atomic<int32_t> roomIdCounter_;
+    
+    // 匹配倒计时机制
+    std::thread matching_timer_thread_;
+    std::atomic<bool> matching_timer_running_{false};
+    std::chrono::steady_clock::time_point first_player_join_time_;
+    bool has_first_player_joined_ = false;
+    static constexpr int MATCHING_COUNTDOWN_SECONDS = 10;
+    std::promise<void> stop_signal_;
+
+    std::vector<std::string> robot_names_ = {"温柔的瓦力", "美丽的伊芙", "勤劳的萝丝"};
 };
