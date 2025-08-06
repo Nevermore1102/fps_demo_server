@@ -1,5 +1,6 @@
 #include "game/Room/Room.h"
 #include "game/Player/Player.h"
+#include "log/log_macro.h"
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
 #include <cstddef>
@@ -189,6 +190,7 @@ void Room::startGame() {
     if (isFull()) {
         setState(RoomState::GAMING);
 
+        initSendResultState();
         nextRound();  // 回合+1
         sendEnemyFormationToAll();       // 发送对手阵容
         broadcastPrepareStart();    // 广播备战开始消息
@@ -292,16 +294,28 @@ void Room::onCountdownFinished() {
     // 处理倒计时结束逻辑，如自动准备、结算等（待实现）
 }
 
-bool Room::allGamingRankingsReceived() const{
-    // 检查是否所有游戏中玩家都已提交排名
-    // if (allHonorValue_.size() != getGamingPlayerCount()) {
-    //     LOG_WARN("Not all gaming players have submitted their rankings, current size: {}", allHonorValue_.size());
-    //     return false;
-    // }
+// 检查所有Gaming玩家是否都已发送结果
+bool Room::allGamingRankingsReceived() {
+    if(isSendResult_.size() != getAllPlayerCount()){
+        LOG_WARN("Not all players have sent their results, current size: {}", isSendResult_.size());
+        return false;
+    }
 
-    // 检查所有玩家是否都已发送结果
-    if(isSendResult_.size() != getGamingPlayerCount()){
-        LOG_WARN("Not all gaming players have sent their results, current size: {}", isSendResult_.size());
+    for(const auto& [pid,flag]:isSendResult_){
+        auto player = getPlayer(pid);
+        if(player && player->getState()==PlayerState::GAMING && !flag){
+            LOG_WARN("Gaming player {} has not sent their result", pid);
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+// 检查所有玩家是否都已发送结果
+bool Room::allRankingsReceived() {
+    if(isSendResult_.size() != getAllPlayerCount()){
+        LOG_WARN("Not all players have sent their results, current size: {}", isSendResult_.size());
         return false;
     }
 
@@ -358,28 +372,36 @@ void Room::BroadcastResults() {
     broadcastMessage(msg);
 }
 
-// 重置Gaming玩家的发送结果状态
+// 初始化发送结果状态
+void Room::initSendResultState(){
+    for (const auto&p: players_){
+        isSendResult_[p->GetPlayerId()] = false;
+    }
+}
+
+// 重置所有玩家的发送结果状态
 void Room::resetSendResultState(){
     for (auto&[pid,flag]: isSendResult_) {
         auto player = getPlayer(pid);
 
         // 重置玩家的发送结果状态
-        if (player && player->getState()==PlayerState::GAMING) {
+        if (player) {
             flag = false;
             LOG_INFO("Reset send result state for player {}", pid);
         }
     }
 }
 
-// 插入在线玩家荣耀值
+// 插入在线玩家/机器人荣耀值
 bool Room::insertRanking(const std::string& playerId, int32_t honorValue) {
     // 插入或更新排名
     auto player = getPlayer(playerId);
-    if (!player || player->getState() != PlayerState::GAMING) {
-        LOG_ERROR("Player {} not found or not in gaming state", playerId);
+    if (!player || player->getState() != PlayerState::GAMING || !player->isRobot()) {
+        LOG_ERROR("Player {} not found or not in gaming state or robot state", playerId);
         return false;
     }
 
+    player->SetHonorValue(honorValue);
     isSendResult_[playerId] = true;  // 标记该玩家已发送结果
     allHonorValue_[playerId] = honorValue;
 
@@ -387,20 +409,20 @@ bool Room::insertRanking(const std::string& playerId, int32_t honorValue) {
     return true;
 }
 
-// 插入退出玩家荣耀值
-bool Room::insertExitRanking(const std::string& playerId, int32_t honorValue) {
-    // 插入或更新退出玩家的荣耀值
-    auto player = getPlayer(playerId);
-    if (!player || player->getState() != PlayerState::DISCONNECTED) {
-        LOG_ERROR("Player {} not found or not in disconnected state", playerId);
-        return false;
-    }
+// 插入退出玩家荣耀值（新版本不再使用，所有机器人玩家和真人玩家荣耀值都要更新）
+// bool Room::insertExitRanking(const std::string& playerId, int32_t honorValue) {
+//     // 插入或更新退出玩家的荣耀值
+//     auto player = getPlayer(playerId);
+//     if (!player || player->getState() != PlayerState::DISCONNECTED) {
+//         LOG_ERROR("Player {} not found or not in disconnected state", playerId);
+//         return false;
+//     }
     
-    allHonorValue_[playerId] = honorValue;
+//     allHonorValue_[playerId] = honorValue;
 
-    LOG_INFO("Inserted exit ranking for player {} with honor value {}", playerId, honorValue);
-    return true;
-}
+//     LOG_INFO("Inserted exit ranking for player {} with honor value {}", playerId, honorValue);
+//     return true;
+// }
 
 // 根据荣耀值计算房间内玩家的排名
 std::vector<std::shared_ptr<RankingEntry>> Room::getRankings() {
@@ -559,7 +581,7 @@ void Room::onPlayerExit(const std::string& playerId, int32_t exit_round, int32_t
     }
 
     // 更新玩家状态
-    player->setState(PlayerState::DISCONNECTED);
+    // player->setState(PlayerState::DISCONNECTED);
 
     // 放入退出玩家信息
     ExitPlayerInfo exitInfo;
@@ -570,11 +592,11 @@ void Room::onPlayerExit(const std::string& playerId, int32_t exit_round, int32_t
     LOG_INFO("Player {} info inserted into exitPlayers_ with round {} and honor value {}", 
                 playerId, exit_round, honorValue);
 
-    // 插入退出玩家的荣耀值
-    if (!insertExitRanking(playerId, honorValue)) {
-        LOG_ERROR("Failed to insert exit ranking for player {}", playerId);
-        return;
-    }
+    // // 插入退出玩家的荣耀值
+    // if (!insertExitRanking(playerId, honorValue)) {
+    //     LOG_ERROR("Failed to insert exit ranking for player {}", playerId);
+    //     return;
+    // }
 
     LOG_INFO("Player {} marked as disconnected in room {}", playerId, room_id_);
 }
@@ -597,7 +619,6 @@ void Room::broadcastExitMessage() {
     broadcastMessage(msg);
     LOG_INFO("Broadcasted exit message for room {}", room_id_);
 }
-
 
 int Room::getCurrentEnemyIdx(const std::string& playerId) {
     int n = players_.size();
@@ -674,4 +695,30 @@ void Room::sendEnemyFormationToPlayer(const std::shared_ptr<Player>& player){
         SPDLOG_INFO("Sent enemy formation to player {}", player->GetPlayerId());
     else
         SPDLOG_ERROR("Failed to send enemy formation to player {}", player->GetPlayerId());
+}
+
+// 两机器人对战荣耀结算
+void Room::calculateRobotHonor(){
+    int idx = getCurrentRound()-1;
+    int h1 = ROUND_ROBOT_HONOR[idx].first;
+    int h2 = ROUND_ROBOT_HONOR[idx].second;
+
+    for(const auto& p:players_){
+        if(p && p->isRobot()){
+            int cur_honor = p->GetHonorValue();
+            int enemy_player_idx = getCurrentEnemyIdx(p->GetPlayerId());
+            if(enemy_player_idx==-1){
+                SPDLOG_ERROR("Failed to get enemy formation for player {}", p->GetPlayerId());
+                return;
+            }
+            auto enemy_player = players_[enemy_player_idx];
+
+            // 对手也是机器人
+            if(enemy_player && enemy_player->isRobot()){
+                int new_honor = cur_honor + rand() % (h2 - h1 + 1) + h1;
+                insertRanking(p->GetPlayerId(), new_honor);
+                LOG_INFO("insert robot {} honor value {}", p->GetPlayerId(), new_honor);
+            }
+        }
+    }
 }

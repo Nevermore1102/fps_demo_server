@@ -269,7 +269,7 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
     }
 }
 
-// 处理战斗后的消息 {type:战斗结果，对局id，playerid1，轮次，荣耀值}
+// 处理战斗后的消息 {type:战斗结果，对局id，我方id，我方荣耀值，敌方id，敌方荣耀值}
 // 如果是最后一轮，需要单独处理
 void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
     LOG_INFO("Player Battle Result: {}", conn->getId());
@@ -290,6 +290,8 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     std::string playerId = pb_msg.player_id();
     int32_t round = battleResult.round();
     int32_t honorValue = battleResult.honor_value();
+    std::string enemyId = battleResult.enemy_player_id();
+    int32_t enemyHonorValue = battleResult.enemy_honor_value();
     
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
@@ -311,14 +313,27 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
                 playerId, matchId, round, honorValue);
     
 
-    // 更新玩家最新的荣耀值（阵容不用更新，备战结束更新过）
-    player->SetHonorValue(honorValue);
-    player->SetRound(round);
+    // // 更新玩家最新的荣耀值（不再使用，insertRanking会更新）
+    // player->SetHonorValue(honorValue);
+    // player->SetRound(round);
     
     // 记录战斗结果
     if (!room->insertRanking(playerId, honorValue)) {
         LOG_ERROR("Failed to record ranking for player {} in room {}", playerId, matchId);
         return;
+    }
+
+    // 20250806updated: 真人和机器人打，更新机器人荣耀值
+    auto enemy_player = room->getPlayer(enemyId);
+    if(enemy_player && enemy_player->isRobot()) {
+        enemy_player->SetHonorValue(enemyHonorValue);
+        enemy_player->SetRound(round);
+
+        // 记录机器人的战斗结果
+        if (!room->insertRanking(enemyId, enemyHonorValue)) {
+            LOG_ERROR("Failed to record ranking for player {} in room {}", enemyId, matchId);
+            return;
+        }
     }
 
     // 20250805updated: 服务器发给每个结算的客户端 {type:对手信息，对手id，是否机器人，机器人阵容，先手id}
@@ -329,13 +344,16 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     room->BroadcastCurrentRankings();
     LOG_INFO("Successfully broadcast ranking for player in room {}", matchId);
     
-    // 检查是否所有游戏中玩家都已提交战斗结果
+    // 检查是否所有在线玩家都已提交战斗结果（不包括纯机器人对战情况）
     if (room->allGamingRankingsReceived()) {
         LOG_INFO("All gaming rankings received for room {}, broadcasting rankings", matchId);
+
+        // 20250806updated: 结算两个机器人对战的情况
+        room->calculateRobotHonor();
         
         // 继续下一轮战斗
         if(room->getCurrentRound() < ROUND_NUM){
-            room->resetSendResultState();  // 重置Gaming玩家的发送结果状态
+            room->resetSendResultState();  // 重置所有玩家的发送结果状态
 
             room->nextRound();  // 回合+1
             room->broadcastPrepareStart();  // 广播备战开始消息

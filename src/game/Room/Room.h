@@ -7,6 +7,8 @@
 #include <thread>
 #include <atomic>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 #include "log/log_macro.h"
 
 
@@ -38,6 +40,15 @@ const int PREPARE_TIME_SECONDS[] = {
     35,  // 第七回合
 };
 
+const std::vector<std::pair<int, int>> ROUND_ROBOT_HONOR = {
+    {0, 10},
+    {0, 20},
+    {0, 30},
+    {0, 40},
+    {0, 50},
+    {0, 60},
+    {0, 70},
+};
  
 enum class RoomState {
     WAITING,    // 等待玩家
@@ -111,13 +122,18 @@ public:
 
     // 战斗结果管理
     std::unordered_map<std::string, bool> isSendResult_;
+    void initSendResultState();
     void resetSendResultState();
     bool insertRanking(const std::string& playerId, int32_t honorValue); // 插入游戏中玩家荣耀值
     bool insertExitRanking(const std::string& playerId, int32_t honorValue); // 插入退出玩家荣耀值
-    bool allGamingRankingsReceived() const; // 检查是否所有游戏中玩家都已提交排名
+    bool allGamingRankingsReceived(); // 检查是否所有游戏中玩家都已提交排名
+    bool allRankingsReceived();
     void clearRankings();
     void BroadcastCurrentRankings();    // 广播当前排名
     void BroadcastResults();            // 广播游戏结果
+
+    // 两机器人对战荣耀结算
+    void calculateRobotHonor();
 
     // 玩家断线或退出
     void onPlayerExit(const std::string& playerId, int32_t exit_round, int32_t honorValue);
