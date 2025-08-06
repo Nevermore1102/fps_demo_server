@@ -13,14 +13,14 @@ if (!conn) {
 
 std::lock_guard<std::mutex> lock(mutex_);
 connections_[conn->getId()] = conn;
-spdlog::info("New connection added: {}, total connections: {}", 
+LOG_INFO("New connection added: {}, total connections: {}", 
                 conn->getId(), connections_.size());
 }
 
 void ConnectionPool::removeConnection(const std::string& id) {
 std::lock_guard<std::mutex> lock(mutex_);
 if (connections_.erase(id) > 0) {
-    spdlog::info("Connection removed: {}, total connections: {}", 
+    LOG_INFO("Connection removed: {}, total connections: {}", 
                     id, connections_.size());
 }
 }

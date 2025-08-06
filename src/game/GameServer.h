@@ -10,6 +10,7 @@
 #include "CppEngine.h"
 #include <memory>
 #include "net/ConnectionPool.h"
+#include "log/log_macro.h"
 
 class GameServer {
 public:
@@ -23,19 +24,19 @@ public:
     bool init() {
         // 初始化事件循环
         if (!event_loop_.init()) {
-            spdlog::error("Failed to init event loop");
+            LOG_ERROR("Failed to init event loop");
             return false;
         }
 
         // // 初始化Lua环境
         // if (!initLua()) {
-        //     spdlog::error("Failed to init Lua environment");
+        //     LOG_ERROR("Failed to init Lua environment");
         //     return false;
         // }
 
         // 初始化网络
         if (!initNetwork()) {
-            spdlog::error("Failed to init network");
+            LOG_ERROR("Failed to init network");
             return false;
         }
 
@@ -70,24 +71,24 @@ private:
         // 设置消息回调，捕获 this
         tcp_server_.setMessageCallback(
             [this](const std::shared_ptr<Connection>& conn, const Message& msg) {
-                spdlog::info("Received message from {}, type: {}", 
+                LOG_INFO("Received message from {}, type: {}", 
                             conn->getId(), static_cast<int>(msg.getType()));
                 // 使用成员变量处理消息
                 if (!message_processor_->processMessage(conn, msg)) {
-                    spdlog::warn("Message not handled: {}", static_cast<int>(msg.getType()));
+                    LOG_WARN("Message not handled: {}", static_cast<int>(msg.getType()));
                 }
             });
 
         // 设置新连接回调
         tcp_server_.setNewConnectionCallback(
             [](const std::shared_ptr<Connection>& conn) {
-                spdlog::info("New connection: {}", conn->getId());
+                LOG_INFO("New connection: {}", conn->getId());
             });
 
         // 设置连接关闭回调
         tcp_server_.setCloseCallback(
             [](const std::shared_ptr<Connection>& conn) {
-                spdlog::info("Connection closed: {}", conn->getId());
+                LOG_INFO("Connection closed: {}", conn->getId());
                 
                 // 获取房间管理器实例
                 auto& roomManager = RoomManager::getInstance();

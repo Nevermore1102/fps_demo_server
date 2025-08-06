@@ -13,6 +13,8 @@
 #include <memory>
 #include "proto/Message.h"
 #include "net/Connection.h"
+#include "log/log_macro.h"
+
 
 class CppEngine {
 public:

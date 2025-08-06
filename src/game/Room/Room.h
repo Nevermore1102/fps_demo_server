@@ -7,6 +7,9 @@
 #include <thread>
 #include <atomic>
 #include <unordered_map>
+#include "log/log_macro.h"
+
+
 
 #define MAX_PLAYERS 4           // 房间最大玩家数
 #define BROADCAST_INTERVAL 1    // 广播间隔（秒）

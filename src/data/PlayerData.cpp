@@ -22,12 +22,12 @@
 
 // bool PlayerData::load() {
 //     if (playerId_.empty()) {
-//         spdlog::error("Player ID is empty");
+//         LOG_ERROR("Player ID is empty");
 //         return false;
 //     }
 //     std::string data = Storage::getInstance().loadPlayerData(playerId_);
 //     if (data.empty()) {
-//         spdlog::info("No saved data found for player {}", playerId_);
+//         LOG_INFO("No saved data found for player {}", playerId_);
 //         return false;
 //     }
 
@@ -35,7 +35,7 @@
 //         nlohmann::json json = nlohmann::json::parse(data);
 //         return fromJson(json);
 //     } catch (const std::exception& e) {
-//         spdlog::error("Failed to parse player data for {}: {}", playerId_, e.what());
+//         LOG_ERROR("Failed to parse player data for {}: {}", playerId_, e.what());
 //         return false;
 //     }
 // }
@@ -46,7 +46,7 @@
 //         std::string data = json.dump();
 //         return Storage::getInstance().savePlayerData(playerId_, data);
 //     } catch (const std::exception& e) {
-//         spdlog::error("Failed to save player data for {}: {}", playerId_, e.what());
+//         LOG_ERROR("Failed to save player data for {}: {}", playerId_, e.what());
 //         return false;
 //     }
 // }
@@ -98,7 +98,7 @@
 //         state_.is_grounded = json["is_grounded"].get<bool>();
 //         return true;
 //     } catch (const std::exception& e) {
-//         spdlog::error("Failed to parse player state from JSON: {}", e.what());
+//         LOG_ERROR("Failed to parse player state from JSON: {}", e.what());
 //         return false;
 //     }
 // }

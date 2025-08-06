@@ -25,9 +25,9 @@ void RoomManager::broadcastwaitRoom(const NetworkMessage& msg) {
         if (conn) {
             bool success = conn->sendMessage(body);
             if (!success)
-                spdlog::error("Failed to send message to player: {}", playerx->GetPlayerId());
+                LOG_ERROR("Failed to send message to player: {}", playerx->GetPlayerId());
             else{
-                spdlog::info("Message sent to player: {}", playerx->GetPlayerId());
+                LOG_INFO("Message sent to player: {}", playerx->GetPlayerId());
                 // body.logMessage();  // 打印消息详情
             }
         }
@@ -38,7 +38,7 @@ void RoomManager::broadcastwaitRoom(const NetworkMessage& msg) {
 void RoomManager::joinWaitRoom(const std::shared_ptr<Player>& player) {
     std::lock_guard<std::mutex> lock(matchingMutex_);
     
-    spdlog::info("Player {} joining wait room", player->GetPlayerId());
+    LOG_INFO("Player {} joining wait room", player->GetPlayerId());
     
     // 设置玩家状态
     player->setState(PlayerState::CONNECTED);
@@ -57,7 +57,7 @@ void RoomManager::joinWaitRoom(const std::shared_ptr<Player>& player) {
 
     // 如果是第一个玩家，启动匹配倒计时
     if (was_empty) {
-        spdlog::info("First player joined, starting matching countdown");
+        LOG_INFO("First player joined, starting matching countdown");
         startMatchingCountdown();
     }
 
@@ -72,7 +72,7 @@ void RoomManager::joinWaitRoom(const std::shared_ptr<Player>& player) {
     
     // 检查是否达到满员条件
     if (wait_rooms_.size() >= MAX_PLAYERS_PER_ROOM) {
-        spdlog::info("Room capacity reached, stopping countdown and creating room immediately");
+        LOG_INFO("Room capacity reached, stopping countdown and creating room immediately");
         stopMatchingCountdown();
         processMatching();
     }
@@ -87,7 +87,7 @@ std::shared_ptr<Room> RoomManager::getRoom(const std::string& roomId) {
         auto it = rooms_.find(id);
         return (it != rooms_.end()) ? it->second : nullptr;
     } catch (const std::exception& e) {
-        spdlog::error("Invalid room ID format: {}", roomId);
+        LOG_ERROR("Invalid room ID format: {}", roomId);
         return nullptr;
     }
 }
@@ -100,7 +100,7 @@ void RoomManager::removeRoom(const std::string& roomId) {
         int32_t id = std::stoi(roomId);
         auto it = rooms_.find(id);
         if (it != rooms_.end()) {
-            spdlog::info("Removing room {}", roomId);
+            LOG_INFO("Removing room {}", roomId);
             
             auto room = it->second;
             
@@ -120,10 +120,10 @@ void RoomManager::removeRoom(const std::string& roomId) {
             // 从容器中移除
             rooms_.erase(it);
             
-            spdlog::info("Room {} removed and cleaned up successfully", roomId);
+            LOG_INFO("Room {} removed and cleaned up successfully", roomId);
         }
     } catch (const std::exception& e) {
-        spdlog::error("Invalid room ID format when removing: {}", roomId);
+        LOG_ERROR("Invalid room ID format when removing: {}", roomId);
     }
 }
 
@@ -176,12 +176,12 @@ void RoomManager::processMatching() {
     
     // 如果等待队列中玩家数量足够创建满员房间，立即创建
     while (wait_rooms_.size() >= MAX_PLAYERS_PER_ROOM) {
-        spdlog::info("Processing matching with {} waiting players (capacity reached)", wait_rooms_.size());
+        LOG_INFO("Processing matching with {} waiting players (capacity reached)", wait_rooms_.size());
         
         // 创建新房间
         auto room = createRoom();
         if (!room) {
-            spdlog::error("Failed to create room");
+            LOG_ERROR("Failed to create room");
             break;
         }
         
@@ -195,17 +195,17 @@ void RoomManager::processMatching() {
             
             // 添加到房间
             if (room->addPlayer(player)) {
-                spdlog::info("Player {} assigned to room {}", 
+                LOG_INFO("Player {} assigned to room {}", 
                             player->GetPlayerId(), room->getId());
             } else {
-                spdlog::error("Failed to add player {} to room {}", 
+                LOG_ERROR("Failed to add player {} to room {}", 
                              player->GetPlayerId(), room->getId());
             }
         }
         
         // 满员房间设置为FULL状态
         room->setState(RoomState::FULL);
-        spdlog::info("Room {} is full with {} players", 
+        LOG_INFO("Room {} is full with {} players", 
                     room->getId(), room->getAllPlayerCount());
         
         // 更新等待队列广播
@@ -219,7 +219,7 @@ void RoomManager::processMatching() {
     
     // 处理剩余玩家：如果还有玩家但不足满员，检查是否需要重新启动倒计时
     // if (!wait_rooms_.empty() && !has_first_player_joined_) {
-    //     spdlog::info("Remaining {} players in queue, restarting countdown", wait_rooms_.size());
+    //     LOG_INFO("Remaining {} players in queue, restarting countdown", wait_rooms_.size());
     //     startMatchingCountdown();
     // }
 }
@@ -236,7 +236,7 @@ std::shared_ptr<Room> RoomManager::createRoom() {
         rooms_[id] = room;
     }
     
-    spdlog::info("Created new room with ID: {}", id);
+    LOG_INFO("Created new room with ID: {}", id);
     return room;
 }
 
@@ -266,7 +266,7 @@ bool RoomManager::removePlayerFromWaitQueue(const std::string& playerId) {
         
         // 如果队列变空，停止倒计时
         if (wait_rooms_.empty()) {
-            spdlog::info("Wait queue is empty, stopping matching countdown");
+            LOG_INFO("Wait queue is empty, stopping matching countdown");
             stopMatchingCountdown();
             return true;
         }
@@ -279,7 +279,7 @@ bool RoomManager::removePlayerFromWaitQueue(const std::string& playerId) {
         msg_waiting->set_room_capacity(MAX_PLAYERS_PER_ROOM);
         broadcastwaitRoom(msg);
         
-        spdlog::info("Player {} removed from wait queue, remaining: {}", playerId, wait_rooms_.size());
+        LOG_INFO("Player {} removed from wait queue, remaining: {}", playerId, wait_rooms_.size());
         return true;
     }
     
@@ -310,11 +310,11 @@ bool RoomManager::removePlayerFromRoom(const std::string& playerId) {
                 player->SetRoomId("");
                 player->setState(PlayerState::DISCONNECTED);
                 
-                spdlog::info("Player {} removed from room {}", playerId, roomPair.first);
+                LOG_INFO("Player {} removed from room {}", playerId, roomPair.first);
                 
                 // 如果房间变空，删除房间
                 if (room->isEmpty()) {
-                    spdlog::info("Room {} is empty, will be removed", roomPair.first);
+                    LOG_INFO("Room {} is empty, will be removed", roomPair.first);
                     rooms_.erase(roomPair.first);
                 } else {
                     // 更新房间状态
@@ -360,12 +360,12 @@ std::vector<std::pair<std::string, size_t>> RoomManager::getAllRoomsInfo() const
 bool RoomManager::startGameInRoom(const std::string& roomId) {
     auto room = getRoom(roomId);
     if (!room) {
-        spdlog::warn("Room {} not found for game start", roomId);
+        LOG_WARN("Room {} not found for game start", roomId);
         return false;
     }
     
     if (!room->isFull()) {
-        spdlog::warn("Room {} is not full, cannot start game", roomId);
+        LOG_WARN("Room {} is not full, cannot start game", roomId);
         return false;
     }
     
@@ -378,7 +378,7 @@ bool RoomManager::startGameInRoom(const std::string& roomId) {
     // room->startGame();
     room->broadcastPlayerInfo();
     
-    spdlog::info("Game started in room {}", roomId);
+    LOG_INFO("Game started in room {}", roomId);
     return true;
 }
 
@@ -389,7 +389,7 @@ void RoomManager::cleanupEmptyRooms() {
     auto it = rooms_.begin();
     while (it != rooms_.end()) {
         if (it->second->isEmpty()) {
-            spdlog::info("Cleaning up empty room {}", it->first);
+            LOG_INFO("Cleaning up empty room {}", it->first);
             it = rooms_.erase(it);
         } else {
             ++it;
@@ -404,7 +404,7 @@ void RoomManager::cleanupEmptyRooms() {
 //     auto it = rooms_.begin();
 //     while (it != rooms_.end()) {
 //         if (it->second->getState() == RoomState::FINISHED) {
-//             spdlog::info("Cleaning up finished room {}", it->first);
+//             LOG_INFO("Cleaning up finished room {}", it->first);
 //             it = rooms_.erase(it);
 //         } else {
 //             ++it;
@@ -439,7 +439,7 @@ void RoomManager::cleanupDisconnectedPlayers() {
     auto it = wait_rooms_.begin();
     while (it != wait_rooms_.end()) {
         if ((*it)->getState() == PlayerState::DISCONNECTED) {
-            spdlog::info("Removing disconnected player {} from wait queue", 
+            LOG_INFO("Removing disconnected player {} from wait queue", 
                         (*it)->GetPlayerId());
             it = wait_rooms_.erase(it);
         } else {
@@ -460,19 +460,19 @@ void RoomManager::startMatchingCountdown() {
     has_first_player_joined_ = true;
     
     matching_timer_thread_ = std::thread([this, future = std::move(future)]() {
-        spdlog::info("Matching countdown started - waiting {} seconds", MATCHING_COUNTDOWN_SECONDS);
+        LOG_INFO("Matching countdown started - waiting {} seconds", MATCHING_COUNTDOWN_SECONDS);
         
         // 等待超时或停止信号
         if (future.wait_for(std::chrono::seconds(MATCHING_COUNTDOWN_SECONDS)) 
             == std::future_status::timeout) {
             // 超时，正常结束
             if (matching_timer_running_) {
-                spdlog::info("Matching countdown finished, creating room with current players");
+                LOG_INFO("Matching countdown finished, creating room with current players");
                 onMatchingCountdownFinished();
             }
         } else {
             // 收到停止信号
-            spdlog::info("Matching countdown was stopped");
+            LOG_INFO("Matching countdown was stopped");
         }
     });
 }
@@ -484,7 +484,7 @@ void RoomManager::stopMatchingCountdown() {
         stop_signal_.set_value();  // 立即唤醒
         has_first_player_joined_ = false;
         
-        spdlog::info("Matching countdown stopped");
+        LOG_INFO("Matching countdown stopped");
     }
     if (matching_timer_thread_.joinable()) {
         matching_timer_thread_.join();
@@ -504,27 +504,27 @@ void RoomManager::onMatchingCountdownFinished() {
     has_first_player_joined_ = false;
     
     if (!wait_rooms_.empty()) {
-        spdlog::info("Countdown finished - creating room with {} players (capacity: {})", 
+        LOG_INFO("Countdown finished - creating room with {} players (capacity: {})", 
                     wait_rooms_.size(), MAX_PLAYERS_PER_ROOM);
         
         // 不管人数多少，直接创建房间
         createRoomWithCurrentPlayers();
     } else {
-        spdlog::info("No players in queue when countdown finished");
+        LOG_INFO("No players in queue when countdown finished");
     }
 }
 
 // 用当前队列中的玩家创建房间
 void RoomManager::createRoomWithCurrentPlayers() {
     if (wait_rooms_.empty()) {
-        spdlog::warn("Cannot create room - no players in queue");
+        LOG_WARN("Cannot create room - no players in queue");
         return;
     }
     
     // 创建新房间
     auto room = createRoom();
     if (!room) {
-        spdlog::error("Failed to create room");
+        LOG_ERROR("Failed to create room");
         return;
     }
     
@@ -548,10 +548,10 @@ void RoomManager::createRoomWithCurrentPlayers() {
         // 添加到房间
         if (room->addPlayer(player)) {
             players_added++;
-            spdlog::info("Player {} assigned to room {} (forced by countdown)", 
+            LOG_INFO("Player {} assigned to room {} (forced by countdown)", 
                         player->GetPlayerId(), room->getId());
         } else {
-            spdlog::error("Failed to add player {} to room {}", 
+            LOG_ERROR("Failed to add player {} to room {}", 
                          player->GetPlayerId(), room->getId());
         }
     }
@@ -571,23 +571,23 @@ void RoomManager::createRoomWithCurrentPlayers() {
     // 设置房间状态
     if (room->isFull()) {
         room->setState(RoomState::FULL);
-        spdlog::info("Room {} is full with {} players", room->getId(), players_added);
+        LOG_INFO("Room {} is full with {} players", room->getId(), players_added);
     } else {
         room->setState(RoomState::WAITING);
-        spdlog::info("Room {} created with {} players (not full)", room->getId(), players_added);
+        LOG_INFO("Room {} created with {} players (not full)", room->getId(), players_added);
     }
     
-    spdlog::info("Room {} created by countdown with {} players", room->getId(), players_added);
+    LOG_INFO("Room {} created by countdown with {} players", room->getId(), players_added);
 
     // 尝试开始游戏
     if (room) {
-        spdlog::info("Room {} is full, attempting to start game", room->getId());
+        LOG_INFO("Room {} is full, attempting to start game", room->getId());
         
         // 尝试开始游戏
         if (startGameInRoom(std::to_string(room->getId()))) {
-            spdlog::info("Game successfully started in room {}", room->getId());
+            LOG_INFO("Game successfully started in room {}", room->getId());
         } else {
-            spdlog::warn("Failed to start game in room {}", room->getId());
+            LOG_WARN("Failed to start game in room {}", room->getId());
         }
     } 
 }
@@ -597,18 +597,18 @@ void RoomManager::addPlayerConnection(const std::shared_ptr<Connection>& conn, c
     std::lock_guard<std::mutex> lock(playersMutex_);
     
     if (!conn || !player) {
-        spdlog::error("Invalid connection or player pointer");
+        LOG_ERROR("Invalid connection or player pointer");
         return;
     }
     
     // 检查连接是否已存在
     auto it = Connections_player_.find(conn);
     if (it != Connections_player_.end()) {
-        spdlog::warn("Connection {} already exists, updating player mapping", conn->getId());
+        LOG_WARN("Connection {} already exists, updating player mapping", conn->getId());
     }
     
     Connections_player_[conn] = player;
-    spdlog::info("Added connection mapping: {} -> {}", conn->getId(), player->GetPlayerId());
+    LOG_INFO("Added connection mapping: {} -> {}", conn->getId(), player->GetPlayerId());
 }
 
 // 移除连接-玩家映射
@@ -616,17 +616,17 @@ void RoomManager::removePlayerConnection(const std::shared_ptr<Connection>& conn
     std::lock_guard<std::mutex> lock(playersMutex_);
     
     if (!conn) {
-        spdlog::error("Invalid connection pointer");
+        LOG_ERROR("Invalid connection pointer");
         return;
     }
     
     auto it = Connections_player_.find(conn);
     if (it != Connections_player_.end()) {
-        spdlog::info("Removing connection mapping: {} -> {}", 
+        LOG_INFO("Removing connection mapping: {} -> {}", 
                     conn->getId(), it->second->GetPlayerId());
         Connections_player_.erase(it);
     } else {
-        spdlog::warn("Connection {} not found in mapping", conn->getId());
+        LOG_WARN("Connection {} not found in mapping", conn->getId());
     }
 }
 
@@ -635,7 +635,7 @@ std::shared_ptr<Player> RoomManager::getPlayerByConnection(const std::shared_ptr
     std::lock_guard<std::mutex> lock(playersMutex_);
     
     if (!conn) {
-        spdlog::error("Invalid connection pointer");
+        LOG_ERROR("Invalid connection pointer");
         return nullptr;
     }
     
@@ -644,7 +644,7 @@ std::shared_ptr<Player> RoomManager::getPlayerByConnection(const std::shared_ptr
         return it->second;
     }
     
-    spdlog::debug("No player found for connection {}", conn->getId());
+    LOG_DEBUG("No player found for connection {}", conn->getId());
     return nullptr;
 }
 
@@ -653,7 +653,7 @@ std::shared_ptr<Connection> RoomManager::getConnectionByPlayerId(const std::stri
     std::lock_guard<std::mutex> lock(playersMutex_);
     
     if (playerId.empty()) {
-        spdlog::error("Empty player ID");
+        LOG_ERROR("Empty player ID");
         return nullptr;
     }
     
@@ -663,7 +663,7 @@ std::shared_ptr<Connection> RoomManager::getConnectionByPlayerId(const std::stri
         }
     }
     
-    spdlog::debug("No connection found for player {}", playerId);
+    LOG_DEBUG("No connection found for player {}", playerId);
     return nullptr;
 }
 
@@ -695,7 +695,7 @@ void RoomManager::cleanupInactiveConnections() {
         
         // 检查连接是否无效或玩家已断线
         if (!conn || !player || !conn->isConnected() || player->getState() == PlayerState::DISCONNECTED) {
-            spdlog::info("Cleaning up inactive connection: {} -> {}", 
+            LOG_INFO("Cleaning up inactive connection: {} -> {}", 
                         conn ? conn->getId() : "null", 
                         player ? player->GetPlayerId() : "null");
             
@@ -714,16 +714,16 @@ void RoomManager::cleanupInactiveConnections() {
 // 处理连接断开
 void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& conn) {
     if (!conn) {
-        spdlog::error("Invalid connection pointer in handleConnectionDisconnect");
+        LOG_ERROR("Invalid connection pointer in handleConnectionDisconnect");
         return;
     }
     
-    spdlog::info("Handling connection disconnect: {}", conn->getId());
+    LOG_INFO("Handling connection disconnect: {}", conn->getId());
     
     // 获取对应的玩家
     auto player = getPlayerByConnection(conn);
     if (!player) {
-        spdlog::warn("No player found for disconnected connection: {}", conn->getId());
+        LOG_WARN("No player found for disconnected connection: {}", conn->getId());
         // 仍然从连接池中移除
         removePlayerConnection(conn);
         return;
@@ -731,7 +731,7 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
     
     // 使用 use_count 检查 shared_ptr 是否有效
     if (player.use_count() == 0) {
-        spdlog::error("Player object has been destroyed");
+        LOG_ERROR("Player object has been destroyed");
         return;
     }
 
@@ -741,11 +741,11 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
     try {
         currentState = player->getState();
     } catch (const std::exception& e) {
-        spdlog::error("Failed to get player state: {}", e.what());
+        LOG_ERROR("Failed to get player state: {}", e.what());
         return;
     }
     
-    spdlog::info("Player {} (state: {}) disconnected", playerId, static_cast<int>(currentState));
+    LOG_INFO("Player {} (state: {}) disconnected", playerId, static_cast<int>(currentState));
     
     // 设置玩家状态为断线
     // player->setState(PlayerState::DISCONNECTED);
@@ -757,7 +757,7 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
 
             player->setState(PlayerState::DISCONNECTED);
             if (removePlayerFromWaitQueue(playerId)) {
-                spdlog::info("Player {} removed from wait queue due to disconnect", playerId);
+                LOG_INFO("Player {} removed from wait queue due to disconnect", playerId);
             }
             break;
         }
@@ -769,7 +769,7 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
             player->SetConnection(nullptr);
             auto room = getPlayerRoom(player);
             if (room) {
-                spdlog::info("Notifying room {} about player {} disconnect", room->getId(), playerId);
+                LOG_INFO("Notifying room {} about player {} disconnect", room->getId(), playerId);
                 
                 // room->stopCountdownTimer();
                 // 房间处理玩家退出并广播消息
@@ -781,11 +781,11 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
                 
                 // 检查房间是否需要结束或继续游戏
                 if (room->getGamingPlayerCount() == 0) {
-                    spdlog::info("Room {} is empty after disconnect, marking as finished", room->getId());
+                    LOG_INFO("Room {} is empty after disconnect, marking as finished", room->getId());
                     room->setState(RoomState::FINISHED);
                     removeRoom(std::to_string(room->getId()));
                 } else {
-                    spdlog::info("Room {} continues with {} players", room->getId(), room->getGamingPlayerCount());
+                    LOG_INFO("Room {} continues with {} players", room->getId(), room->getGamingPlayerCount());
                     // 可以在这里添加其他逻辑，比如暂停游戏等
                 }
             }
@@ -795,13 +795,13 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
         case PlayerState::FINISHED: {
             // 游戏已结束，只需要清理
             // removePlayerFromRoom(playerId);
-            spdlog::info("Player {} disconnected after game finished", playerId);
+            LOG_INFO("Player {} disconnected after game finished", playerId);
             break;
         }
         
         case PlayerState::DISCONNECTED: {
             // 已经是断线状态，只需要清理
-            spdlog::info("Player {} was already disconnected", playerId);
+            LOG_INFO("Player {} was already disconnected", playerId);
             break;
         }
         case ::PlayerState::ROBOT: {  
@@ -812,5 +812,5 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
     // 移除连接映射
     removePlayerConnection(conn);
     
-    spdlog::info("Connection disconnect handling completed for player {}", playerId);
+    LOG_INFO("Connection disconnect handling completed for player {}", playerId);
 }

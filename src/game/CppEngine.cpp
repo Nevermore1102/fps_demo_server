@@ -57,29 +57,29 @@ bool CppEngine::handleMessage(const std::shared_ptr<Connection>& conn, const Mes
         //     onPlayerLeave(conn, msg);
         //     break;
         default:
-            spdlog::warn("Unknown message type: {}", static_cast<uint32_t>(msg.getType()));
+            LOG_WARN("Unknown message type: {}", static_cast<uint32_t>(msg.getType()));
             return false;
     }
     return true;
 }
 
 void CppEngine::onHeartbeat(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::debug("Received heartbeat from {}", conn->getId());
+    LOG_DEBUG("Received heartbeat from {}", conn->getId());
     
     // msg.logMessage();
 
     NetworkMessage row_msg;
     // 尝试从消息体中解析protobuf对象
     if (!msg.getBodyAsProto(row_msg)) {
-        spdlog::error("Failed to parse heartbeat message body");
+        LOG_ERROR("Failed to parse heartbeat message body");
         return;
     }
     // 打印解析后的NetworkMessage内容
-    spdlog::info("P arsed NetworkMessage:");
-    spdlog::info("  Message Type: {}", MessageType_Name(row_msg.msg_id()));
-    spdlog::info("  Player ID: {}", row_msg.player_id());
-    // spdlog::info("  Timestamp: {}", row_msg.timestamp());
-    // spdlog::info("  data: {}", row_msg.heartbeat().data());
+    LOG_INFO("P arsed NetworkMessage:");
+    LOG_INFO("  Message Type: {}", MessageType_Name(row_msg.msg_id()));
+    LOG_INFO("  Player ID: {}", row_msg.player_id());
+    // LOG_INFO("  Timestamp: {}", row_msg.timestamp());
+    // LOG_INFO("  data: {}", row_msg.heartbeat().data());
 
 
     // 发送心跳响应
@@ -96,27 +96,27 @@ void CppEngine::onHeartbeat(const std::shared_ptr<Connection>& conn, const Messa
     response.setBodyFromProto(pb_msg);
     
     if (!conn->sendMessage(response)) {
-        spdlog::error("Failed to send heartbeat response");
+        LOG_ERROR("Failed to send heartbeat response");
     }
-     spdlog::info("发送心跳结束", conn->getId());
+     LOG_INFO("发送心跳结束", conn->getId());
 }
 
 void CppEngine::onConnect(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Player connected: {}", conn->getId());
+    LOG_INFO("Player connected: {}", conn->getId());
 }
 
 void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Player Start Match: {}", conn->getId());
+    LOG_INFO("Player Start Match: {}", conn->getId());
     
     // 解析消息获取玩家ID
     NetworkMessage pb_msg;
     if (!msg.getBodyAsProto(pb_msg)) {
-        spdlog::error("1 Failed to parse start match message body");
+        LOG_ERROR("1 Failed to parse start match message body");
         return;
     }
 
     if (pb_msg.msg_id() != MessageType::START_MATCH || !pb_msg.has_start_match()) {
-        spdlog::error("2 Failed to parse start match message body");
+        LOG_ERROR("2 Failed to parse start match message body");
         return;
     }
     
@@ -128,11 +128,11 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
     if (playerId.empty()) {
         // 如果消息中没有玩家ID，使用连接ID作为玩家ID
         // playerId = conn->getId();
-        spdlog::error("Player ID is empty");
+        LOG_ERROR("Player ID is empty");
         return ;
     }
     
-    spdlog::info("Player {} requesting to start match", playerId);
+    LOG_INFO("Player {} requesting to start match", playerId);
     
     // 创建新的Player对象
     auto player = std::make_shared<Player>(playerId, conn);
@@ -144,47 +144,47 @@ void CppEngine::onStartMatch(const std::shared_ptr<Connection>& conn, const Mess
     auto& roomManager = RoomManager::getInstance();
     roomManager.joinWaitRoom(player);
     
-    spdlog::info("Player {} added to match queue", playerId);
+    LOG_INFO("Player {} added to match queue", playerId);
     
     // 检查是否有房间可以开始游戏
     // auto playerRoom = roomManager.getPlayerRoom(playerId);
     auto playerRoom = roomManager.getPlayerRoom(player);
     if (playerRoom && playerRoom->isFull()) {
-        spdlog::info("Room {} is full, attempting to start game", playerRoom->getId());
+        LOG_INFO("Room {} is full, attempting to start game", playerRoom->getId());
         
         // 尝试开始游戏
         if (roomManager.startGameInRoom(std::to_string(playerRoom->getId()))) {
-            spdlog::info("Game successfully started in room {}", playerRoom->getId());
+            LOG_INFO("Game successfully started in room {}", playerRoom->getId());
         } else {
-            spdlog::warn("Failed to start game in room {}", playerRoom->getId());
+            LOG_WARN("Failed to start game in room {}", playerRoom->getId());
         }
     } else {
         if (playerRoom) {
-            spdlog::info("Player {} assigned to room {}, waiting for more players ({}/{})", 
+            LOG_INFO("Player {} assigned to room {}, waiting for more players ({}/{})", 
                         playerId, playerRoom->getId(), 
                         playerRoom->getAllPlayerCount(), room_capacity);
         } else {
-            spdlog::warn("Player {} not assigned to any room", playerId);
+            LOG_WARN("Player {} not assigned to any room", playerId);
         }
     }
 }
 
 // 处理数据加载完成消息
 void CppEngine::onDataLoaded(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Player Data Loaded: {}", conn->getId());
+    LOG_INFO("Player Data Loaded: {}", conn->getId());
 
     // 解析消息获取玩家ID
     NetworkMessage pb_msg;
     if (!msg.getBodyAsProto(pb_msg)) {
-        spdlog::error("Failed to parse data loaded message body");
+        LOG_ERROR("Failed to parse data loaded message body");
         return;
     }
     std::string playerId = pb_msg.player_id();
     if (playerId.empty()) {
-        spdlog::error("Player ID is empty in data loaded message");
+        LOG_ERROR("Player ID is empty in data loaded message");
         return;
     }
-    spdlog::info("Player {} data loaded", playerId);
+    LOG_INFO("Player {} data loaded", playerId);
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
     // auto room = roomManager.getPlayerRoom(playerId);
@@ -193,34 +193,34 @@ void CppEngine::onDataLoaded(const std::shared_ptr<Connection>& conn, const Mess
     auto room = roomManager.getPlayerRoom(player);
 
     if (!room) {
-        spdlog::error("Room not found for player {}", playerId);
+        LOG_ERROR("Room not found for player {}", playerId);
         return;
     }
     // 设置玩家数据加载状态
     room->setDataLoadStatus(playerId, true);
-    spdlog::info("Player {} data load status set to true in room {}", playerId, room->getId());
+    LOG_INFO("Player {} data load status set to true in room {}", playerId, room->getId());
 
     // 检查是否所有玩家都已加载数据
     if (room->isAllPlayerDataLoaded()) {
-        spdlog::info("All players in room {} have loaded data, starting game", room->getId());
+        LOG_INFO("All players in room {} have loaded data, starting game", room->getId());
         room->startGame();
     }
 }
 
 // 备战结束，收到玩家快照，集齐快照后广播
 void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Received BATTLE_PREP_SNAPSHOT from connection: {}", conn->getId());
+    LOG_INFO("Received BATTLE_PREP_SNAPSHOT from connection: {}", conn->getId());
     
     // 解析消息
     NetworkMessage pb_msg;
     if (!msg.getBodyAsProto(pb_msg)) {
-        spdlog::error("Failed to parse battle prep snapshot message body");
+        LOG_ERROR("Failed to parse battle prep snapshot message body");
         return;
     }
     
     // 检查是否有快照数据
     if (!pb_msg.has_battle_prep_snapshot()) {
-        spdlog::error("Message does not contain battle prep snapshot data");
+        LOG_ERROR("Message does not contain battle prep snapshot data");
         return;
     }
     
@@ -237,31 +237,31 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
     // auto room = roomManager.getPlayerRoom(playerId);
     auto player = roomManager.getPlayerByConnection(conn);
         if (!player) {
-        spdlog::error("Player {} not found in room", playerId);
+        LOG_ERROR("Player {} not found in room", playerId);
         return;
     }
 
     auto room = roomManager.getPlayerRoom(player);
     if (!room) {
-        spdlog::error("Room not found for player {}", playerId);
+        LOG_ERROR("Room not found for player {}", playerId);
         return;
     }
 
     std::string matchId = std::to_string(room->getId());
-    spdlog::info("Processing snapshot - Player: {}, match id: {}, Round: {}, Honor: {}", 
+    LOG_INFO("Processing snapshot - Player: {}, match id: {}, Round: {}, Honor: {}", 
                 playerId, matchId, round, honorValue);
     
     // 记录玩家快照
     if (!room->recordPlayerSnapshot(playerId, formationData, honorValue, round)) {
-        spdlog::error("Failed to record snapshot for player {} in room {}", playerId, matchId);
+        LOG_ERROR("Failed to record snapshot for player {} in room {}", playerId, matchId);
         return;
     }
     
-    spdlog::info("Successfully recorded snapshot for player {} in room {}", playerId, matchId);
+    LOG_INFO("Successfully recorded snapshot for player {} in room {}", playerId, matchId);
     
     // 检查是否所有游戏中玩家都已提交快照
     if (room->allGamingSnapshotsReceived()) {
-        spdlog::info("All snapshots received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
+        LOG_INFO("All snapshots received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
         room->broadcastAllGamingSnapshots();
         
         // 清理快照为下一轮准备
@@ -272,16 +272,16 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
 // 处理战斗后的消息 {type:战斗结果，对局id，playerid1，轮次，荣耀值}
 // 如果是最后一轮，需要单独处理
 void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Player Battle Result: {}", conn->getId());
+    LOG_INFO("Player Battle Result: {}", conn->getId());
     // 解析消息获取玩家ID
     NetworkMessage pb_msg;
     if (!msg.getBodyAsProto(pb_msg)) {
-        spdlog::error("Failed to parse battle result message body");
+        LOG_ERROR("Failed to parse battle result message body");
         return;
     }
 
     if( !pb_msg.has_battle_result_report()) {
-        spdlog::error("Message does not contain battle result data");
+        LOG_ERROR("Message does not contain battle result data");
         return;
     }
 
@@ -296,18 +296,18 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     // auto room = roomManager.getPlayerRoom(playerId);
     auto player = roomManager.getPlayerByConnection(conn);
     if(!player) {
-        spdlog::error("Player not found for connection {}", conn->getId());
+        LOG_ERROR("Player not found for connection {}", conn->getId());
         return;
     }
 
     auto room = roomManager.getPlayerRoom(player);
     if (!room) {
-        spdlog::error("Room not found");
+        LOG_ERROR("Room not found");
         return;
     }
 
     std::string matchId = std::to_string(room->getId());
-    spdlog::info("Processing battle result - Player: {}, Match: {}, Round: {}, Honor: {}", 
+    LOG_INFO("Processing battle result - Player: {}, Match: {}, Round: {}, Honor: {}", 
                 playerId, matchId, round, honorValue);
     
 
@@ -317,7 +317,7 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     
     // 记录战斗结果
     if (!room->insertRanking(playerId, honorValue)) {
-        spdlog::error("Failed to record ranking for player {} in room {}", playerId, matchId);
+        LOG_ERROR("Failed to record ranking for player {} in room {}", playerId, matchId);
         return;
     }
 
@@ -327,11 +327,11 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     // 20250805updated: 广播排名
     // 每有玩家结算，服务器广播客户端 {type：现在排名信息，所有<玩家id，排名，荣耀值>}
     room->BroadcastCurrentRankings();
-    spdlog::info("Successfully broadcast ranking for player in room {}", matchId);
+    LOG_INFO("Successfully broadcast ranking for player in room {}", matchId);
     
     // 检查是否所有游戏中玩家都已提交战斗结果
     if (room->allGamingRankingsReceived()) {
-        spdlog::info("All gaming rankings received for room {}, broadcasting rankings", matchId);
+        LOG_INFO("All gaming rankings received for room {}, broadcasting rankings", matchId);
         
         // 继续下一轮战斗
         if(room->getCurrentRound() < ROUND_NUM){
@@ -348,29 +348,29 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
                 playerx->setState(PlayerState::CONNECTED);
             }
             roomManager.removeRoom(matchId);
-            spdlog::info("Game finished in room {}, broadcasting battle results", matchId);
+            LOG_INFO("Game finished in room {}, broadcasting battle results", matchId);
         }
     }
 }
 
 // 玩家主动退出匹配或游戏
 void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& msg) {
-    spdlog::info("Player Exit: {}", conn->getId());
+    LOG_INFO("Player Exit: {}", conn->getId());
 
     // 解析消息获取玩家ID
     NetworkMessage pb_msg;
     if (!msg.getBodyAsProto(pb_msg)) {
-        spdlog::error("Failed to parse exit message body");
+        LOG_ERROR("Failed to parse exit message body");
         return;
     }
 
     auto exit_msg = pb_msg.exit();
     std::string exit_player_id = exit_msg.exit_info().exit_player_id();
     if (exit_player_id.empty()) {
-        spdlog::error("Player ID is empty in exit message");
+        LOG_ERROR("Player ID is empty in exit message");
         return;
     }
-    spdlog::info("Player {} is exiting", exit_player_id);
+    LOG_INFO("Player {} is exiting", exit_player_id);
 
     // 获取房间管理器并找到对应房间
     auto& roomManager = RoomManager::getInstance();
@@ -378,13 +378,13 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
     auto player = roomManager.getPlayerByConnection(conn);
 
     if (!player) {
-        spdlog::error("游戏已结束，房间已销毁");
+        LOG_ERROR("游戏已结束，房间已销毁");
         return ;
     }
     
     // 玩家主动退出匹配
     if (player->getState() == PlayerState::CONNECTED) {
-        spdlog::info("Player {} is exiting match queue", exit_player_id);
+        LOG_INFO("Player {} is exiting match queue", exit_player_id);
         roomManager.removePlayerFromWaitQueue(player->GetPlayerId());
     }
     else if (player->getState() == PlayerState::GAMING) {
@@ -393,7 +393,7 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
         // auto room = roomManager.getPlayerRoom(exit_player_id);
         auto room = roomManager.getPlayerRoom(player);
         if (!room) {
-            spdlog::error("Room not found for player {}", exit_player_id);
+            LOG_ERROR("Room not found for player {}", exit_player_id);
             return;
         }
 
@@ -407,23 +407,23 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
         room->broadcastExitMessage();
 
         if (room->getGamingPlayerCount() == 0) {
-            spdlog::info("All players have exited the game and removed from room {}", room->getId());
+            LOG_INFO("All players have exited the game and removed from room {}", room->getId());
             roomManager.removeRoom(std::to_string(room->getId()));
         }
-        spdlog::info("Player {} has exited the game and removed from room {}", exit_player_id, room->getId());
+        LOG_INFO("Player {} has exited the game and removed from room {}", exit_player_id, room->getId());
     }
 }
 
 // void CppEngine::onPlayerUpdate(const std::shared_ptr<Connection>& conn, const Message& msg) {
 //     NetworkMessage pb_msg;
 //     if (!msg.getBodyAsProto(pb_msg)) {
-//         spdlog::error("Failed to parse player update message");
+//         LOG_ERROR("Failed to parse player update message");
 //         return;
 //     }
     
 //     if (pb_msg.has_player_update()) {
 //         const auto& update = pb_msg.player_update();
-//         spdlog::debug("Player update: pos=({}, {}, {}), rot=({}, {}, {})", 
+//         LOG_DEBUG("Player update: pos=({}, {}, {}), rot=({}, {}, {})", 
 //                      update.position_x(), update.position_y(), update.position_z(),
 //                      update.rotation_x(), update.rotation_y(), update.rotation_z());
 //     }
@@ -432,33 +432,33 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
 // void CppEngine::onPlayerAttribute(const std::shared_ptr<Connection>& conn, const Message& msg) {
 //     NetworkMessage pb_msg;
 //     if (!msg.getBodyAsProto(pb_msg)) {
-//         spdlog::error("Failed to parse player attribute message");
+//         LOG_ERROR("Failed to parse player attribute message");
 //         return;
 //     }
     
 //     if (pb_msg.has_player_attribute()) {
 //         const auto& attr = pb_msg.player_attribute();
-//         spdlog::debug("Player attribute: health={}, armor={}", attr.health(), attr.armor());
+//         LOG_DEBUG("Player attribute: health={}, armor={}", attr.health(), attr.armor());
 //     }
 // }
 
 // void CppEngine::onPlayerState(const std::shared_ptr<Connection>& conn, const Message& msg) {
 //     NetworkMessage pb_msg;
 //     if (!msg.getBodyAsProto(pb_msg)) {
-//         spdlog::error("Failed to parse player state message");
+//         LOG_ERROR("Failed to parse player state message");
 //         return;
 //     }
     
 //     if (pb_msg.has_player_state()) {
 //         const auto& state = pb_msg.player_state();
-//         spdlog::debug("Player state: alive={}, team={}", state.is_alive(), state.team_id());
+//         LOG_DEBUG("Player state: alive={}, team={}", state.is_alive(), state.team_id());
 //     }
 // }
 
 // void CppEngine::onPlayerJoin(const std::shared_ptr<Connection>& conn, const Message& msg) {
-//     spdlog::info("Player joined: {}", conn->getId());
+//     LOG_INFO("Player joined: {}", conn->getId());
 // }
 
 // void CppEngine::onPlayerLeave(const std::shared_ptr<Connection>& conn, const Message& msg) {
-//     spdlog::info("Player left: {}", conn->getId());
+//     LOG_INFO("Player left: {}", conn->getId());
 // } 

@@ -6,6 +6,8 @@
 #include <functional>
 #include "proto/Message.h"
 
+
+
 class Connection : public std::enable_shared_from_this<Connection> {
 public:
     using MessageCallback = std::function<void(const std::shared_ptr<Connection>&, const Message&)>;

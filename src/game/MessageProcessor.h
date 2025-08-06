@@ -3,6 +3,7 @@
 #include "CppEngine.h"
 #include <memory>
 #include <spdlog/spdlog.h>
+#include "log/log_macro.h"
 
 class MessageProcessor {
 public:
@@ -11,7 +12,7 @@ public:
 
     bool processMessage(const std::shared_ptr<Connection>& conn, const Message& msg) {
         if (!conn) {
-            spdlog::error("Connection is null");
+            LOG_ERROR("Connection is null");
             return false;
         }
 
@@ -20,7 +21,7 @@ public:
 
         // // 尝试由Lua处理消息
         // if (lua_vm->handleMessage(msg)) {
-        //     spdlog::info("Message handled by Lua");
+        //     LOG_INFO("Message handled by Lua");
         //     return true;
         // }
 
@@ -30,7 +31,7 @@ public:
             return true;
         }
 
-        spdlog::warn("Unknown message type: {}", static_cast<int>(msg.getType()));
+        LOG_WARN("Unknown message type: {}", static_cast<int>(msg.getType()));
         return false;
     }
 

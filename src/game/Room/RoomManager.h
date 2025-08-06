@@ -10,6 +10,7 @@
 #include "game/Player/Player.h"
 #include "net/Connection.h"
 #include "proto/NetworkMessage.pb.h"
+#include "log/log_macro.h"
 
 class RoomManager {
 public:

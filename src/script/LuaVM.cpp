@@ -15,7 +15,7 @@
 //     lua_pop(L, 1);
     
 //     if (!vm || !vm->current_connection_) {
-//         spdlog::error("Failed to send response: no valid connection");
+//         LOG_ERROR("Failed to send response: no valid connection");
 //         lua_pushboolean(L, false);
 //         return 1;
 //     }
@@ -27,7 +27,7 @@
 //     // 发送响应
 //     bool success = vm->current_connection_->sendMessage(response);
 //     if (!success) {
-//         spdlog::error("Failed to send response message");
+//         LOG_ERROR("Failed to send response message");
 //     }
     
 //     lua_pushboolean(L, success);
@@ -102,7 +102,7 @@
 //     // 获取函数
 //     lua_getglobal(L_, funcName.c_str());
 //     if (!lua_isfunction(L_, -1)) {
-//         spdlog::error("Function {} is not found or not a function", funcName);
+//         LOG_ERROR("Function {} is not found or not a function", funcName);
 //         lua_pop(L_, 1);
 //         return false;
 //     }
@@ -209,7 +209,7 @@
 
 // bool LuaVM::registerMessageHandler(MessageType type, const std::string& luaFuncName) {
 //     message_handlers_[type] = luaFuncName;
-//     spdlog::info("Registered Lua message handler for type {}: {}", 
+//     LOG_INFO("Registered Lua message handler for type {}: {}", 
 //                  static_cast<int>(type), luaFuncName);
 //     return true;
 // }
@@ -218,7 +218,7 @@
 //     auto it = message_handlers_.find(type);
 //     if (it != message_handlers_.end()) {
 //         message_handlers_.erase(it);
-//         spdlog::info("Unregistered Lua message handler for type {}", 
+//         LOG_INFO("Unregistered Lua message handler for type {}", 
 //                      static_cast<int>(type));
 //         return true;
 //     }
@@ -456,14 +456,14 @@
 //     // 创建新的PlayerData实例
 //     lua_getglobal(L_, "PlayerData");
 //     if (!lua_istable(L_, -1)) {
-//         spdlog::error("Failed to get PlayerData table");
+//         LOG_ERROR("Failed to get PlayerData table");
 //         return false;
 //     }
     
 //     // 调用构造函数
 //     lua_pushstring(L_, player_id.c_str());
 //     if (lua_pcall(L_, 1, 1, 0) != 0) {
-//         spdlog::error("Failed to create PlayerData instance: {}", lua_tostring(L_, -1));
+//         LOG_ERROR("Failed to create PlayerData instance: {}", lua_tostring(L_, -1));
 //         return false;
 //     }
     

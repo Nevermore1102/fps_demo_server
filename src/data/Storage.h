@@ -37,17 +37,17 @@
         
 //         // 打开数据库连接
 //         if (sqlite3_open(fullPath.string().c_str(), &db_) != SQLITE_OK) {
-//             spdlog::error("Failed to open database: {}", sqlite3_errmsg(db_));
+//             LOG_ERROR("Failed to open database: {}", sqlite3_errmsg(db_));
 //             return false;
 //         }
 
 //         // 初始化数据库表
 //         if (!initTables()) {
-//             spdlog::error("Failed to initialize tables");
+//             LOG_ERROR("Failed to initialize tables");
 //             return false;
 //         }
 
-//         spdlog::info("Database initialized successfully at {}", fullPath.string());
+//         LOG_INFO("Database initialized successfully at {}", fullPath.string());
 //         return true;
 //     }
 
@@ -58,14 +58,14 @@
         
 //         sqlite3_stmt* stmt;
 //         if (sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr) != SQLITE_OK) {
-//             spdlog::error("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+//             LOG_ERROR("Failed to prepare statement: {}", sqlite3_errmsg(db_));
 //             return false;
 //         }
 
 //         // 绑定参数
 //         if (sqlite3_bind_text(stmt, 1, playerId.c_str(), -1, SQLITE_STATIC) != SQLITE_OK ||
 //             sqlite3_bind_text(stmt, 2, data.c_str(), -1, SQLITE_STATIC) != SQLITE_OK) {
-//             spdlog::error("Failed to bind parameters: {}", sqlite3_errmsg(db_));
+//             LOG_ERROR("Failed to bind parameters: {}", sqlite3_errmsg(db_));
 //             sqlite3_finalize(stmt);
 //             return false;
 //         }
@@ -73,7 +73,7 @@
 //         // 执行语句
 //         bool success = (sqlite3_step(stmt) == SQLITE_DONE);
 //         if (!success) {
-//             spdlog::error("Failed to execute statement: {}", sqlite3_errmsg(db_));
+//             LOG_ERROR("Failed to execute statement: {}", sqlite3_errmsg(db_));
 //         }
 
 //         sqlite3_finalize(stmt);
@@ -86,13 +86,13 @@
         
 //         sqlite3_stmt* stmt;
 //         if (sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr) != SQLITE_OK) {
-//             spdlog::error("Failed to prepare statement: {}", sqlite3_errmsg(db_));
+//             LOG_ERROR("Failed to prepare statement: {}", sqlite3_errmsg(db_));
 //             return "";
 //         }
 
 //         // 绑定参数
 //         if (sqlite3_bind_text(stmt, 1, playerId.c_str(), -1, SQLITE_STATIC) != SQLITE_OK) {
-//             spdlog::error("Failed to bind parameters: {}", sqlite3_errmsg(db_));
+//             LOG_ERROR("Failed to bind parameters: {}", sqlite3_errmsg(db_));
 //             sqlite3_finalize(stmt);
 //             return "";
 //         }
@@ -133,7 +133,7 @@
 
 //         char* errMsg = nullptr;
 //         if (sqlite3_exec(db_, sql, nullptr, nullptr, &errMsg) != SQLITE_OK) {
-//             spdlog::error("Failed to create table: {}", errMsg);
+//             LOG_ERROR("Failed to create table: {}", errMsg);
 //             sqlite3_free(errMsg);
 //             return false;
 //         }

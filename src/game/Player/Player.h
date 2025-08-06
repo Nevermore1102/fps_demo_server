@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include "log/log_macro.h"
 
 enum class PlayerState {
     CONNECTED,      // 已连接

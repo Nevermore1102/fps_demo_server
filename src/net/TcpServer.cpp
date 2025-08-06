@@ -30,7 +30,7 @@ bool TcpServer::start() {
     // 创建事件基础
     base_ = event_base_new();
     if (!base_) {
-        spdlog::error("Failed to create event base");
+        LOG_ERROR("Failed to create event base");
         return false;
     }
 
@@ -54,7 +54,7 @@ bool TcpServer::start() {
                                       sizeof(sin));
 
     if (!listener_) {
-        spdlog::error("Failed to create listener");
+        LOG_ERROR("Failed to create listener");
         event_base_free(base_);
         base_ = nullptr;
         return false;
@@ -64,7 +64,7 @@ bool TcpServer::start() {
 
     // 启动事件循环
     running_ = true;
-    spdlog::info("Server started on {}:{}", host_, port_);
+    LOG_INFO("Server started on {}:{}", host_, port_);
     event_base_dispatch(base_);
 
     return true;
@@ -88,7 +88,7 @@ void TcpServer::stop() {
         base_ = nullptr;
     }
 
-    spdlog::info("Server stopped");
+    LOG_INFO("Server stopped");
 }
 
 void TcpServer::broadcast(const Message& msg) {
@@ -158,7 +158,7 @@ void TcpServer::onAccept(evutil_socket_t fd, struct sockaddr* addr) {
     // 创建新的 bufferevent
     struct bufferevent* bev = bufferevent_socket_new(base_, fd, BEV_OPT_CLOSE_ON_FREE);
     if (!bev) {
-        spdlog::error("Failed to create bufferevent");
+        LOG_ERROR("Failed to create bufferevent");
         return;
     }
 
@@ -176,7 +176,7 @@ void TcpServer::onAccept(evutil_socket_t fd, struct sockaddr* addr) {
     }
     else {
         conn->setCloseCallback([this](const std::shared_ptr<Connection>& conn) {
-            spdlog::info("Connection closed: {}", conn->getId());
+            LOG_INFO("Connection closed: {}", conn->getId());
             ConnectionPool::getInstance().removeConnection(conn->getId());
         });
     }
@@ -193,10 +193,10 @@ void TcpServer::onAccept(evutil_socket_t fd, struct sockaddr* addr) {
     char client_addr[INET_ADDRSTRLEN];
     struct sockaddr_in* client_sin = (struct sockaddr_in*)addr;
     inet_ntop(AF_INET, &client_sin->sin_addr, client_addr, sizeof(client_addr));
-    spdlog::info("New connection from {}:{}", client_addr, ntohs(client_sin->sin_port));
+    LOG_INFO("New connection from {}:{}", client_addr, ntohs(client_sin->sin_port));
 }
 
 void TcpServer::onAcceptError() {
     int err = EVUTIL_SOCKET_ERROR();
-    spdlog::error("Accept error: {}", evutil_socket_error_to_string(err));
+    LOG_ERROR("Accept error: {}", evutil_socket_error_to_string(err));
 } 

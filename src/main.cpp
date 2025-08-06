@@ -24,15 +24,10 @@
 // #include "script/LuaVM.h"
 #include "game/GameServer.h"
 // #include "test/TestStorage.h"
-
+#include "log/log_macro.h"
 // 定义是否运行测试的宏
 // #define RUN_TESTS 1
 
-// 重定义为简短的宏名
-#define LOG_INFO(msg, ...) SPDLOG_INFO(msg, ##__VA_ARGS__)
-#define LOG_ERROR(msg, ...) SPDLOG_ERROR(msg, ##__VA_ARGS__)
-#define LOG_DEBUG(msg, ...) SPDLOG_DEBUG(msg, ##__VA_ARGS__)  
-#define LOG_WARM(msg, ...) SPDLOG_WARN(msg, ##__VA_ARGS__)
 
 int main() {
     // 忽略 SIGPIPE 信号
@@ -43,22 +38,23 @@ int main() {
     // spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [tid:%t] %v");  
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] [tid:%t] [%s:%#] %v");
     spdlog::set_level(spdlog::level::debug);
-    // spdlog::info("Server starting...");
+    // LOG_INFO("Server starting...");
     LOG_INFO("Server starting...");
+
 
 // #if RUN_TESTS
 //     // 运行测试
 //     if (!test::TestStorage::runAllTests()) {
-//         spdlog::error("存储模块测试失败");
+//         LOG_ERROR("存储模块测试失败");
 //         return -1;
 //     }
-//     spdlog::info("所有测试通过");
+//     LOG_INFO("所有测试通过");
 // #endif
 
     // 创建并运行服务器
     GameServer server;
     if (!server.init()) {
-        spdlog::error("Failed to init server");
+        LOG_ERROR("Failed to init server");
         return 1;
     }
 

@@ -9,7 +9,7 @@ constexpr size_t MAX_MESSAGE_SIZE = 10 * 1024 * 1024;
 bool Message::serialize(std::vector<uint8_t>& out) const {
     // 检查消息体大小
     if (body_.size() > MAX_MESSAGE_SIZE) {
-        spdlog::error("Message body too large: {} bytes (max: {})", body_.size(), MAX_MESSAGE_SIZE);
+        LOG_ERROR("Message body too large: {} bytes (max: {})", body_.size(), MAX_MESSAGE_SIZE);
         return false;
     }
 
@@ -25,10 +25,10 @@ bool Message::serialize(std::vector<uint8_t>& out) const {
     // 解析protobuf消息以获取实际的消息类型
     NetworkMessage pb_msg;
     if (pb_msg.ParseFromArray(body_.data(), static_cast<int>(body_.size()))) {
-        spdlog::debug("Serialized message: type={}, body_size={}, total_size={}", 
+        LOG_DEBUG("Serialized message: type={}, body_size={}, total_size={}", 
                      static_cast<int>(pb_msg.msg_id()), body_.size(), out.size());
     } else {
-        spdlog::debug("Serialized message: body_size={}, total_size={}", 
+        LOG_DEBUG("Serialized message: body_size={}, total_size={}", 
                      body_.size(), out.size());
     }
     return true;
@@ -37,7 +37,7 @@ bool Message::serialize(std::vector<uint8_t>& out) const {
 bool Message::deserialize(const std::vector<uint8_t>& in) {
     // 检查最小长度
     if (in.size() < sizeof(uint32_t)) {
-        spdlog::error("Message too small for length header: {} bytes", in.size());
+        LOG_ERROR("Message too small for length header: {} bytes", in.size());
         return false;
     }
 
@@ -48,13 +48,13 @@ bool Message::deserialize(const std::vector<uint8_t>& in) {
 
     // 检查消息体大小是否合理
     if (body_len > MAX_MESSAGE_SIZE) {
-        spdlog::error("Message body too large: {} bytes (max: {})", body_len, MAX_MESSAGE_SIZE);
+        LOG_ERROR("Message body too large: {} bytes (max: {})", body_len, MAX_MESSAGE_SIZE);
         return false;
     }
 
     // 检查总长度是否匹配
     if (in.size() != sizeof(uint32_t) + body_len) {
-        spdlog::error("Invalid message size: got {} bytes, expected {} bytes", 
+        LOG_ERROR("Invalid message size: got {} bytes, expected {} bytes", 
                      in.size(), sizeof(uint32_t) + body_len);
         return false;
     }
@@ -69,25 +69,25 @@ bool Message::deserialize(const std::vector<uint8_t>& in) {
     NetworkMessage pb_msg;
     if (pb_msg.ParseFromArray(body_.data(), static_cast<int>(body_len))) {
         msg_type_ = static_cast<MessageType>(pb_msg.msg_id());
-        spdlog::debug("Deserialized message: type={}, body_size={}, total_size={}", 
+        LOG_DEBUG("Deserialized message: type={}, body_size={}, total_size={}", 
                      static_cast<int>(msg_type_), body_len, in.size());
         return true;
     }
 
-    spdlog::error("Failed to parse protobuf message");
+    LOG_ERROR("Failed to parse protobuf message");
     return false;
 }
 
 void Message::logMessage() const {
-    spdlog::debug("消息详情:");
-    spdlog::debug("  - 类型: {}", static_cast<int>(msg_type_));
-    spdlog::debug("  - 大小: {}", body_.size());
+    LOG_DEBUG("消息详情:");
+    LOG_DEBUG("  - 类型: {}", static_cast<int>(msg_type_));
+    LOG_DEBUG("  - 大小: {}", body_.size());
     
     std::string hex_data;
     for (uint8_t b : body_) {
         hex_data += fmt::format("{:02x} ", b);
     }
-    spdlog::debug("  - 原始数据: {}", hex_data);
+    LOG_DEBUG("  - 原始数据: {}", hex_data);
 }
 
 //打印原始数据
@@ -96,5 +96,5 @@ void Message::printRawData() const {
     for (uint8_t b : body_) {
         hex_data += fmt::format("{:02x} ", b);
     }
-    spdlog::info("原始数据: {}", hex_data);
+    LOG_INFO("原始数据: {}", hex_data);
 }
