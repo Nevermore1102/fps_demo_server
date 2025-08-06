@@ -57,6 +57,10 @@ bool Room::isPlayerDataLoaded(const std::string& playerId) const{
 
 bool Room::isAllPlayerDataLoaded() const{
     for(const auto& p:players_){
+        LOG_INFO("Player {} , state{}, data load status: {}", 
+            p->GetPlayerId(), static_cast<int>(p->getState()),  isPlayerDataLoaded(p->GetPlayerId()));
+    }
+    for(const auto& p:players_){
         if(p && p->getState()==PlayerState::GAMING 
             && !isPlayerDataLoaded(p->GetPlayerId())) {
             return false;  // 只要有一个玩家未加载就返回false
@@ -594,16 +598,16 @@ void Room::stopSnapshotTimer() {
 
 // 检查是否所有玩家的快照都已收到
 bool Room::allGamingSnapshotsReceived() const {
-    if (currentSnapshots_.size() != getGamingPlayerCount()) {
-        LOG_WARN("Not all gaming players have submitted their snapshots, current size: {}, gaming player: ", currentSnapshots_.size(), getGamingPlayerCount());
-        return false;
-    }
+    // if (currentSnapshots_.size() != getGamingPlayerCount()) {
+    //     LOG_WARN("Not all gaming players have submitted their snapshots, current size: {}, gaming player: ", currentSnapshots_.size(), getGamingPlayerCount());
+    //     return false;
+    // }
     
-    // 确保所有玩家都有快照
+    // 确保所有Gaming玩家都有快照
     for (const auto& player : players_) {
-        if (player->getState() != PlayerState::GAMING && 
-            currentSnapshots_.find(player->GetPlayerId()) == currentSnapshots_.end()) {
-            return false;
+        if (player->getState() == PlayerState::GAMING ){
+            if (currentSnapshots_.find(player->GetPlayerId()) == currentSnapshots_.end())
+                return false;
         }
     }
     

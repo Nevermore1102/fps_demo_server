@@ -194,7 +194,7 @@ public:
     // 为房间内的每个玩家生成随机头像
     std::atomic<int> icon_id_counter_{0};
     void generateRandomPlayerIcons();
-
+    int get_robot_formation_data();
 private:
     // 基础信息
     int32_t room_id_;
@@ -223,7 +223,7 @@ private:
     
     std::atomic_int robot_formation_data{-1}; // 机器人阵容数据，0,1,2,3,4..
 
-    int get_robot_formation_data();
+   
 
     // 内部方法
     void startCountdownTimer(int32_t seconds);  // 启动倒计时，参数为总秒数

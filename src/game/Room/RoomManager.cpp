@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <spdlog/spdlog.h>
 #include <algorithm>
+#include <string>
 
 // 单例模式实现
 RoomManager& RoomManager::getInstance() {
@@ -370,9 +371,10 @@ bool RoomManager::startGameInRoom(const std::string& roomId) {
         return false;
     }
     
-    // 设置所有玩家状态为游戏中
+    // 设置所有真人玩家状态为游戏中
     for (const auto& player : room->getPlayers()) {
-        player->setState(PlayerState::GAMING);
+        if(!player->isRobot())
+            player->setState(PlayerState::GAMING);
     }
 
     // 生成随机玩家名字和头像id
@@ -568,6 +570,7 @@ void RoomManager::createRoomWithCurrentPlayers() {
         robot->SetPlayerId(std::to_string(room->getId()) + "robot" + std::to_string(robot_nums));
         robot->SetRoomId(std::to_string(room->getId()));
         robot->setState(PlayerState::ROBOT);
+        robot->SetFormationData(std::to_string(room->get_robot_formation_data()));
         // robot->SetIconId(robot_nums);
         // robot->SetPlayerName(robot_names_[robot_nums]);
         room->addPlayer(robot);
