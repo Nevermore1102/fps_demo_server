@@ -51,13 +51,13 @@ bool Connection::sendMessage(const Message& msg) {
     // 序列化消息
     std::vector<uint8_t> data;
     if (!msg.serialize(data)) {
-        LOG_ERROR("Failed to serialize message");
+        spdlog::error("Failed to serialize message");
         return false;
     }
 
     // 发送数据
     if (bufferevent_write(bev_, data.data(), data.size()) < 0) {
-        LOG_ERROR("Failed to write to buffer");
+        spdlog::error("Failed to write to buffer");
         return false;
     }
 
@@ -86,7 +86,7 @@ void Connection::onRead() {
         size_t total_size = sizeof(uint32_t) + body_len;
 
         if (body_len > MAX_MESSAGE_SIZE) {
-            LOG_ERROR("Message body too large: {} bytes (max: {})", body_len, MAX_MESSAGE_SIZE);
+            spdlog::error("Message body too large: {} bytes (max: {})", body_len, MAX_MESSAGE_SIZE);
             close();
             return;
         }
@@ -106,16 +106,16 @@ void Connection::onRead() {
 
 void Connection::onError(short events) {
     if (events & BEV_EVENT_EOF) {
-        LOG_INFO("Connection closed by peer: {}", id_);
+        spdlog::info("Connection closed by peer: {}", id_);
     } else if (events & BEV_EVENT_ERROR) {
-        LOG_ERROR("Connection error: {}", id_);
+        spdlog::error("Connection error: {}", id_);
     }
     close();
 }
 
 void Connection::handleMessage(const std::vector<uint8_t>& data) {
     if (data.size() < sizeof(uint32_t)) {
-        LOG_ERROR("Message too small: {} bytes", data.size());
+        spdlog::error("Message too small: {} bytes", data.size());
         return;
     }
 
@@ -125,7 +125,7 @@ void Connection::handleMessage(const std::vector<uint8_t>& data) {
     uint32_t body_len = ntohl(net_len);
 
     if (data.size() != sizeof(uint32_t) + body_len) {
-        LOG_ERROR("Invalid message size: got {} bytes, expected {} bytes", 
+        spdlog::error("Invalid message size: got {} bytes, expected {} bytes", 
                      data.size(), sizeof(uint32_t) + body_len);
         return;
     }
@@ -133,13 +133,13 @@ void Connection::handleMessage(const std::vector<uint8_t>& data) {
     // 创建消息对象并反序列化
     Message msg;
     if (!msg.deserialize(data)) {
-        LOG_ERROR("Failed to deserialize message");
+        spdlog::error("Failed to deserialize message");
         return;
     }
 
     // 获取消息类型（确保使用正确的字节序）
     MessageType type = msg.getType();
-    LOG_DEBUG("Received message type: {}", static_cast<uint32_t>(type));
+    spdlog::debug("Received message type: {}", static_cast<uint32_t>(type));
 
     // 调用消息回调
     if (message_cb_) {

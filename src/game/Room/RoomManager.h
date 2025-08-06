@@ -10,7 +10,6 @@
 #include "game/Player/Player.h"
 #include "net/Connection.h"
 #include "proto/NetworkMessage.pb.h"
-#include "log/log_macro.h"
 
 class RoomManager {
 public:
@@ -104,7 +103,7 @@ private:
     std::atomic<bool> matching_timer_running_{false};
     std::chrono::steady_clock::time_point first_player_join_time_;
     bool has_first_player_joined_ = false;
-    static constexpr int MATCHING_COUNTDOWN_SECONDS = 20;
+    static constexpr int MATCHING_COUNTDOWN_SECONDS = 10;
     std::promise<void> stop_signal_;
 
     std::vector<std::string> robot_names_ = {"温柔的瓦力", "美丽的伊芙", "勤劳的萝丝"};

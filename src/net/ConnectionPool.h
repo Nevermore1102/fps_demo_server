@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <memory>
 #include <mutex>
+#include "log/log_macro.h"
 
 class ConnectionPool {
 public:
