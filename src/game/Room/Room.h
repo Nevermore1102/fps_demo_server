@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-
+#include "game/Time/Timer.h"
 
 
 
@@ -149,6 +149,13 @@ public:
     bool isCountdownThreadRunning() const { return countdown_thread_.joinable(); }
     void stopCountdownTimer();
 
+    // --- 新增内部计时器相关 ---
+    void tryStartSnapshotTimer();
+    void stopSnapshotTimer();
+    void onSnapshotTimeout();
+
+    void deletePlayer(const std::string& playerId);
+
     // 房间内回合匹配逻辑
     // 获取此轮敌人id
     // 返回-1表示没有配对的敌人
@@ -174,6 +181,15 @@ private:
     int32_t countdown_remaining_seconds_;
     std::thread countdown_thread_;
     std::atomic<bool> countdown_running_{false};
+
+    Timer snapshotTimer_; // 针对快照收集
+    int32_t hassnapshotclearedRound_ = 0; // 清理快照的回合数
+    uint32_t snapshotTimeoutMs_ = 30000; // 30秒
+    std::unordered_set<std::string> snapshotPlayers_; // 已收快照玩家id
+    
+    std::atomic_int robot_formation_data{-1}; // 机器人阵容数据，0,1,2,3,4..
+
+    int get_robot_formation_data();
 
     // 内部方法
     void startCountdownTimer(int32_t seconds);  // 启动倒计时，参数为总秒数

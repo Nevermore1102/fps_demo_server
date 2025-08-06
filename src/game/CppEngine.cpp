@@ -417,8 +417,9 @@ void CppEngine::onExit(const std::shared_ptr<Connection>& conn, const Message& m
 
         // 关闭定时器
         // room->stopCountdownTimer();
-        player->setState(PlayerState::ROBOT);
-        player->SetConnection(nullptr);
+        // player->setState(PlayerState::ROBOT);
+        // player->SetConnection(nullptr);
+        room->deletePlayer(player->GetPlayerId());  // 删除玩家
         // 房间处理玩家退出并广播消息
         roomManager.removePlayerConnection(conn);
         room->onPlayerExit(exit_player_id, exit_round, exit_honor_value);

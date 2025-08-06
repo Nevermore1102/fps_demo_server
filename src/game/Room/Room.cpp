@@ -494,7 +494,15 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
         LOG_WARN("Player {} not found in room {}", playerId, room_id_);
         return false;
     }
-    
+    if(round<=hassnapshotclearedRound_){
+        LOG_WARN("Player {} round {} snapshot has been cleared, cannot record", playerId, round);
+        return false;
+    }
+    //记录第一个快照
+    bool firstSnapshot = snapshotPlayers_.empty();
+    snapshotPlayers_.insert(playerId);
+
+
     // 创建快照
     PlayerSnapshot snapshot;
     snapshot.set_player_id(playerId);
@@ -509,10 +517,73 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
     // 存储快照
     currentSnapshots_[playerId] = snapshot;
     
+    //第一个启动快照计时器
+    if (firstSnapshot) {
+        tryStartSnapshotTimer();
+    }
     LOG_INFO("Recorded snapshot for player {} in room {}, round {} (honor: {})", 
                 playerId, room_id_, round, honorValue);
     return true;
 }
+
+void Room::deletePlayer(const std::string& playerId){
+    auto player = getPlayer(playerId);
+    if (!player) {
+        LOG_WARN("Player {} not found in room {}", playerId, room_id_);
+        return;
+    }
+    player->setState(PlayerState::ROBOT);
+    //设定机器人阵容 ，0，1，2
+    player->SetFormationData(std::to_string(get_robot_formation_data()));
+    auto coon=player->GetConnection();
+    player->SetConnection(nullptr);
+    if (!coon) {
+        LOG_WARN("Player {} conn has del  in room {}", playerId, room_id_);
+        // return;
+    }
+    else coon->close();
+}
+int Room::get_robot_formation_data(){
+    robot_formation_data++;
+    if(robot_formation_data>=3)
+    {
+        LOG_ERROR("robot_formation_data error");
+        return 0;
+    }
+    return robot_formation_data;
+}
+
+void Room::onSnapshotTimeout() {
+    LOG_WARN("Room {} snapshot timeout, now handle unsubmitted players", getId());
+
+    // 检查哪些玩家未提交快照
+    for (const auto& player : players_) {
+        if (player->getState() == PlayerState::GAMING && 
+            snapshotPlayers_.find(player->GetPlayerId()) == snapshotPlayers_.end()) {
+            //删除玩家
+            deletePlayer(player->GetPlayerId());
+            // recordPlayerSnapshot(player->GetPlayerId(), "default_formation", 0, getCurrentRound());
+        }
+    }
+
+    // 正常继续广播和清理
+    broadcastAllGamingSnapshots();
+    clearSnapshots();
+    stopSnapshotTimer();
+}
+
+
+void Room::tryStartSnapshotTimer() {
+    // 若timer正在运行，先停一下再开启
+    stopSnapshotTimer();
+    snapshotTimer_.start(snapshotTimeoutMs_, [this]() {
+        this->onSnapshotTimeout();
+    });
+}
+void Room::stopSnapshotTimer() {
+    snapshotTimer_.stop();
+}
+
 
 // 检查是否所有玩家的快照都已收到
 bool Room::allGamingSnapshotsReceived() const {
@@ -567,6 +638,8 @@ void Room::broadcastAllGamingSnapshots() {
 // 清理快照
 void Room::clearSnapshots() {
     currentSnapshots_.clear();
+    hassnapshotclearedRound_ = currentRound_;
+    stopSnapshotTimer(); // 防止残留timer
     LOG_INFO("Cleared snapshots for room {}", room_id_);
 }
 

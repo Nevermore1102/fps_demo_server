@@ -765,9 +765,11 @@ void RoomManager::handleConnectionDisconnect(const std::shared_ptr<Connection>& 
         case PlayerState::GAMING: {
             // 玩家在游戏中，需要通知房间内其他玩家
             // auto room = getPlayerRoom(playerId);
-            player->setState(PlayerState::ROBOT);
-            player->SetConnection(nullptr);
+            // player->setState(PlayerState::ROBOT);
+            // player->SetConnection(nullptr);
+            
             auto room = getPlayerRoom(player);
+            room->deletePlayer(player->GetPlayerId()) ;
             if (room) {
                 LOG_INFO("Notifying room {} about player {} disconnect", room->getId(), playerId);
                 
