@@ -343,14 +343,18 @@ void Room::BroadcastCurrentRankings() {
     msg.set_msg_id(MessageType::CURRENT_RANK_INFO);
     CurrentRankInfoMessage* rank_msg = msg.mutable_current_rank_info();
     
+    std::string log_rank_info;
+
     for(const auto& entry : rankings) {
         // 使用add_rankings()添加新的排名条目
         RankingEntry* new_entry = rank_msg->add_rankings();
         new_entry->CopyFrom(*entry);  // 复制entry的内容到新条目
+        log_rank_info += "Player ID: " + entry->player_id() + ", Honor Value: " + std::to_string(entry->honor_value()) + "\n";
     }
 
     // 广播消息
     broadcastMessage(msg);
+    LOG_INFO("Broadcasted current rankings for room {}: \n{}", room_id_, log_rank_info);
 }
 
 // 广播结果给所有玩家
@@ -361,15 +365,18 @@ void Room::BroadcastResults() {
     msg.set_msg_id(MessageType::SETTLEMENT);
     SettlementMessage* settlement_msg = msg.mutable_settlement();
     settlement_msg->set_match_id(std::to_string(room_id_));
-    
+
+    std::string log_rank_info;
     for(const auto& entry : rankings) {
         // 使用add_rankings()添加新的排名条目
         RankingEntry* new_entry = settlement_msg->add_rankings();
         new_entry->CopyFrom(*entry);  // 复制entry的内容到新条目
+        log_rank_info += "Player ID: " + entry->player_id() + ", Honor Value: " + std::to_string(entry->honor_value()) + "\n";
     }
 
     // 广播消息
     broadcastMessage(msg);
+    LOG_INFO("Broadcasted final results for room {}: \n{}", room_id_, log_rank_info);
 }
 
 // 初始化发送结果状态
@@ -396,8 +403,8 @@ void Room::resetSendResultState(){
 bool Room::insertRanking(const std::string& playerId, int32_t honorValue) {
     // 插入或更新排名
     auto player = getPlayer(playerId);
-    if (!player || player->getState() != PlayerState::GAMING || !player->isRobot()) {
-        LOG_ERROR("Player {} not found or not in gaming state or robot state", playerId);
+    if (!player) {
+        LOG_ERROR("11111111111 Player {} not found or not in gaming state or robot state", playerId);
         return false;
     }
 
@@ -764,8 +771,10 @@ void Room::sendEnemyFormationToPlayer(const std::shared_ptr<Player>& player){
     
     enemy_info->set_first_player(first_player_id);
 
-    if(player->sendMessage(msg))
-        SPDLOG_INFO("Sent enemy formation to player {}", player->GetPlayerId());
+    if(player->sendMessage(msg)){
+        SPDLOG_INFO("Sent enemy formation to player {} :enemy_id={}, real_enemy={}, first_player={}",
+            player->GetPlayerId(), enemy_player->GetPlayerId(), enemy_player->isRobot(), first_player_id);
+    }
     else
         SPDLOG_ERROR("Failed to send enemy formation to player {}", player->GetPlayerId());
 }
@@ -793,5 +802,59 @@ void Room::calculateRobotHonor(){
                 LOG_INFO("insert robot {} honor value {}", p->GetPlayerId(), new_honor);
             }
         }
+    }
+}
+
+// 为房间内的每个玩家生成随机名字
+void Room::generateRandomPlayerNames(){
+    for(auto& p:players_){
+        if(p) p->SetPlayerName(generateRandomPlayerName(p));
+    }
+}
+
+std::string Room::generateRandomPlayerName(const std::shared_ptr<Player>& player){
+    // 用当前时间作为随机数种子
+    static bool seeded = false;
+    if (!seeded) {
+        std::srand(static_cast<unsigned int>(std::time(nullptr)));
+        seeded = true;
+    }
+    
+    // 随机选择前缀和后缀
+    int preIndex = std::rand() % NAME_PRE.size();
+    int postIndex = std::rand() % NAME_POST.size();
+    
+    // 组合名字
+    std::string randomName = NAME_PRE[preIndex] + "的" + NAME_POST[postIndex];
+    
+    // 检查名字是否已存在，如果存在则重新生成
+    while (!isPlayerNameAvailable(randomName)) {
+        preIndex = std::rand() % NAME_PRE.size();
+        postIndex = std::rand() % NAME_POST.size();
+        randomName = NAME_PRE[preIndex] + "的" + NAME_POST[postIndex];
+    }
+    
+    spdlog::info("Generated random player name: {}", randomName);
+    return randomName;
+}
+
+
+bool Room::isPlayerNameAvailable(const std::string& name){
+    // 遍历房间中所有玩家，检查是否有重名
+    for (const auto& player : players_) {
+        if (player && player->GetPlayerName() == name) {
+            spdlog::info("Player name '{}' already exists in room {}", name, room_id_);
+            return false;
+        }
+    }
+    
+    // 没有找到重名，名字可用
+    return true;
+}
+
+// 为房间内的每个玩家生成头像id
+void Room::generateRandomPlayerIcons(){
+    for(auto& p:players_){
+        if(p) p->SetIconId(++icon_id_counter_);
     }
 }

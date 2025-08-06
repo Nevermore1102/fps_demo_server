@@ -348,8 +348,9 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     if (room->allGamingRankingsReceived()) {
         LOG_INFO("All gaming rankings received for room {}, broadcasting rankings", matchId);
 
-        // 20250806updated: 结算两个机器人对战的情况
+        // 20250806updated: 结算两个机器人对战的情况，再次广播排名
         room->calculateRobotHonor();
+        room->BroadcastCurrentRankings();
         
         // 继续下一轮战斗
         if(room->getCurrentRound() < ROUND_NUM){

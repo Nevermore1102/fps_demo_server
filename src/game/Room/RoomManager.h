@@ -58,8 +58,7 @@ public:
     void cleanupEmptyRooms();
     void cleanupFinishedRooms();
     void safeRemoveRoom(const std::string& roomId);  // 安全删除房间
-    
-    
+
 private:
     RoomManager() : roomIdCounter_(1) {}
     ~RoomManager();
@@ -106,5 +105,5 @@ private:
     static constexpr int MATCHING_COUNTDOWN_SECONDS = 10;
     std::promise<void> stop_signal_;
 
-    std::vector<std::string> robot_names_ = {"温柔的瓦力", "美丽的伊芙", "勤劳的萝丝"};
+    // std::vector<std::string> robot_names_ = {"温柔的瓦力", "美丽的伊芙", "勤劳的萝丝"};
 };

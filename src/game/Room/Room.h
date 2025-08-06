@@ -11,8 +11,6 @@
 #include <vector>
 #include "game/Time/Timer.h"
 
-
-
 #define MAX_PLAYERS 4           // 房间最大玩家数
 #define BROADCAST_INTERVAL 1    // 广播间隔（秒）
 #define ROUND_NUM 7             // 游戏总轮次
@@ -48,6 +46,32 @@ const std::vector<std::pair<int, int>> ROUND_ROBOT_HONOR = {
     {0, 50},
     {0, 60},
     {0, 70},
+};
+
+const std::vector<std::string> NAME_PRE = {
+    "勤劳",
+    "开心",
+    "顽皮",
+    "996",
+    "时尚",
+    "聪明",
+    "万人迷",
+    "善良",
+    "美丽",
+    "阔绰"
+};
+
+const std::vector<std::string> NAME_POST = {
+    "冰箱",
+    "打火机",
+    "蚂蚁",
+    "卫生纸",
+    "章鱼",
+    "鸭嘴兽",
+    "小龙虾",
+    "蜜蜂",
+    "蘑菇",
+    "耳机"
 };
  
 enum class RoomState {
@@ -161,6 +185,16 @@ public:
     // 返回-1表示没有配对的敌人
     int getCurrentEnemyIdx(const std::string& playerId);
     // std::vector<std::pair<int, int>> generateRoundMatches(int playerCount, int round);
+
+    // 为所有玩家生成随机名字
+    void generateRandomPlayerNames();
+    std::string generateRandomPlayerName(const std::shared_ptr<Player>& player);
+    bool isPlayerNameAvailable(const std::string& name);
+
+    // 为房间内的每个玩家生成随机头像
+    std::atomic<int> icon_id_counter_{0};
+    void generateRandomPlayerIcons();
+
 private:
     // 基础信息
     int32_t room_id_;

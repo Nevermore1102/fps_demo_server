@@ -2,6 +2,7 @@
 #include "game/Player/Player.h"
 #include "proto/Message.h"
 #include "proto/NetworkMessage.pb.h"
+#include <cstdlib>
 #include <spdlog/spdlog.h>
 #include <algorithm>
 
@@ -373,7 +374,11 @@ bool RoomManager::startGameInRoom(const std::string& roomId) {
     for (const auto& player : room->getPlayers()) {
         player->setState(PlayerState::GAMING);
     }
-    
+
+    // 生成随机玩家名字和头像id
+    room->generateRandomPlayerNames();
+    room->generateRandomPlayerIcons();
+
     // 启动游戏（先广播玩家信息，等待所有客户端渲染完毕信息后的消息再开始）
     // room->startGame();
     room->broadcastPlayerInfo();
@@ -560,11 +565,11 @@ void RoomManager::createRoomWithCurrentPlayers() {
     int robot_nums = MAX_PLAYERS_PER_ROOM - players_added;
     while (robot_nums--) {
         auto robot = std::make_shared<Player>();
-        robot->SetPlayerId("robot" + std::to_string(robot_nums));
+        robot->SetPlayerId(std::to_string(room->getId()) + "robot" + std::to_string(robot_nums));
         robot->SetRoomId(std::to_string(room->getId()));
         robot->setState(PlayerState::ROBOT);
-        robot->SetIconId(robot_nums);
-        robot->SetPlayerName(robot_names_[robot_nums]);
+        // robot->SetIconId(robot_nums);
+        // robot->SetPlayerName(robot_names_[robot_nums]);
         room->addPlayer(robot);
     }
     
