@@ -1,4 +1,5 @@
 #include "EventLoop.h"
+#include "log/log_macro.h"
 #include <iostream>
 
 EventLoop::EventLoop() : base_(nullptr), running_(false) {}
@@ -24,7 +25,13 @@ void EventLoop::run() {
     
     running_ = true;
     std::cout << "Event loop started" << std::endl;
-    event_base_dispatch(base_);
+    // event_base_dispatch(base_);
+    int result = event_base_dispatch(base_);
+    LOG_WARN("Event loop exited with result: {}", result);
+    LOG_INFO("Active events when exiting: {}", 
+                event_base_get_num_events(base_, EVENT_BASE_COUNT_ACTIVE));
+    LOG_INFO("Added events when exiting: {}", 
+                event_base_get_num_events(base_, EVENT_BASE_COUNT_ADDED));
 }
 
 void EventLoop::stop() {
