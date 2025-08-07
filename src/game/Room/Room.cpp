@@ -652,7 +652,15 @@ void Room::broadcastAllSnapshots() {
     // 添加所有玩家快照
     for (const auto& snapshotPair : currentSnapshots_) {
         PlayerSnapshot* snapshot = all_snapshots->add_snapshots();
-        *snapshot = snapshotPair.second;
+        auto player = getPlayer(snapshotPair.first);
+        auto s = snapshotPair.second;
+        if(player->isRobot()){
+            s.set_is_robot(true);
+        }
+        else {
+            s.set_is_robot(false);
+        }
+        *snapshot = s;
     }
     
     // 广播消息
@@ -674,7 +682,7 @@ void Room::clearSnapshots() {
 void Room::recordRobotSnapshots(){
     for(const auto& player : players_) {
         if (player->getState() == PlayerState::ROBOT) {
-            currentSnapshots_[player->GetPlayerId()] = PlayerSnapshot();
+            currentSnapshots_[player->GetPlayerId()] = player->GetPlayerSnapshot();
         }
     }
     LOG_INFO_ROOM("Recorded robot snapshots for room {}", room_id_);

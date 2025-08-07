@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include "log/log_macro.h"
+#include "proto/NetworkMessage.pb.h"
 
 enum class PlayerState {
     CONNECTED,      // 已连接
@@ -67,6 +68,7 @@ public:
     int32_t GetIconId() const { return icon_id_; }
     const std::shared_ptr<PlayerSnapshot>& GetLatestSnapshot() const { return latest_snapshot_; }
     bool isRobot() const { return state_ == PlayerState::ROBOT; }
+    PlayerSnapshot GetPlayerSnapshot() const { return *latest_snapshot_; }
 
     // 服务器给玩家发送消息
     bool sendMessage(const NetworkMessage& msg) const {
