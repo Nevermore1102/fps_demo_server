@@ -548,12 +548,26 @@ void Room::deletePlayer(const std::string& playerId){
     player->SetFormationData(std::to_string(get_robot_formation_data()));
     auto coon=player->GetConnection();
     player->SetConnection(nullptr);
+}
+
+void Room::deletePlayerWithConn(const std::string& playerId){
+    auto player = getPlayer(playerId);
+    if (!player) {
+        LOG_WARN("Player {} not found in room {}", playerId, room_id_);
+        return;
+    }
+    player->setState(PlayerState::ROBOT);
+    //设定机器人阵容 ，0，1，2
+    player->SetFormationData(std::to_string(get_robot_formation_data()));
+    auto coon=player->GetConnection();
+    player->SetConnection(nullptr);
     if (!coon) {
         LOG_WARN("Player {} conn has del  in room {}", playerId, room_id_);
         // return;
     }
     else coon->close();
 }
+
 int Room::get_robot_formation_data(){
     robot_formation_data++;
     if(robot_formation_data>=3)
@@ -572,7 +586,7 @@ void Room::onSnapshotTimeout() {
         if (player->getState() == PlayerState::GAMING && 
             snapshotPlayers_.find(player->GetPlayerId()) == snapshotPlayers_.end()) {
             //删除玩家
-            deletePlayer(player->GetPlayerId());
+            deletePlayerWithConn(player->GetPlayerId());
             // recordPlayerSnapshot(player->GetPlayerId(), "default_formation", 0, getCurrentRound());
         }
     }

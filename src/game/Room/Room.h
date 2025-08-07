@@ -180,6 +180,8 @@ public:
     void onSnapshotTimeout();
 
     void deletePlayer(const std::string& playerId);
+    void deletePlayerWithConn(const std::string& playerId);
+
 
     // 房间内回合匹配逻辑
     // 获取此轮敌人id

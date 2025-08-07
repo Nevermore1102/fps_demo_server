@@ -60,7 +60,7 @@ bool Connection::sendMessage(const Message& msg) {
         spdlog::error("Failed to write to buffer");
         return false;
     }
-    LOG_INFO("Sent message type: {}", static_cast<uint32_t>(msg.getType()));
+    // LOG_INFO("Sent message type: {}", static_cast<uint32_t>(msg.getType()));
     return true;
 }
 
