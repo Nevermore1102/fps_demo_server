@@ -34,7 +34,13 @@ public:
         }
         cv_.notify_one();
         if(thread_.joinable())
-            thread_.join();
+        {
+            if(thread_.get_id() == std::this_thread::get_id()) {
+                // 如果是当前线程，直接返回
+                return;
+            }
+            else thread_.join();
+        }
     }
 
 private:

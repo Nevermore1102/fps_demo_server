@@ -596,7 +596,7 @@ void Room::onSnapshotTimeout() {
     recordRobotSnapshots();
     broadcastAllSnapshots();
     clearSnapshots();
-    stopSnapshotTimer();
+    // stopSnapshotTimer();
 }
 
 
