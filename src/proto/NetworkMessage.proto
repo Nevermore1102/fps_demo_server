@@ -112,6 +112,7 @@ message PlayerSnapshot {
     int32 round = 3;
     string formation_data = 4; // 需与上方formation_data结构一致
     int32 honor_value = 5;
+    bool is_robot = 6;          // 20250807updated
 }
 
 // 所有玩家快照广播（服务器→所有客户端）

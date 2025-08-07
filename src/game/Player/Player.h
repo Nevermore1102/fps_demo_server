@@ -21,6 +21,7 @@ public:
         latest_snapshot_->set_honor_value(0);  // 初始荣耀值为0
         latest_snapshot_->set_round(0);  // 初始轮数为0
         latest_snapshot_->set_formation_data("");
+        latest_snapshot_->set_is_robot(true);
         state_ = PlayerState::CONNECTED;
         player_name_ = "Unknown";  // 默认玩家名
         icon_id_ = 0;  // 默认图标ID
@@ -33,6 +34,7 @@ public:
             latest_snapshot_->set_honor_value(0);  // 初始荣耀值为0
             latest_snapshot_->set_round(0);  // 初始轮数为0
             latest_snapshot_->set_formation_data("");
+            latest_snapshot_->set_is_robot(false);
             state_ = PlayerState::CONNECTED;
             player_name_ = "Unknown";  // 默认玩家名
             icon_id_ = 0;  // 默认图标ID

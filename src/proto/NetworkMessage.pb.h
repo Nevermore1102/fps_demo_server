@@ -2417,6 +2417,7 @@ class PlayerSnapshot PROTOBUF_FINAL :
     kFormationDataFieldNumber = 4,
     kRoundFieldNumber = 3,
     kHonorValueFieldNumber = 5,
+    kIsRobotFieldNumber = 6,
   };
   // string player_id = 1;
   void clear_player_id();
@@ -2511,6 +2512,15 @@ class PlayerSnapshot PROTOBUF_FINAL :
   void _internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // bool is_robot = 6;
+  void clear_is_robot();
+  bool is_robot() const;
+  void set_is_robot(bool value);
+  private:
+  bool _internal_is_robot() const;
+  void _internal_set_is_robot(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:PlayerSnapshot)
  private:
   class _Internal;
@@ -2523,6 +2533,7 @@ class PlayerSnapshot PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr formation_data_;
   ::PROTOBUF_NAMESPACE_ID::int32 round_;
   ::PROTOBUF_NAMESPACE_ID::int32 honor_value_;
+  bool is_robot_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
 };
@@ -5697,6 +5708,26 @@ inline void PlayerSnapshot::_internal_set_honor_value(::PROTOBUF_NAMESPACE_ID::i
 inline void PlayerSnapshot::set_honor_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_honor_value(value);
   // @@protoc_insertion_point(field_set:PlayerSnapshot.honor_value)
+}
+
+// bool is_robot = 6;
+inline void PlayerSnapshot::clear_is_robot() {
+  is_robot_ = false;
+}
+inline bool PlayerSnapshot::_internal_is_robot() const {
+  return is_robot_;
+}
+inline bool PlayerSnapshot::is_robot() const {
+  // @@protoc_insertion_point(field_get:PlayerSnapshot.is_robot)
+  return _internal_is_robot();
+}
+inline void PlayerSnapshot::_internal_set_is_robot(bool value) {
+  
+  is_robot_ = value;
+}
+inline void PlayerSnapshot::set_is_robot(bool value) {
+  _internal_set_is_robot(value);
+  // @@protoc_insertion_point(field_set:PlayerSnapshot.is_robot)
 }
 
 // -------------------------------------------------------------------

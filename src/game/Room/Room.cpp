@@ -521,6 +521,7 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
     snapshot.set_round(round);
     snapshot.set_formation_data(formationData);
     snapshot.set_honor_value(honorValue);
+    snapshot.set_is_robot(player->isRobot());
 
     // 更新最新的玩家快照
     player->SetLatestSnapshot(std::make_shared<PlayerSnapshot>(snapshot));
