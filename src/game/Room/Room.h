@@ -141,8 +141,9 @@ public:
     // 快照管理
     bool recordPlayerSnapshot(const std::string& playerId, const std::string& formationData, int32_t honorValue, int32_t round);
     bool allGamingSnapshotsReceived() const;
-    void broadcastAllGamingSnapshots();
+    void broadcastAllSnapshots();
     void clearSnapshots();
+    void recordRobotSnapshots();
 
     // 战斗结果管理
     std::unordered_map<std::string, bool> isSendResult_;

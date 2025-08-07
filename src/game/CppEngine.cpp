@@ -262,7 +262,13 @@ void CppEngine::onPrepSnapshot(const std::shared_ptr<Connection>& conn, const Me
     // 检查是否所有游戏中玩家都已提交快照
     if (room->allGamingSnapshotsReceived()) {
         LOG_INFO("All snapshots received for room {}, broadcasting ALL_SNAPSHOTS", matchId);
-        room->broadcastAllGamingSnapshots();
+        // room->broadcastAllGamingSnapshots();
+
+        // 记录机器人快照
+        room->recordRobotSnapshots();
+
+        // 广播所有快照
+        room->broadcastAllSnapshots();
         
         // 清理快照为下一轮准备
         room->clearSnapshots();

@@ -578,7 +578,8 @@ void Room::onSnapshotTimeout() {
     }
 
     // 正常继续广播和清理
-    broadcastAllGamingSnapshots();
+    recordRobotSnapshots();
+    broadcastAllSnapshots();
     clearSnapshots();
     stopSnapshotTimer();
 }
@@ -615,7 +616,7 @@ bool Room::allGamingSnapshotsReceived() const {
 }
 
 // 广播所有快照
-void Room::broadcastAllGamingSnapshots() {
+void Room::broadcastAllSnapshots() {
     if (!allGamingSnapshotsReceived()) {
         LOG_WARN("Cannot broadcast snapshots, not all players have submitted");
         return;
@@ -652,6 +653,16 @@ void Room::clearSnapshots() {
     hassnapshotclearedRound_ = currentRound_;
     stopSnapshotTimer(); // 防止残留timer
     LOG_INFO("Cleared snapshots for room {}", room_id_);
+}
+
+// 记录机器人快照
+void Room::recordRobotSnapshots(){
+    for(const auto& player : players_) {
+        if (player->getState() == PlayerState::ROBOT) {
+            currentSnapshots_[player->GetPlayerId()] = PlayerSnapshot();
+        }
+    }
+    LOG_INFO("Recorded robot snapshots for room {}", room_id_);
 }
 
 // 玩家退出处理
