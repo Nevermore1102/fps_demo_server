@@ -207,7 +207,7 @@ void Room::startGame() {
 }
 
 // 广播消息给房间所有Gaming状态玩家
-void Room::broadcastMessage(const NetworkMessage& msg) {
+void Room::broadcastMessage(const NetworkMessage& msg,bool haslog) {
     // 将NetworkMessage转换为Message
     Message body;
     body.setBodyFromProto(msg);
@@ -221,7 +221,7 @@ void Room::broadcastMessage(const NetworkMessage& msg) {
                 if (!success)
                     LOG_ERROR("Failed to send message to player: {}", player->GetPlayerId());
                 else{
-                    LOG_INFO("Message sent to player: {}", player->GetPlayerId());
+                    if (haslog) LOG_INFO("Message sent to player: {}", player->GetPlayerId());
                     // body.logMessage();  // 打印消息详情
                 }
             }
@@ -287,7 +287,7 @@ void Room::onCountdownTick() {
         timer_msg->set_round(currentRound_);
         timer_msg->set_remaining_time_seconds(countdown_remaining_seconds_);
         
-        broadcastMessage(msg);
+        broadcastMessage(msg,false);
     }
     if (countdown_remaining_seconds_ == 0) {
         onCountdownFinished();

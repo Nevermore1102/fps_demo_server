@@ -231,7 +231,7 @@ private:
     // 内部方法
     void startCountdownTimer(int32_t seconds);  // 启动倒计时，参数为总秒数
     int32_t getRemainingTime() const;           // 获取当前剩余时间（秒）
-    void broadcastMessage(const NetworkMessage& msg);
+    void broadcastMessage(const NetworkMessage& msg,bool haslog = true); // 广播消息到房间内所有玩家
     void broadcastToOthers(const std::string& excludePlayerId, const NetworkMessage& msg);
     void onCountdownTick();                     // 定时器回调：每秒调用一次，处理倒计时逻辑
     void onCountdownFinished();                 // 定时器回调：备战倒计时结束时调用
