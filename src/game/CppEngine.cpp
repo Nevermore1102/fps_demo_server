@@ -343,7 +343,8 @@ void CppEngine::onBattleResult(const std::shared_ptr<Connection>& conn, const Me
     }
 
     // 20250805updated: 服务器发给每个结算的客户端 {type:对手信息，对手id，是否机器人，机器人阵容，先手id}
-    room->sendEnemyFormationToPlayer(player);
+    if(room->getCurrentRound() < ROUND_NUM)
+        room->sendEnemyFormationToPlayer(player);
 
     // 20250805updated: 广播排名
     // 每有玩家结算，服务器广播客户端 {type：现在排名信息，所有<玩家id，排名，荣耀值>}
