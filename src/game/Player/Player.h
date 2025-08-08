@@ -46,7 +46,7 @@ public:
 
     // Setters
     void SetRoomId(const std::string& room_id) { room_id_ = room_id; }
-    void SetPlayerId(const std::string& player_id) { player_id_ = player_id; }
+    void SetPlayerId(const std::string& player_id) { player_id_ = player_id; latest_snapshot_->set_player_id(player_id);}
     void SetFormationData(const std::string& formation_data) { latest_snapshot_->set_formation_data(formation_data); }
     void SetConnection(const std::shared_ptr<Connection>& connection) { connection_ = connection; }
     void setState(PlayerState state) { state_ = state; }
