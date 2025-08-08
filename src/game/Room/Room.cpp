@@ -505,13 +505,13 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
         LOG_WARN_ROOM("Player {} not found in room {}", playerId, room_id_);
         return false;
     }
-    if(round<=hassnapshotclearedRound_){
-        LOG_WARN_ROOM("Player {} round {} snapshot has been cleared, cannot record", playerId, round);
-        return false;
-    }
-    //记录第一个快照
-    bool firstSnapshot = snapshotPlayers_.empty();
-    snapshotPlayers_.insert(playerId);
+    // if(round<=hassnapshotclearedRound_){
+    //     LOG_WARN_ROOM("Player {} round {} snapshot has been cleared, cannot record", playerId, round);
+    //     return false;
+    // }
+    // //记录第一个快照
+    // bool firstSnapshot = snapshotPlayers_.empty();
+    // snapshotPlayers_.insert(playerId);
 
 
     // 创建快照
@@ -529,10 +529,10 @@ bool Room::recordPlayerSnapshot(const std::string& playerId, const std::string& 
     // 存储快照
     currentSnapshots_[playerId] = snapshot;
     
-    //第一个启动快照计时器
-    if (firstSnapshot) {
-        tryStartSnapshotTimer();
-    }
+    // //第一个启动快照计时器
+    // if (firstSnapshot) {
+    //     tryStartSnapshotTimer();
+    // }
     LOG_INFO_ROOM("Recorded snapshot for player {} in room {}, round {} (honor: {})", 
                 playerId, room_id_, round, honorValue);
     return true;
