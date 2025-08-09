@@ -756,7 +756,7 @@ int Room::getCurrentEnemyIdx(const std::string& playerId) {
     int idx = it - players_.begin();
 
     // 计算本轮配对方案
-    int round = (currentRound_ - 1) % (n - 1);
+    int round = (n + currentRound_ - 1) % (n - 1);
     std::vector<int> pos(n);
     std::iota(pos.begin(), pos.end(), 0);
     if (round > 0) std::rotate(pos.begin() + 1, pos.begin() + 1 + round, pos.end());
@@ -893,6 +893,6 @@ bool Room::isPlayerNameAvailable(const std::string& name){
 // 为房间内的每个玩家生成头像id
 void Room::generateRandomPlayerIcons(){
     for(auto& p:players_){
-        if(p) p->SetIconId(++icon_id_counter_);
+        if(p) p->SetIconId(icon_id_counter_++);
     }
 }
