@@ -65,7 +65,7 @@ message DataLoadedMessage {
 // 对手信息
 message EnemyInfoMessage {
     string enemy_player_id = 1;
-    bool real_enemy = 2;
+    bool is_robot = 2;
     int32 formation_data = 3;
     string first_player = 4;
 }

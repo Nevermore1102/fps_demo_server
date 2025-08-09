@@ -1350,7 +1350,7 @@ class EnemyInfoMessage PROTOBUF_FINAL :
   enum : int {
     kEnemyPlayerIdFieldNumber = 1,
     kFirstPlayerFieldNumber = 4,
-    kRealEnemyFieldNumber = 2,
+    kIsRobotFieldNumber = 2,
     kFormationDataFieldNumber = 3,
   };
   // string enemy_player_id = 1;
@@ -1403,13 +1403,13 @@ class EnemyInfoMessage PROTOBUF_FINAL :
   std::string* _internal_mutable_first_player();
   public:
 
-  // bool real_enemy = 2;
-  void clear_real_enemy();
-  bool real_enemy() const;
-  void set_real_enemy(bool value);
+  // bool is_robot = 2;
+  void clear_is_robot();
+  bool is_robot() const;
+  void set_is_robot(bool value);
   private:
-  bool _internal_real_enemy() const;
-  void _internal_set_real_enemy(bool value);
+  bool _internal_is_robot() const;
+  void _internal_set_is_robot(bool value);
   public:
 
   // int32 formation_data = 3;
@@ -1430,7 +1430,7 @@ class EnemyInfoMessage PROTOBUF_FINAL :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr enemy_player_id_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr first_player_;
-  bool real_enemy_;
+  bool is_robot_;
   ::PROTOBUF_NAMESPACE_ID::int32 formation_data_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_src_2fproto_2fNetworkMessage_2eproto;
@@ -4698,24 +4698,24 @@ inline void EnemyInfoMessage::unsafe_arena_set_allocated_enemy_player_id(
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:EnemyInfoMessage.enemy_player_id)
 }
 
-// bool real_enemy = 2;
-inline void EnemyInfoMessage::clear_real_enemy() {
-  real_enemy_ = false;
+// bool is_robot = 2;
+inline void EnemyInfoMessage::clear_is_robot() {
+  is_robot_ = false;
 }
-inline bool EnemyInfoMessage::_internal_real_enemy() const {
-  return real_enemy_;
+inline bool EnemyInfoMessage::_internal_is_robot() const {
+  return is_robot_;
 }
-inline bool EnemyInfoMessage::real_enemy() const {
-  // @@protoc_insertion_point(field_get:EnemyInfoMessage.real_enemy)
-  return _internal_real_enemy();
+inline bool EnemyInfoMessage::is_robot() const {
+  // @@protoc_insertion_point(field_get:EnemyInfoMessage.is_robot)
+  return _internal_is_robot();
 }
-inline void EnemyInfoMessage::_internal_set_real_enemy(bool value) {
+inline void EnemyInfoMessage::_internal_set_is_robot(bool value) {
   
-  real_enemy_ = value;
+  is_robot_ = value;
 }
-inline void EnemyInfoMessage::set_real_enemy(bool value) {
-  _internal_set_real_enemy(value);
-  // @@protoc_insertion_point(field_set:EnemyInfoMessage.real_enemy)
+inline void EnemyInfoMessage::set_is_robot(bool value) {
+  _internal_set_is_robot(value);
+  // @@protoc_insertion_point(field_set:EnemyInfoMessage.is_robot)
 }
 
 // int32 formation_data = 3;

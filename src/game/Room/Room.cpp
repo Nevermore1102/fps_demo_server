@@ -796,7 +796,7 @@ void Room::sendEnemyFormationToPlayer(const std::shared_ptr<Player>& player){
     msg.set_msg_id(MessageType::ENEMY_INFO);
     EnemyInfoMessage* enemy_info = msg.mutable_enemy_info();
     enemy_info->set_enemy_player_id(enemy_player->GetPlayerId());
-    enemy_info->set_real_enemy(enemy_player->isRobot());
+    enemy_info->set_is_robot(enemy_player->isRobot());
     if(enemy_player->isRobot())
         enemy_info->set_formation_data(std::stoi(enemy_player->GetFormationData()));
 
