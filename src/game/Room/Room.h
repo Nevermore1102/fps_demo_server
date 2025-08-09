@@ -11,7 +11,7 @@
 #include <vector>
 #include "game/Time/Timer.h"
 
-#define MAX_PLAYERS 2           // 房间最大玩家数
+#define MAX_PLAYERS 4           // 房间最大玩家数
 #define BROADCAST_INTERVAL 1    // 广播间隔（秒）
 #define ROUND_NUM 7             // 游戏总轮次
 // // 备战时间（秒）常数组
