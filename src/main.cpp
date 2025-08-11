@@ -29,6 +29,33 @@
 // #define RUN_TESTS 1
 
 
+void test_play() {
+        Room room; 
+
+    // 创建4个玩家并加入房间
+    std::vector<std::shared_ptr<Player>> players;
+    std::vector<std::string> playerIds = {"p0", "p1", "p2", "p3"};
+    for (int i = 0; i < 4; ++i) {
+        auto player = std::make_shared<Player>(playerIds[i], nullptr);
+        room.addPlayer(player);
+        players.push_back(player);
+    }
+
+    // 测试回合0~8的匹配序列
+    std::cout << "=== Match Sequence for 4 Players ===\n";
+    for(int round = 0; round <= 8; ++round){
+        room.nextRound(); // 假定每调用一次就是下一回合（可根据实际定义调整）
+        std::cout << "Round " << round << ":\n";
+        for(const auto& player : players){
+            int enemyIdx = room.getCurrentEnemyIdx(player->GetPlayerId());
+            std::string enemyId = (enemyIdx >= 0 && enemyIdx < players.size()) ? players[enemyIdx]->GetPlayerId() : "None";
+            std::cout << "  Player " << player->GetPlayerId() << " vs " << enemyId << '\n';
+        }
+    }
+    // return 0;
+}
+
+
 int main() {
     // 忽略 SIGPIPE 信号
     signal(SIGPIPE, SIG_IGN);
@@ -41,6 +68,7 @@ int main() {
     // LOG_INFO("Server starting...");
     LOG_INFO("Server starting...");
 
+    // test_play();
 
 // #if RUN_TESTS
 //     // 运行测试
