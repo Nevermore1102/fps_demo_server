@@ -195,8 +195,8 @@ void Room::startGame() {
         setState(RoomState::GAMING);
 
         initSendResultState();
-        nextRound();  // 回合+1
         sendEnemyFormationToAll();       // 发送对手阵容
+        nextRound();  // 回合+1
         broadcastPrepareStart();    // 广播备战开始消息
         startBattlePrepTimer();     // 启动备战倒计时
 
