@@ -565,9 +565,10 @@ void RoomManager::createRoomWithCurrentPlayers() {
 
     // 检查是否需要添加机器人
     int robot_nums = MAX_PLAYERS_PER_ROOM - players_added;
+    int robot_index = 0;
     while (robot_nums--) {
         auto robot = std::make_shared<Player>();
-        robot->SetPlayerId(std::to_string(room->getId()) + "robot" + std::to_string(robot_nums));
+        robot->SetPlayerId(std::to_string(room->getId()) + "_robot_" + std::to_string(robot_index++));
         robot->SetRoomId(std::to_string(room->getId()));
         robot->setState(PlayerState::ROBOT);
         robot->SetFormationData(std::to_string(room->get_robot_formation_data()));
