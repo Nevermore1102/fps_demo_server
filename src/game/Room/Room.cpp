@@ -343,6 +343,8 @@ void Room::clearRankings() {
 void Room::BroadcastCurrentRankings() {
     auto rankings = getRankings();
 
+    LOG_INFO_ROOM("Current rankings size: {}", rankings.size());
+
     NetworkMessage msg;
     msg.set_msg_id(MessageType::CURRENT_RANK_INFO);
     CurrentRankInfoMessage* rank_msg = msg.mutable_current_rank_info();
@@ -437,8 +439,13 @@ bool Room::insertRanking(const std::string& playerId, int32_t honorValue) {
 
 // 根据荣耀值计算房间内玩家的排名
 std::vector<std::shared_ptr<RankingEntry>> Room::getRankings() {
-    if(allHonorValue_.size() != getAllPlayerCount()) {
-        LOG_WARN_ROOM("Not all players have submitted their rankings, cannot generate complete rankings, allHonorValue_ size:", allHonorValue_.size());
+    // if(allHonorValue_.size() != getAllPlayerCount()) {
+    //     LOG_WARN_ROOM("Not all players have submitted their rankings, cannot generate complete rankings, allHonorValue_ size:", allHonorValue_.size());
+    //     return {};
+    // }
+
+    if(allHonorValue_.size() ==0 ) {
+        LOG_WARN_ROOM("No  player have submitted their rankings, cannot generate complete rankings, allHonorValue_ size:", allHonorValue_.size());
         return {};
     }
 
