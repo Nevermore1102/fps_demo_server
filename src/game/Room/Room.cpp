@@ -885,13 +885,15 @@ std::string Room::generateRandomPlayerName(const std::shared_ptr<Player>& player
 
 
 bool Room::isPlayerNameAvailable(const std::string& name){
+    std::string pre_name = name.substr(0, name.find("的"));
     std::string post_name = name.substr(name.find("的") + 1);
     // 遍历房间中所有玩家，检查是否有重名后缀
     for (const auto& player : players_) {
         if (player) {
             std::string playert_name = player->GetPlayerName();
+            std::string player_pre_name = playert_name.substr(0, playert_name.find("的"));
             std::string player_post_name = playert_name.substr(playert_name.find("的") + 1);
-            if(post_name == player_post_name)
+            if(pre_name == player_pre_name || post_name == player_post_name)
                 return false;
         }
     }
