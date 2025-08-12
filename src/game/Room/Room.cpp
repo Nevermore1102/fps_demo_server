@@ -865,7 +865,7 @@ std::string Room::generateRandomPlayerName(const std::shared_ptr<Player>& player
     // 组合名字
     std::string randomName = NAME_PRE[preIndex] + "的" + NAME_POST[postIndex];
     
-    // 检查名字是否已存在，如果存在则重新生成
+    // 检查名字后缀是否已存在，如果存在则重新生成
     while (!isPlayerNameAvailable(randomName)) {
         preIndex = std::rand() % NAME_PRE.size();
         postIndex = std::rand() % NAME_POST.size();
@@ -878,11 +878,14 @@ std::string Room::generateRandomPlayerName(const std::shared_ptr<Player>& player
 
 
 bool Room::isPlayerNameAvailable(const std::string& name){
-    // 遍历房间中所有玩家，检查是否有重名
+    std::string post_name = name.substr(name.find("的") + 1);
+    // 遍历房间中所有玩家，检查是否有重名后缀
     for (const auto& player : players_) {
-        if (player && player->GetPlayerName() == name) {
-            spdlog::info("Player name '{}' already exists in room {}", name, room_id_);
-            return false;
+        if (player) {
+            std::string playert_name = player->GetPlayerName();
+            std::string player_post_name = playert_name.substr(playert_name.find("的") + 1);
+            if(post_name == player_post_name)
+                return false;
         }
     }
     
