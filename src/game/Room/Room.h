@@ -7,6 +7,7 @@
 #include <thread>
 #include <atomic>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include "game/Time/Timer.h"
@@ -29,7 +30,7 @@
 // 备战时间（秒）常数组
 const int PREPARE_TIME_SECONDS[] = {
     -1,  // 第0回合
-    40,  // 第一回合
+    50,  // 第一回合
     30,  // 第二回合
     30,  // 第三回合
     30,  // 第四回合
@@ -195,7 +196,8 @@ public:
     bool isPlayerNameAvailable(const std::string& name);
 
     // 为房间内的每个玩家生成随机头像
-    std::atomic<int> icon_id_counter_{0};
+    // std::atomic<int> icon_id_counter_{0};
+    std::unordered_set<int> icon_set_;
     void generateRandomPlayerIcons();
     int get_robot_formation_data();
 private:

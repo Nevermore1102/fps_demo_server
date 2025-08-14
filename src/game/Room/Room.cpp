@@ -905,6 +905,14 @@ bool Room::isPlayerNameAvailable(const std::string& name){
 // 为房间内的每个玩家生成头像id
 void Room::generateRandomPlayerIcons(){
     for(auto& p:players_){
-        if(p) p->SetIconId(icon_id_counter_++);
+        if(p){
+            int icon_id = rand() % 6;
+            // 在set中，重新生成
+            while (icon_set_.find(icon_id) != icon_set_.end()){
+                icon_id = rand() % 6;
+            }
+            icon_set_.insert(icon_id);
+            p->SetIconId(icon_id);
+        }
     }
 }

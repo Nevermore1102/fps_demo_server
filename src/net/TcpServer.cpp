@@ -101,8 +101,8 @@ void TcpServer::broadcast(const Message& msg) {
 // 设置保活机制的函数
 int TcpServer::enable_keepalive(int socket_fd) {
     int keepalive = 1;
-    int keepidle = 300;     // 5分钟后开始探测
-    int keepintvl = 60;     // 探测间隔60秒
+    int keepidle = 5;     // 5分钟后开始探测
+    int keepintvl = 1;     // 探测间隔60秒
     int keepcnt = 3;        // 探测3次
 
     // 启用保活
